@@ -24,17 +24,16 @@
 	  android:id="@+id/group_header"
 	  android:layout_width="wrap_content"
 	  android:layout_height="wrap_content"/>
-	<Button android:id="@+id/add_group"
-	  android:layout_width="wrap_content"
-	  android:layout_height="wrap_content"
-	  android:layout_alignParentBottom="true"
-	  android:text="@string/add_group"/>
-	<Button android:id="@+id/add_entry"
-	  android:layout_width="wrap_content"
-	  android:layout_height="wrap_content"
-	  android:layout_toRightOf="@id/add_group"
-	  android:layout_alignParentBottom="true"
-	  android:text="@string/add_entry"/>
+	<LinearLayout
+	    android:id="@+id/ButtonBar"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true" android:layout_width="match_parent" android:gravity="center">
+	    <Button android:id="@+id/add_group"
+    	  android:layout_width="wrap_content"
+    	  android:layout_height="wrap_content"
+    	  android:text="@string/add_group" style="@style/ButtonBarStyle"/>
+	    <Button android:layout_width="wrap_content" android:id="@+id/add_entry" android:layout_height="wrap_content" android:text="@string/add_entry" style="@style/ButtonBarStyle"></Button>
+	</LinearLayout>
 	<ImageView android:id="@+id/divider2"
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
