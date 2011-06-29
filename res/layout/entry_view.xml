@@ -42,16 +42,21 @@
 		  android:src="@drawable/ic99_blank"
 		  style="@style/WhiteOnBlack"/>
 	</LinearLayout>
-	<Button android:id="@+id/entry_edit"
-	  android:text="@string/menu_edit"
-	  android:layout_width="100sp"
-	  android:layout_height="wrap_content"
-	  android:layout_alignParentLeft="true"
-	  android:layout_alignParentBottom="true"/>
+	<LinearLayout
+	    android:id="@+id/ButtonBar2"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentBottom="true" android:layout_width="match_parent" android:gravity="center">
+	    <Button android:id="@+id/entry_edit"
+    	  android:text="@string/menu_edit"
+    	  android:layout_width="100sp"
+    	  android:layout_height="wrap_content"
+    	  />
+	</LinearLayout>
 	<ImageView android:id="@+id/entry_divider2"
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
-	  android:layout_above="@id/entry_edit"
+	  android:layout_above="@+id/ButtonBar2"
 	  android:scaleType="fitXY"
 	  android:src="@android:drawable/divider_horizontal_dark"/>
 	<ScrollView android:id="@+id/entry_scroll" 
