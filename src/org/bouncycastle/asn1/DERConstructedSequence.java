@@ -7,7 +7,6 @@ import java.util.Enumeration;
 /**
  * @deprecated use DERSequence.
  */
-@SuppressWarnings("unchecked")
 public class DERConstructedSequence
     extends ASN1Sequence
 {
@@ -36,7 +35,7 @@ public class DERConstructedSequence
     {
         ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
         DEROutputStream         dOut = new DEROutputStream(bOut);
-        Enumeration             e = this.getObjects();
+        Enumeration<?>             e = this.getObjects();
 
         while (e.hasMoreElements())
         {

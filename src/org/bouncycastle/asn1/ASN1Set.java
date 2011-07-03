@@ -5,11 +5,10 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
 
-@SuppressWarnings("unchecked")
 abstract public class ASN1Set
     extends ASN1Object
 {
-    protected Vector set = new Vector();
+    protected Vector<Object> set = new Vector<Object>();
 
     /**
      * return an ASN1Set from the given object.
@@ -86,7 +85,7 @@ abstract public class ASN1Set
                 if (obj.getObject() instanceof ASN1Sequence)
                 {
                     ASN1Sequence s = (ASN1Sequence)obj.getObject();
-                    Enumeration e = s.getObjects();
+                    Enumeration<?> e = s.getObjects();
 
                     while (e.hasMoreElements())
                     {
@@ -105,7 +104,7 @@ abstract public class ASN1Set
     {
     }
 
-    public Enumeration getObjects()
+    public Enumeration<Object> getObjects()
     {
         return set.elements();
     }
@@ -171,7 +170,7 @@ abstract public class ASN1Set
 
     public int hashCode()
     {
-        Enumeration             e = this.getObjects();
+        Enumeration<Object>             e = this.getObjects();
         int                     hashCode = size();
 
         while (e.hasMoreElements())
@@ -202,8 +201,8 @@ abstract public class ASN1Set
             return false;
         }
 
-        Enumeration s1 = this.getObjects();
-        Enumeration s2 = other.getObjects();
+        Enumeration<Object> s1 = this.getObjects();
+        Enumeration<Object> s2 = other.getObjects();
 
         while (s1.hasMoreElements())
         {

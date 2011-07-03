@@ -11,7 +11,6 @@ import org.bouncycastle.asn1.DERInteger;
 import org.bouncycastle.asn1.DERObject;
 import org.bouncycastle.asn1.DERSequence;
 
-@SuppressWarnings("unchecked")
 public class RSAPrivateKeyStructure
     extends ASN1Encodable
 {
@@ -72,7 +71,7 @@ public class RSAPrivateKeyStructure
     public RSAPrivateKeyStructure(
         ASN1Sequence  seq)
     {
-        Enumeration e = seq.getObjects();
+        Enumeration<?> e = seq.getObjects();
 
         BigInteger  v = ((DERInteger)e.nextElement()).getValue();
         if (v.intValue() != 0 && v.intValue() != 1)

@@ -5,7 +5,6 @@ import java.util.*;
 
 import org.bouncycastle.asn1.*;
 
-@SuppressWarnings("unchecked")
 public class ElGamalParameter
     extends ASN1Encodable
 {
@@ -22,7 +21,7 @@ public class ElGamalParameter
     public ElGamalParameter(
         ASN1Sequence  seq)
     {
-        Enumeration     e = seq.getObjects();
+        Enumeration<?>     e = seq.getObjects();
 
         p = (DERInteger)e.nextElement();
         g = (DERInteger)e.nextElement();

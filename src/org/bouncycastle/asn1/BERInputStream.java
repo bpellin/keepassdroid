@@ -9,7 +9,6 @@ import java.util.Vector;
 /**
  * @deprecated use ASN1InputStream
  */
-@SuppressWarnings("unchecked")
 public class BERInputStream
     extends DERInputStream
 {
@@ -65,7 +64,7 @@ public class BERInputStream
     private BERConstructedOctetString buildConstructedOctetString()
         throws IOException
     {
-        Vector               octs = new Vector();
+        Vector<DEREncodable>               octs = new Vector<DEREncodable>();
 
         for (;;)
         {

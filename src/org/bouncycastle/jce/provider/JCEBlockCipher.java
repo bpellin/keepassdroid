@@ -89,7 +89,8 @@ public class JCEBlockCipher extends WrapCipherSpi
     //
     // specs we can handle.
     //
-	private Class[]                 availableSpecs =
+	@SuppressWarnings("rawtypes")
+    private Class[]                 availableSpecs =
                                     {
                                         //RC2ParameterSpec.class,
                                         //RC5ParameterSpec.class,

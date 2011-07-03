@@ -3,9 +3,8 @@ package org.bouncycastle.asn1;
 import java.util.Enumeration;
 import java.io.IOException;
 
-@SuppressWarnings("unchecked")
 class LazyDERConstructionEnumeration
-    implements Enumeration
+    implements Enumeration<Object>
 {
     private ASN1InputStream aIn;
     private Object          nextObj;

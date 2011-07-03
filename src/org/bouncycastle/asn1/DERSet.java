@@ -7,7 +7,6 @@ import java.util.Enumeration;
 /**
  * A DER encoded set object
  */
-@SuppressWarnings("unchecked")
 public class DERSet
     extends ASN1Set
 {
@@ -83,7 +82,7 @@ public class DERSet
         // TODO Intermediate buffer could be avoided if we could calculate expected length
         ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
         DEROutputStream         dOut = new DEROutputStream(bOut);
-        Enumeration             e = this.getObjects();
+        Enumeration<?>             e = this.getObjects();
 
         while (e.hasMoreElements())
         {

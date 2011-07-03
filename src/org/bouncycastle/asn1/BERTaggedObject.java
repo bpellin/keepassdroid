@@ -8,7 +8,6 @@ import java.util.Enumeration;
  * a [n] where n is some number - these are assumed to follow the construction
  * rules (as with sequences).
  */
-@SuppressWarnings("unchecked")
 public class BERTaggedObject
     extends DERTaggedObject
 {
@@ -59,7 +58,7 @@ public class BERTaggedObject
             {
                 if (!explicit)
                 {
-                    Enumeration e;
+                    Enumeration<?> e;
                     if (obj instanceof ASN1OctetString)
                     {
                         if (obj instanceof BERConstructedOctetString)

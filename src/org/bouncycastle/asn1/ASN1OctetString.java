@@ -37,7 +37,6 @@ public abstract class ASN1OctetString
      * @param obj the object we want converted.
      * @exception IllegalArgumentException if the object cannot be converted.
      */
-    @SuppressWarnings("unchecked")
 	public static ASN1OctetString getInstance(
         Object  obj)
     {
@@ -53,8 +52,8 @@ public abstract class ASN1OctetString
 
         if (obj instanceof ASN1Sequence)
         {
-            Vector      v = new Vector();
-            Enumeration e = ((ASN1Sequence)obj).getObjects();
+            Vector<DEREncodable>      v = new Vector<DEREncodable>();
+            Enumeration<DEREncodable> e = ((ASN1Sequence)obj).getObjects();
 
             while (e.hasMoreElements())
             {

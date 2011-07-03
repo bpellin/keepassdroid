@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 
-@SuppressWarnings("unchecked")
 public class DERSequence
     extends ASN1Sequence
 {
@@ -63,7 +62,7 @@ public class DERSequence
         // TODO Intermediate buffer could be avoided if we could calculate expected length
         ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
         DEROutputStream         dOut = new DEROutputStream(bOut);
-        Enumeration             e = this.getObjects();
+        Enumeration<?>             e = this.getObjects();
 
         while (e.hasMoreElements())
         {
