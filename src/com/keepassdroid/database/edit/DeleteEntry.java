@@ -22,7 +22,7 @@ package com.keepassdroid.database.edit;
 import com.keepassdroid.Database;
 import com.keepassdroid.database.PwEntry;
 import com.keepassdroid.database.PwGroup;
-import com.keepassdroid.search.SearchDbHelper;
+import com.keepassdroid.search.SearchHelper;
 
 /** Task to delete entries
  * @author bpellin
@@ -88,7 +88,7 @@ public class DeleteEntry extends RunnableOnFinish {
 		public void run() {
 			if ( mSuccess ) {
 				if ( mDb.indexBuilt ) {
-					SearchDbHelper dbHelper = mDb.searchHelper;
+					SearchHelper dbHelper = mDb.getSearchHelper();
 					dbHelper.open();
 	
 					// Remove from entry global
