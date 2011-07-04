@@ -43,10 +43,9 @@
 		  style="@style/WhiteOnBlack"/>
 	</LinearLayout>
 	<LinearLayout
-	    android:id="@+id/ButtonBar2"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
-	    android:layout_alignParentBottom="true" android:layout_width="match_parent" android:gravity="center">
+	    android:layout_alignParentBottom="true" android:layout_width="match_parent" android:gravity="center" android:id="@+id/EntryViewButtonBar" android:paddingTop="5dp">
 	    <Button android:id="@+id/entry_edit"
     	  android:text="@string/menu_edit"
     	  android:layout_width="100sp"
@@ -56,9 +55,8 @@
 	<ImageView android:id="@+id/entry_divider2"
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
-	  android:layout_above="@+id/ButtonBar2"
 	  android:scaleType="fitXY"
-	  android:src="@android:drawable/divider_horizontal_dark"/>
+	  android:src="@android:drawable/divider_horizontal_dark" android:layout_above="@+id/EntryViewButtonBar"/>
 	<ScrollView android:id="@+id/entry_scroll" 
 	  android:layout_width="fill_parent"
 	  android:layout_height="fill_parent"
