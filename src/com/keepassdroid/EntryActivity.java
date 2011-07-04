@@ -154,13 +154,13 @@ public class EntryActivity extends LockCloseActivity {
         }
 		if ( mEntry.getPassword().length() > 0 ) {
             // only show notification if password is available
-			Notification password = getNotification(Intents.COPY_PASSWORD, String.format( "%s [%s]", getString(R.string.copy_password), title ), R.drawable.notify_profile);
+			Notification password = getNotification(Intents.COPY_PASSWORD, String.format( "%s [%s]", getString(R.string.copy_password), title ), R.drawable.notify);
 			mNM.notify(NOTIFY_PASSWORD, password);
 		}
 		
 		if ( mEntry.getUsername().length() > 0 ) {
 			// only show notification if username is available
-			Notification username = getNotification(Intents.COPY_USERNAME, String.format( "%s [%s]", getString(R.string.copy_password), title ), R.drawable.notify);
+			Notification username = getNotification(Intents.COPY_USERNAME, String.format( "%s [%s]", getString(R.string.copy_username), title ), R.drawable.notify_profile);
 			mNM.notify(NOTIFY_USERNAME, username);
 		}
 			
