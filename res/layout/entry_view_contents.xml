@@ -32,8 +32,7 @@
 	<com.keepassdroid.view.TextViewSelect android:id="@+id/entry_user_name" 
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
-	  style="@style/EntryItem"
-	android:hint="username"/>
+	  style="@style/EntryItem"/>
 	<!--  URL -->
 	<!-- Password -->
 	<TextView android:id="@+id/entry_password_label"
@@ -46,11 +45,10 @@
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
 	  android:password="true"
-	  style="@style/EntryItem"
-	android:hint="**********"/>
+	  style="@style/EntryItem"/>
 	<!-- Comment -->
 	<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/WhiteOnDarkSmall" android:id="@+id/entry_url_label" android:text="@string/entry_url"></TextView>
-	<com.keepassdroid.view.TextViewSelect android:layout_width="fill_parent" android:hint="www.url-goes-here.com" android:layout_height="wrap_content" android:id="@+id/entry_url" android:autoLink="all" style="@style/EntryItemMinor"></com.keepassdroid.view.TextViewSelect>
+	<com.keepassdroid.view.TextViewSelect android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/entry_url" android:autoLink="all" style="@style/EntryItemMinor"></com.keepassdroid.view.TextViewSelect>
 	<TextView android:id="@+id/entry_comment_label"
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content" 
@@ -61,7 +59,7 @@
       android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
 	  style="@style/EntryItem"
-	android:gravity="left" android:hint="Comments, questions, concerns" android:textSize="10pt"/>
+	android:gravity="left" android:textSize="10pt"/>
 	<LinearLayout android:id="@+id/extra_strings"
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
