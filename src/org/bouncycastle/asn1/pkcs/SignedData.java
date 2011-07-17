@@ -14,7 +14,6 @@ import org.bouncycastle.asn1.DERTaggedObject;
 /**
  * a PKCS#7 signed data object.
  */
-@SuppressWarnings("unchecked")
 public class SignedData
     extends ASN1Encodable
     implements PKCSObjectIdentifiers
@@ -60,7 +59,7 @@ public class SignedData
     public SignedData(
         ASN1Sequence seq)
     {
-        Enumeration     e = seq.getObjects();
+        Enumeration<?>     e = seq.getObjects();
 
         version = (DERInteger)e.nextElement();
         digestAlgorithms = ((ASN1Set)e.nextElement());

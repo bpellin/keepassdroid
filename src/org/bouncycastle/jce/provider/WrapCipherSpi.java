@@ -50,8 +50,8 @@ public abstract class WrapCipherSpi extends CipherSpi
     //
     // specs we can handle.
     //
-    @SuppressWarnings("unchecked")
-	private Class[]                 availableSpecs =
+	@SuppressWarnings("rawtypes")
+    private Class[]                 availableSpecs =
                                     {
                                         IvParameterSpec.class,
                                         PBEParameterSpec.class,

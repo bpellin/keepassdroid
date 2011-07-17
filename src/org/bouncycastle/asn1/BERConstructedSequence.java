@@ -6,7 +6,6 @@ import java.util.Enumeration;
 /**
  * @deprecated use BERSequence
  */
-@SuppressWarnings("unchecked")
 public class BERConstructedSequence
     extends DERConstructedSequence
 {
@@ -21,7 +20,7 @@ public class BERConstructedSequence
             out.write(SEQUENCE | CONSTRUCTED);
             out.write(0x80);
             
-            Enumeration e = getObjects();
+            Enumeration<?> e = getObjects();
             while (e.hasMoreElements())
             {
                 out.writeObject(e.nextElement());

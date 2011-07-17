@@ -12,7 +12,6 @@ import org.bouncycastle.asn1.DERObject;
 import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.DERTaggedObject;
 
-@SuppressWarnings("unchecked")
 public class ContentInfo
     extends ASN1Encodable
     implements PKCSObjectIdentifiers
@@ -38,7 +37,7 @@ public class ContentInfo
     public ContentInfo(
         ASN1Sequence  seq)
     {
-        Enumeration   e = seq.getObjects();
+        Enumeration<?>   e = seq.getObjects();
 
         contentType = (DERObjectIdentifier)e.nextElement();
 

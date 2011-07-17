@@ -7,10 +7,9 @@ import java.util.Vector;
  * this will eventually be superceded by ASN1EncodableVector so you should
  * use that class in preference.
  */
-@SuppressWarnings("unchecked")
 public class DEREncodableVector
 {
-    Vector v = new Vector();
+    Vector<DEREncodable> v = new Vector<DEREncodable>();
 
     /**
      * @deprecated use ASN1EncodableVector instead.

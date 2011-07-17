@@ -148,15 +148,19 @@ public class EntryActivity extends LockCloseActivity {
 		// Notification Manager
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		
+        String title = mEntry.getTitle();
+        if( title == null ) {
+            title = "";
+        }
 		if ( mEntry.getPassword().length() > 0 ) {
-			// only show notification if password is available
-			Notification password = getNotification(Intents.COPY_PASSWORD, R.string.copy_password);
+            // only show notification if password is available
+			Notification password = getNotification(Intents.COPY_PASSWORD, String.format( "%s [%s]", getString(R.string.copy_password), title ), R.drawable.notify);
 			mNM.notify(NOTIFY_PASSWORD, password);
 		}
 		
 		if ( mEntry.getUsername().length() > 0 ) {
 			// only show notification if username is available
-			Notification username = getNotification(Intents.COPY_USERNAME, R.string.copy_username);
+			Notification username = getNotification(Intents.COPY_USERNAME, String.format( "%s [%s]", getString(R.string.copy_username), title ), R.drawable.notify_profile);
 			mNM.notify(NOTIFY_USERNAME, username);
 		}
 			
@@ -200,16 +204,32 @@ public class EntryActivity extends LockCloseActivity {
 		super.onDestroy();
 	}
 
+	/**
+	 * Get {@link Notification} using custom icon resource
+	 * @param intentText
+	 * @param desc
+	 * @param icon
+	 * @return
+	 */
+    private Notification getNotification(String intentText, String desc, int icon) {
+        Notification notify = new Notification(icon, desc, System.currentTimeMillis());
+        
+        Intent intent = new Intent(intentText);
+        PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        
+        notify.setLatestEventInfo(this, getString(R.string.app_name), desc, pending);
+        
+        return notify;
+    }
+    
+    /**
+     * Get {@link Notification} using default icon (R.drawable.notify)
+     * @param intentText
+     * @param descResId
+     * @return
+     */
 	private Notification getNotification(String intentText, int descResId) {
-		String desc = getString(descResId);
-		Notification notify = new Notification(R.drawable.notify, desc, System.currentTimeMillis());
-		
-		Intent intent = new Intent(intentText);
-		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		
-		notify.setLatestEventInfo(this, getString(R.string.app_name), desc, pending);
-		
-		return notify;
+	    return getNotification(intentText, getString(descResId), R.drawable.notify);
 	}
 	
 	private String getDateTime(Date dt) {

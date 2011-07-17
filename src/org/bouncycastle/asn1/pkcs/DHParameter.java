@@ -10,7 +10,6 @@ import org.bouncycastle.asn1.DERInteger;
 import org.bouncycastle.asn1.DERObject;
 import org.bouncycastle.asn1.DERSequence;
 
-@SuppressWarnings("unchecked")
 public class DHParameter
     extends ASN1Encodable
 {
@@ -37,7 +36,7 @@ public class DHParameter
     public DHParameter(
         ASN1Sequence  seq)
     {
-        Enumeration     e = seq.getObjects();
+        Enumeration<?>     e = seq.getObjects();
 
         p = (DERInteger)e.nextElement();
         g = (DERInteger)e.nextElement();

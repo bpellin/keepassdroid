@@ -43,7 +43,8 @@ import com.keepassdroid.database.PwGroup;
 import com.keepassdroid.database.PwGroupV3;
 import com.keepassdroid.database.PwGroupV4;
 
-public class SearchDbHelper {
+@Deprecated
+public class SearchDbHelper implements SearchHelper {
 	private static final String DATABASE_NAME = "search";
 	private static final String SEARCH_TABLE = "entries";
 	private static final int DATABASE_VERSION = 3;
@@ -104,18 +105,30 @@ public class SearchDbHelper {
 		
 	}
 	
-	public SearchDbHelper open() throws SQLException {
+	/* (non-Javadoc)
+     * @see com.keepassdroid.search.SearchHelper#open()
+     */
+	@Override
+    public SearchHelper open() throws SQLException {
 		mDbHelper = new DatabaseHelper(mCtx);
 		mDb = mDbHelper.getWritableDatabase();
 		mDb.execSQL(PRAGMA_NO_SYNCHRONOUS);
 		return this;
 	}
 	
-	public void close() {
+	/* (non-Javadoc)
+     * @see com.keepassdroid.search.SearchHelper#close()
+     */
+	@Override
+    public void close() {
 		mDb.close();
 	}
 
-	public void clear() {
+	/* (non-Javadoc)
+     * @see com.keepassdroid.search.SearchHelper#clear()
+     */
+	@Override
+    public void clear() {
 		mDb.delete(SEARCH_TABLE, null, null);
 		initOmitBackup();
 	}
@@ -135,14 +148,22 @@ public class SearchDbHelper {
 		return cv;
 	}
 	
-	public void insertEntry(PwDatabase db, PwEntry entry) {
+	/* (non-Javadoc)
+     * @see com.keepassdroid.search.SearchHelper#insertEntry(com.keepassdroid.database.PwDatabase, com.keepassdroid.database.PwEntry)
+     */
+	@Override
+    public void insertEntry(PwDatabase db, PwEntry entry) {
 		if (!isOmitBackup || !db.isBackup(entry.getParent())) {
 			ContentValues cv = buildNewEntryContent(db, entry);
 			mDb.insert(SEARCH_TABLE, null, cv);
 		}
 	}
 	
-	public void insertEntry(PwDatabase db, List<? extends PwEntry> entries) {
+	/* (non-Javadoc)
+     * @see com.keepassdroid.search.SearchHelper#insertEntry(com.keepassdroid.database.PwDatabase, java.util.List)
+     */
+	@Override
+    public void insertEntry(PwDatabase db, List<? extends PwEntry> entries) {
 		mDb.beginTransaction();
 
 		try {
@@ -155,21 +176,33 @@ public class SearchDbHelper {
 		}
 	}
 	
-	public void updateEntry(PwDatabase db, PwEntry entry) {
+	/* (non-Javadoc)
+     * @see com.keepassdroid.search.SearchHelper#updateEntry(com.keepassdroid.database.PwDatabase, com.keepassdroid.database.PwEntry)
+     */
+	@Override
+    public void updateEntry(PwDatabase db, PwEntry entry) {
 		ContentValues cv = buildNewEntryContent(db, entry);
 		String uuidStr = cv.getAsString(KEY_UUID);
 		
 		mDb.update(SEARCH_TABLE, cv, KEY_UUID + " = ?", new String[] {uuidStr});
 	}
 	
-	public void deleteEntry(PwEntry entry) {
+	/* (non-Javadoc)
+     * @see com.keepassdroid.search.SearchHelper#deleteEntry(com.keepassdroid.database.PwEntry)
+     */
+	@Override
+    public void deleteEntry(PwEntry entry) {
 		UUID uuid = entry.getUUID();
 		String uuidStr = uuid.toString();
 		
 		mDb.delete(SEARCH_TABLE, KEY_UUID + " = ?", new String[] {uuidStr});
 	}
 	
-	public PwGroup search(Database db, String qStr) {
+	/* (non-Javadoc)
+     * @see com.keepassdroid.search.SearchHelper#search(com.keepassdroid.Database, java.lang.String)
+     */
+	@Override
+    public PwGroup search(Database db, String qStr) {
 		Cursor cursor;
 		String queryWithWildCard = addWildCard(qStr);
 		

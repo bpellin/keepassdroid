@@ -3,7 +3,6 @@ package org.bouncycastle.asn1;
 import java.io.IOException;
 import java.util.Enumeration;
 
-@SuppressWarnings("unchecked")
 public class BERSequence
     extends DERSequence
 {
@@ -43,7 +42,7 @@ public class BERSequence
             out.write(SEQUENCE | CONSTRUCTED);
             out.write(0x80);
             
-            Enumeration e = getObjects();
+            Enumeration<?> e = getObjects();
             while (e.hasMoreElements())
             {
                 out.writeObject(e.nextElement());

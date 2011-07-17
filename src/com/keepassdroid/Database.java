@@ -47,7 +47,8 @@ import com.keepassdroid.database.load.Importer;
 import com.keepassdroid.database.load.ImporterFactory;
 import com.keepassdroid.database.save.PwDbOutput;
 import com.keepassdroid.icons.DrawableFactory;
-import com.keepassdroid.search.SearchDbHelper;
+import com.keepassdroid.search.InMemorySearchHelper;
+import com.keepassdroid.search.SearchHelper;
 
 /**
  * @author bpellin
@@ -59,7 +60,7 @@ public class Database {
 	public PwGroup root;
 	public PwDatabase pm;
 	public String mFilename;
-	public SearchDbHelper searchHelper;
+	private SearchHelper searchHelper;
 	public boolean indexBuilt = false;
 	
 	public DrawableFactory drawFactory = new DrawableFactory();
@@ -129,7 +130,8 @@ public class Database {
 	 */
 	public void buildSearchIndex(Context ctx) {
 
-		searchHelper = new SearchDbHelper(ctx);
+        searchHelper = new InMemorySearchHelper();
+//        searchHelper = new SearchDbHelper(ctx);
 		
 		initSearch();
 		
@@ -234,6 +236,13 @@ public class Database {
 			dirty.add(root);		
 		}
 	}
+	
+	public SearchHelper getSearchHelper() {
+	    if( searchHelper == null ) {
+	        searchHelper = new InMemorySearchHelper();
+	    }
+	    return searchHelper;
+    }
 	
 	
 }

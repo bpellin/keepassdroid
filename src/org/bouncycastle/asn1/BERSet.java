@@ -3,7 +3,6 @@ package org.bouncycastle.asn1;
 import java.io.IOException;
 import java.util.Enumeration;
 
-@SuppressWarnings("unchecked")
 public class BERSet
     extends DERSet
 {
@@ -53,7 +52,7 @@ public class BERSet
             out.write(SET | CONSTRUCTED);
             out.write(0x80);
             
-            Enumeration e = getObjects();
+            Enumeration<?> e = getObjects();
             while (e.hasMoreElements())
             {
                 out.writeObject(e.nextElement());

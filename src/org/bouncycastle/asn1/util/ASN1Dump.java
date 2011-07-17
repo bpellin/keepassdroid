@@ -40,7 +40,7 @@ import org.bouncycastle.asn1.DERUnknownTag;
 import org.bouncycastle.asn1.DERVisibleString;
 import org.bouncycastle.util.encoders.Hex;
 
-@SuppressWarnings({ "unchecked", "deprecation" })
+@SuppressWarnings({ "deprecation" })
 public class ASN1Dump
 {
     private static final String  TAB = "    ";
@@ -60,7 +60,7 @@ public class ASN1Dump
         String nl = System.getProperty("line.separator");
         if (obj instanceof ASN1Sequence)
         {
-            Enumeration     e = ((ASN1Sequence)obj).getObjects();
+            Enumeration<?>     e = ((ASN1Sequence)obj).getObjects();
             String          tab = indent + TAB;
 
             buf.append(indent);
@@ -146,7 +146,7 @@ public class ASN1Dump
         }
         else if (obj instanceof DERConstructedSet)
         {
-            Enumeration     e = ((ASN1Set)obj).getObjects();
+            Enumeration<?>     e = ((ASN1Set)obj).getObjects();
             String          tab = indent + TAB;
 
             buf.append(indent);
@@ -175,7 +175,7 @@ public class ASN1Dump
         }
         else if (obj instanceof BERSet)
         {
-            Enumeration     e = ((ASN1Set)obj).getObjects();
+            Enumeration<?>     e = ((ASN1Set)obj).getObjects();
             String          tab = indent + TAB;
 
             buf.append(indent);
@@ -204,7 +204,7 @@ public class ASN1Dump
         }
         else if (obj instanceof DERSet)
         {
-            Enumeration     e = ((ASN1Set)obj).getObjects();
+            Enumeration<?>     e = ((ASN1Set)obj).getObjects();
             String          tab = indent + TAB;
 
             buf.append(indent);
@@ -365,7 +365,7 @@ public class ASN1Dump
             {
                 ASN1Sequence s = ASN1Sequence.getInstance(app.getObject(DERTags.SEQUENCE));
                 buf.append(indent + type + " ApplicationSpecific[" + app.getApplicationTag() + "]" + nl);
-                for (Enumeration e = s.getObjects(); e.hasMoreElements();)
+                for (Enumeration<?> e = s.getObjects(); e.hasMoreElements();)
                 {
                     _dumpAsString(indent + TAB, verbose, (DERObject)e.nextElement(), buf);
                 }

@@ -12,7 +12,6 @@ import org.bouncycastle.asn1.DERObject;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
 
-@SuppressWarnings("unchecked")
 public class PBKDF2Params
     extends ASN1Encodable
 {
@@ -47,7 +46,7 @@ public class PBKDF2Params
     public PBKDF2Params(
         ASN1Sequence  seq)
     {
-        Enumeration e = seq.getObjects();
+        Enumeration<?> e = seq.getObjects();
 
         octStr = (ASN1OctetString)e.nextElement();
         iterationCount = (DERInteger)e.nextElement();

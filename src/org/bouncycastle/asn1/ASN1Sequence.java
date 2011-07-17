@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
 
-@SuppressWarnings("unchecked")
 public abstract class ASN1Sequence
     extends ASN1Object
 {
-	private Vector seq = new Vector();
+	private Vector<DEREncodable> seq = new Vector<DEREncodable>();
 
     /**
      * return an ASN1Sequence from the given object.
@@ -86,7 +85,7 @@ public abstract class ASN1Sequence
         throw new IllegalArgumentException("unknown object in getInstance: " + obj.getClass().getName());
     }
 
-    public Enumeration getObjects()
+    public Enumeration<DEREncodable> getObjects()
     {
         return seq.elements();
     }
@@ -152,7 +151,7 @@ public abstract class ASN1Sequence
 
     public int hashCode()
     {
-        Enumeration             e = this.getObjects();
+        Enumeration<DEREncodable>             e = this.getObjects();
         int                     hashCode = size();
 
         while (e.hasMoreElements())
@@ -183,8 +182,8 @@ public abstract class ASN1Sequence
             return false;
         }
 
-        Enumeration s1 = this.getObjects();
-        Enumeration s2 = other.getObjects();
+        Enumeration<DEREncodable> s1 = this.getObjects();
+        Enumeration<DEREncodable> s2 = other.getObjects();
 
         while (s1.hasMoreElements())
         {

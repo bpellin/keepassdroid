@@ -13,7 +13,6 @@ import org.bouncycastle.crypto.params.KeyParameter;
  *
  * H(K XOR opad, H(K XOR ipad, text))
  */
-@SuppressWarnings("unchecked")
 public class HMac
     implements Mac
 {
@@ -27,11 +26,11 @@ public class HMac
     private byte[] inputPad;
     private byte[] outputPad;
 
-    private static Hashtable blockLengths;
+    private static Hashtable<String, Integer> blockLengths;
     
     static
     {
-        blockLengths = new Hashtable();
+        blockLengths = new Hashtable<String, Integer>();
         
         blockLengths.put("GOST3411", new Integer(32));
         

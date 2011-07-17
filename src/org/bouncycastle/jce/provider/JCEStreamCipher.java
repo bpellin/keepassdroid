@@ -43,6 +43,7 @@ public class JCEStreamCipher
     //
     // specs we can handle.
     //
+    @SuppressWarnings("rawtypes")
     private Class[]                 availableSpecs =
                                     {
                                         RC2ParameterSpec.class,

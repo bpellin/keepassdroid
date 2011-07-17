@@ -8,7 +8,6 @@ import java.util.Enumeration;
  * 
  * @deprecated use DERSet
  */
-@SuppressWarnings("unchecked")
 public class DERConstructedSet
     extends ASN1Set
 {
@@ -62,7 +61,7 @@ public class DERConstructedSet
     {
         ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
         DEROutputStream         dOut = new DEROutputStream(bOut);
-        Enumeration             e = this.getObjects();
+        Enumeration<?>             e = this.getObjects();
 
         while (e.hasMoreElements())
         {

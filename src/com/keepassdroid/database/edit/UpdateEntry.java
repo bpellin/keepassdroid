@@ -22,7 +22,7 @@ package com.keepassdroid.database.edit;
 import com.keepassdroid.Database;
 import com.keepassdroid.database.PwEntry;
 import com.keepassdroid.database.PwGroup;
-import com.keepassdroid.search.SearchDbHelper;
+import com.keepassdroid.search.SearchHelper;
 
 public class UpdateEntry extends RunnableOnFinish {
 	private Database mDb;
@@ -79,7 +79,7 @@ public class UpdateEntry extends RunnableOnFinish {
 					
 					if ( mDb.indexBuilt ) {
 						// Update search index
-						SearchDbHelper helper = mDb.searchHelper;
+						SearchHelper helper = mDb.getSearchHelper();
 						helper.open();
 						helper.updateEntry(mDb.pm, mOldE);
 						helper.close();

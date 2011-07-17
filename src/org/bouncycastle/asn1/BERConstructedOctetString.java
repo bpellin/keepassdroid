@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
 
-@SuppressWarnings("unchecked")
 public class BERConstructedOctetString
     extends DEROctetString
 {
@@ -15,7 +14,7 @@ public class BERConstructedOctetString
      * convert a vector of octet strings into a single byte string
      */
 	static private byte[] toBytes(
-        Vector  octs)
+        Vector<DEREncodable>  octs)
     {
         ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
 
@@ -40,7 +39,7 @@ public class BERConstructedOctetString
         return bOut.toByteArray();
     }
 
-    private Vector  octs;
+    private Vector<DEREncodable>  octs;
 
     /**
      * @param string the octets making up the octet string.
@@ -52,7 +51,7 @@ public class BERConstructedOctetString
     }
 
     public BERConstructedOctetString(
-        Vector  octs)
+        Vector<DEREncodable>  octs)
     {
         super(toBytes(octs));
 
@@ -79,7 +78,7 @@ public class BERConstructedOctetString
     /**
      * return the DER octets that make up this string.
      */
-    public Enumeration getObjects()
+    public Enumeration<DEREncodable> getObjects()
     {
         if (octs == null)
         {
@@ -89,9 +88,9 @@ public class BERConstructedOctetString
         return octs.elements();
     }
 
-    private Vector generateOcts() 
+    private Vector<DEREncodable> generateOcts() 
     { 
-        Vector vec = new Vector(); 
+        Vector<DEREncodable> vec = new Vector<DEREncodable>(); 
         for (int i = 0; i < string.length; i += MAX_LENGTH) 
         { 
             int end; 
@@ -128,7 +127,7 @@ public class BERConstructedOctetString
             //
             // write out the octet array
             //
-            Enumeration e = getObjects();
+            Enumeration<DEREncodable> e = getObjects();
             while (e.hasMoreElements())
             {
                 out.writeObject(e.nextElement());

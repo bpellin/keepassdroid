@@ -213,10 +213,9 @@ public final class Strings
         return bytes;
     }
 
-    @SuppressWarnings("unchecked")
-	public static String[] split(String input, char delimiter)
+    public static String[] split(String input, char delimiter)
     {
-        Vector           v = new Vector();
+        Vector<String>           v = new Vector<String>();
         boolean moreTokens = true;
         String subString;
 
