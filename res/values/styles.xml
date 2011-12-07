@@ -60,4 +60,27 @@
 	<style name="EntryItem">
 		<item name="@android:padding">5sp</item>
 	</style>
+	<style name="DAVPrefsButton">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:textColor">#ffffff</item>
+		<item name="android:gravity">center</item>
+		<item name="android:layout_margin">3dp</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:shadowColor">#000000</item>
+		<item name="android:shadowDx">1</item>
+		<item name="android:shadowDy">1</item>
+		<item name="android:shadowRadius">2</item>
+	</style>
+	<style name="DAVPrefsEditBox">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:inputType">textNoSuggestions</item>
+		<item name="android:background">@android:drawable/editbox_background</item>
+	</style>
+	<style name="DAVPrefsHeading">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_weight">1</item>
+	</style>
 </resources>
