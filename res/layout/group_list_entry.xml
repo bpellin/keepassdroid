@@ -17,30 +17,11 @@
   You should have received a copy of the GNU General Public License
   along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
-  android:stretchColumns="1">
-	<TableRow android:layout_width="fill_parent"
-	  android:gravity="center_vertical"
-	  android:layout_height="wrap_content">
-		<ImageView android:id="@+id/group_icon"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:padding="5dp"
-		  android:scaleType="fitXY"
-		  android:src="@drawable/ic99_blank"/>
-		<TextView android:id="@+id/group_text"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:paddingTop="2dp"
-		  android:paddingBottom="2dp"
-		  style="@style/GroupTextLarge"/>
-		<View/>
-		<TextView android:id="@+id/group_label"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  style="@style/GroupLabel"
-		  android:text="@string/group"/>
-	</TableRow>
-</TableLayout>
+  android:id="@+id/GroupListEntryLayout" android:paddingTop="5dp" android:paddingBottom="5dp">
+	<ImageView android:id="@+id/group_icon" android:layout_width="wrap_content" android:padding="5dp" android:layout_height="wrap_content" android:scaleType="fitXY" android:src="@drawable/ic99_blank" android:layout_alignParentLeft="true"></ImageView>
+	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingBottom="2dp" style="@style/GroupTextLarge" android:id="@+id/group_text" android:paddingTop="2dp" android:layout_toRightOf="@id/group_icon" android:hint="Group Label Goes Here"></TextView>
+	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/GroupLabel" android:id="@+id/group_label" android:text="@string/group" android:layout_alignParentRight="true" android:paddingRight="5dp"></TextView>
+</RelativeLayout>

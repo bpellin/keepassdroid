@@ -21,7 +21,7 @@
   android:id="@+id/entry_table"
   android:layout_height="wrap_content"
   android:layout_width="fill_parent"
-  android:orientation="vertical">	
+  android:orientation="vertical" android:padding="10dp">	
 	<!-- Username -->
 	<TextView android:id="@+id/entry_user_name_label"
 	  android:layout_width="fill_parent"
@@ -32,21 +32,8 @@
 	<com.keepassdroid.view.TextViewSelect android:id="@+id/entry_user_name" 
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
-	  style="@style/EntryItem"
-	/>
+	  style="@style/EntryItem"/>
 	<!--  URL -->
-	<TextView android:id="@+id/entry_url_label"
-	  android:layout_width="fill_parent"
-	  android:layout_height="wrap_content"
-	  android:text="@string/entry_url" 
-	  style="@style/WhiteOnDarkSmall"
-	/>
-	<com.keepassdroid.view.TextViewSelect android:id="@+id/entry_url" 
-	  android:layout_width="fill_parent"
-	  android:layout_height="wrap_content"
-	  android:autoLink="all"
-	  style="@style/EntryItem"
-	/>
 	<!-- Password -->
 	<TextView android:id="@+id/entry_password_label"
 	  android:layout_width="fill_parent"
@@ -58,9 +45,10 @@
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
 	  android:password="true"
-	  style="@style/EntryItem"
-	/>
+	  style="@style/EntryItem"/>
 	<!-- Comment -->
+	<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/WhiteOnDarkSmall" android:id="@+id/entry_url_label" android:text="@string/entry_url"></TextView>
+	<com.keepassdroid.view.TextViewSelect android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/entry_url" android:autoLink="all" style="@style/EntryItemMinor"></com.keepassdroid.view.TextViewSelect>
 	<TextView android:id="@+id/entry_comment_label"
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content" 
@@ -71,7 +59,7 @@
       android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
 	  style="@style/EntryItem"
-	/>
+	android:gravity="left" android:textSize="10pt"/>
 	<LinearLayout android:id="@+id/extra_strings"
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
@@ -86,9 +74,7 @@
 	/>
 	<TextView android:id="@+id/entry_created" 
 	  android:layout_width="fill_parent"
-	  android:layout_height="wrap_content"
-	  style="@style/EntryItem"
-	/>
+	  android:layout_height="wrap_content" style="@style/EntryItemMinor"/>
 	<!-- Modified -->
 	<TextView android:id="@+id/entry_modified_label"
 	  android:layout_width="fill_parent"
@@ -98,9 +84,7 @@
 	/>
 	<TextView android:id="@+id/entry_modified" 
 	  android:layout_width="fill_parent"
-	  android:layout_height="wrap_content"
-	  style="@style/EntryItem"
-	/>
+	  android:layout_height="wrap_content" style="@style/EntryItemMinor"/>
 	<!-- Accessed -->
 	<TextView android:id="@+id/entry_accessed_label"
 	  android:layout_width="fill_parent"
@@ -110,9 +94,7 @@
 	/>
 	<TextView android:id="@+id/entry_accessed" 
 	  android:layout_width="fill_parent"
-	  android:layout_height="wrap_content"
-	  style="@style/EntryItem"
-	/>
+	  android:layout_height="wrap_content" style="@style/EntryItemMinor"/>
 	<!-- Expires -->
 	<TextView android:id="@+id/entry_expires_label"
 	  android:layout_width="fill_parent"
@@ -122,7 +104,5 @@
 	/>
 	<TextView android:id="@+id/entry_expires" 
 	  android:layout_width="fill_parent"
-	  android:layout_height="wrap_content"
-	  style="@style/EntryItem"
-	/>
+	  android:layout_height="wrap_content" style="@style/EntryItemMinor"/>
 </LinearLayout>
