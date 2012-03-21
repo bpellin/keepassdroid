@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.android.keepass.R;
 import com.keepassdroid.database.PwGroupId;
@@ -44,17 +45,14 @@ public class GroupActivityV4 extends GroupActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		
-		menu.add(0, MENU_DONATE, 0, R.string.menu_donate);
-		menu.findItem(MENU_DONATE).setIcon(android.R.drawable.ic_menu_share);
+		menu.add(0, MENU_SEARCH, 0, R.string.menu_search);
+		menu.findItem(MENU_SEARCH).setIcon(android.R.drawable.ic_menu_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
 		menu.add(0, MENU_LOCK, 0, R.string.menu_lock);
-		menu.findItem(MENU_LOCK).setIcon(android.R.drawable.ic_lock_lock);
-	
-		menu.add(0, MENU_SEARCH, 0, R.string.menu_search);
-		menu.findItem(MENU_SEARCH).setIcon(android.R.drawable.ic_menu_search);
+		menu.findItem(MENU_LOCK).setIcon(android.R.drawable.ic_lock_lock).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		
 		menu.add(0, MENU_APP_SETTINGS, 0, R.string.menu_app_settings);
-		menu.findItem(MENU_APP_SETTINGS).setIcon(android.R.drawable.ic_menu_preferences);
+		menu.findItem(MENU_APP_SETTINGS).setIcon(android.R.drawable.ic_menu_preferences).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		
 		/*
 		menu.add(0, MENU_CHANGE_MASTER_KEY, 0, R.string.menu_change_key);
@@ -62,7 +60,10 @@ public class GroupActivityV4 extends GroupActivity {
 		*/
 		
 		menu.add(0, MENU_SORT, 0, R.string.sort_name);
-		menu.findItem(MENU_SORT).setIcon(android.R.drawable.ic_menu_sort_by_size);
+		menu.findItem(MENU_SORT).setIcon(android.R.drawable.ic_menu_sort_by_size).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		
+		menu.add(0, MENU_DONATE, 0, R.string.menu_donate);
+		menu.findItem(MENU_DONATE).setIcon(android.R.drawable.ic_menu_share).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		
 		return true;
 
