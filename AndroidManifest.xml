@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.android.keepass"
       android:installLocation="auto" android:versionCode="85" android:versionName="1.9.8">
-    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="11"/>
+    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="11"/>
 	<supports-screens
       android:smallScreens="true"
       android:normalScreens="true"
