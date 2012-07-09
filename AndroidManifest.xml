@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.android.keepass"
-      android:installLocation="auto" android:versionCode="82" android:versionName="1.9.5">
+      android:installLocation="auto" android:versionCode="85" android:versionName="1.9.8">
     <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="10"/>
 	<supports-screens
       android:smallScreens="true"
@@ -9,6 +9,7 @@
       android:largeScreens="true"
       android:anyDensity="true"
     />
+	<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
     <application 
       android:label="@string/app_name"
       android:icon="@drawable/launcher"
@@ -33,15 +34,25 @@
 			    <data android:mimeType="*/*" />
 			    <data android:host="*" />
 			    <data android:pathPattern=".*\\.kdb" />
-    		</intent-filter>
-    		<intent-filter>
-			    <action android:name="android.intent.action.VIEW" />
-			    <category android:name="android.intent.category.DEFAULT" />
-			    <category android:name="android.intent.category.BROWSABLE" />
-			    <data android:scheme="file" />
-			    <data android:mimeType="*/*" />
-			    <data android:host="*" />
+			    <data android:pathPattern=".*\\..*\\.kdb" />
+			    <data android:pathPattern=".*\\..*\\..*\\.kdb" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\.kdb" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.kdb" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.kdb" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdb" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdb" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdb" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdb" />
 			    <data android:pathPattern=".*\\.kdbx" />
+			    <data android:pathPattern=".*\\..*\\.kdbx" />
+			    <data android:pathPattern=".*\\..*\\..*\\.kdbx" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\.kdbx" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.kdbx" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.kdbx" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdbx" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdbx" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdbx" />
+			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdbx" />
     		</intent-filter>
     	</activity>
     	<activity android:name="com.keepassdroid.GroupActivityV3" android:configChanges="orientation|keyboardHidden"
@@ -86,4 +97,4 @@
 	</application>
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-</manifest> 
+</manifest>
