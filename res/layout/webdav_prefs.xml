@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <TableLayout
+        android:id="@+id/tableLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WebDAV Configuration" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" " />
+
+        </TableRow>
+    </TableLayout>
+
+  <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="1">
+    <TextView android:text="Hostname"    style="@style/DAVPrefsHeading" />
+    <EditText android:id="@+id/hostname" style="@style/DAVPrefsEditBox" />
+    <TextView android:text="Resource"    style="@style/DAVPrefsHeading" />
+    <EditText android:id="@+id/resource" style="@style/DAVPrefsEditBox" />
+    <TextView android:text="Username"    style="@style/DAVPrefsHeading" />
+    <EditText android:id="@+id/username" style="@style/DAVPrefsEditBox" />
+    <TextView android:text="Password"    style="@style/DAVPrefsHeading" />
+    <EditText android:id="@+id/password" style="@style/DAVPrefsEditBox" android:password="true" />
+
+  </LinearLayout>
+
+  <TableLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:stretchColumns="*" >
+
+      <TableRow
+          android:id="@+id/tableRow5"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" >
+
+          <TextView
+              android:id="@+id/textView4"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text=" " />
+
+      </TableRow>
+
+      <TableRow android:layout_width="match_parent" >
+
+          <Button
+              android:id="@+id/wdc_save"
+              style="@style/DAVPrefsButton"
+              android:background="@drawable/btn_red"
+              android:text="Save" />
+
+          <Button
+              android:id="@+id/wdc_clear"
+              style="@style/DAVPrefsButton"
+              android:background="@drawable/btn_purple"
+              android:text="Clear" />
+
+          <Button
+              android:id="@+id/wdc_test"
+              style="@style/DAVPrefsButton"
+              android:background="@drawable/btn_yellow"
+              android:text="Test" />
+      </TableRow>
+
+  </TableLayout>
+
+  <TableLayout
+      android:id="@+id/tableLayout1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="1" >
+
+      <TableRow
+          android:id="@+id/tableRow2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" >
+
+          <TextView
+              android:id="@+id/textView2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text=" "
+              android:textAppearance="?android:attr/textAppearanceSmall" />
+      </TableRow>
+
+      <TableRow
+          android:id="@+id/tableRow1"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1" >
+
+
+      </TableRow>
+  </TableLayout>
+ 
+</LinearLayout>
+

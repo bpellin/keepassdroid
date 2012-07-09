@@ -19,6 +19,8 @@
  */
 package com.keepassdroid.fileselect;
 
+import net.temerity.davsync.DAVException;
+import net.temerity.davsync.DAVProfile;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -27,6 +29,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+
 public class FileDbHelper {
 	
 	public static final String LAST_FILENAME = "lastFile";
@@ -34,7 +37,7 @@ public class FileDbHelper {
 	
 	private static final String DATABASE_NAME = "keepassdroid";
 	private static final String FILE_TABLE = "files";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	
 	private static final int MAX_FILES = 5;
 	
@@ -47,6 +50,8 @@ public class FileDbHelper {
 		"create table " + FILE_TABLE + " ( " + KEY_FILE_ID + " integer primary key autoincrement, " 
 			+ KEY_FILE_FILENAME + " text not null, " + KEY_FILE_KEYFILE + " text, "
 			+ KEY_FILE_UPDATED + " integer not null);";
+	private static final String DATABASE_CREATE_DAV =
+		"CREATE TABLE IF NOT EXISTS dav_profiles ( filename TEXT PRIMARY KEY, hostname TEXT, resource TEXT, username TEXT, password TEXT );";
 	
 	private final Context mCtx;
 	private DatabaseHelper mDbHelper;
@@ -63,6 +68,7 @@ public class FileDbHelper {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(DATABASE_CREATE);
+			db.execSQL(DATABASE_CREATE_DAV);
 			
 			// Migrate preference to database if it is set.
 			SharedPreferences settings = mCtx.getSharedPreferences("PasswordActivity", Context.MODE_PRIVATE); 
@@ -88,7 +94,10 @@ public class FileDbHelper {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// Only one database version so far
+			// this new database will also contain DAV profiles
+			if( oldVersion == 1 && newVersion == 2 ) {
+				db.execSQL(DATABASE_CREATE_DAV);
+			}
 		}
 		
 		private void deletePrefs(SharedPreferences prefs) {
@@ -101,6 +110,36 @@ public class FileDbHelper {
 			} catch (Exception e) {
 				assert(true);
 			}
+		}
+	}
+	
+	public void addDavProfile(DAVProfile p) {
+		if( ! isOpen() ) {
+			open();
+		}
+		String q = "INSERT OR REPLACE INTO dav_profiles VALUES('"
+			   + p.getFilename() + "','"
+			   + p.getHostname() + "','"
+			   + p.getResource() + "','"
+			   + p.getUsername() + "','"
+			   + p.getPassword() + "');";
+		mDb.execSQL(q);
+	}
+	
+	public void delDavProfile(String filename) {
+		mDb.execSQL("DELETE FROM dav_profiles WHERE filename LIKE '" + filename + "';");
+	}
+	
+	public DAVProfile getDavProfile(String filename) throws DAVException  {
+		if( ! isOpen() ) {
+			open();
+		}
+		Cursor c = mDb.rawQuery("SELECT * FROM dav_profiles WHERE filename = '" + filename + "';", null);
+		if( c.getCount() == 0 ) {
+			throw new DAVException();
+		} else {
+			c.moveToFirst();
+			return new DAVProfile(c.getString(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4));
 		}
 	}
 	
