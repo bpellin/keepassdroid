@@ -44,6 +44,12 @@ public class UpdateEntry extends RunnableOnFinish {
 
 	@Override
 	public void run() {
+		//move to the new group
+		if (!mOldE.getParent().equals(mNewE.getParent())) {
+			mOldE.getParent().childEntries.remove(mOldE);
+			mNewE.getParent().childEntries.add(mOldE);
+		}
+		
 		// Update entry with new values
 		mOldE.assign(mNewE);
 		
@@ -76,8 +82,19 @@ public class UpdateEntry extends RunnableOnFinish {
 						
 					}
 				}
+				// if group changed, sort new group and mark both groups as dirty
+				if (!mBackup.getParent().equals(mNewE.getParent())) {
+					mNewE.getParent().sortEntriesByName();
+					mDb.dirty.add(mNewE.getParent());
+					mDb.dirty.add(mBackup.getParent());
+				}
 			} else {
 				// If we fail to save, back out changes to global structure
+				// move back to original group if they changed
+				if (!mBackup.getParent().equals(mNewE.getParent())) {
+					mBackup.getParent().childEntries.add(mOldE);
+					mNewE.getParent().childEntries.remove(mOldE);
+				}
 				mOldE.assign(mBackup);
 			}
 			

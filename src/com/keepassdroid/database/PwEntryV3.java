@@ -315,6 +315,7 @@ public class PwEntryV3 extends PwEntry {
 
 		newEntry.parent = parent;
 
+		newEntry.groupId = groupId;
 		
 		return newEntry;
 	}

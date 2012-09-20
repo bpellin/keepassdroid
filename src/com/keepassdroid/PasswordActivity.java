@@ -25,6 +25,7 @@ import java.net.URLDecoder;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -72,6 +73,7 @@ public class PasswordActivity extends LockingActivity {
 	private String mKeyFile;
 	private boolean mRememberKeyfile;
 	SharedPreferences prefs;
+	BroadcastReceiver mIntentReceiver;
 	
 	public static void Launch(Activity act, String fileName) throws FileNotFoundException {
 		Launch(act,fileName,"");
@@ -370,9 +372,20 @@ public class PasswordActivity extends LockingActivity {
 		case R.id.menu_app_settings:
 			AppSettingsActivity.Launch(this);
 			return true;
+		case R.id.menu_share:
+			shareFile();
+			return true;
 		}
 		
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void shareFile() {
+		Intent shareIntent = new Intent();
+		shareIntent.setAction(Intent.ACTION_SEND);
+		shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mFileName)));
+		shareIntent.setType("application/octet-stream");
+		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 	}
 
 	private final class AfterLoad extends OnFinish {

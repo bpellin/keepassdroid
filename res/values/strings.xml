@@ -180,4 +180,7 @@
     	<item>Medium</item>
     	<item>Large</item>
     </string-array>
+    <string name="entry_parent">Group:</string>
+    <string name="menu_share">Share</string>
+    <string name="send_to">Send to</string>
 </resources>
