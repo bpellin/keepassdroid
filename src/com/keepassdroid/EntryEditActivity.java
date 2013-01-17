@@ -21,6 +21,7 @@ package com.keepassdroid;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
@@ -37,9 +38,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +54,7 @@ import com.keepassdroid.database.PwEntry;
 import com.keepassdroid.database.PwEntryV3;
 import com.keepassdroid.database.PwGroup;
 import com.keepassdroid.database.PwGroupV3;
+import com.keepassdroid.database.PwGroupIdV3;
 import com.keepassdroid.database.edit.AddEntry;
 import com.keepassdroid.database.edit.OnFinish;
 import com.keepassdroid.database.edit.RunnableOnFinish;
@@ -70,6 +74,7 @@ public class EntryEditActivity extends LockCloseActivity {
 	private boolean mShowPassword = false;
 	private boolean mIsNew;
 	private int mSelectedIconID = -1;
+	private ArrayAdapter<PwGroup> mGroupsAdapter;
 	
 	public static void Launch(Activity act, PwEntry pw) {
 		if ( !(pw instanceof PwEntryV3) ) {
@@ -121,6 +126,7 @@ public class EntryEditActivity extends LockCloseActivity {
 
 			mEntry = new PwEntryV3(db, groupId);
 			mIsNew = true;
+			fillGroupsAndSelect(groupId);
 			
 		} else {
 			UUID uuid = Types.bytestoUUID(uuidBytes);
@@ -179,7 +185,9 @@ public class EntryEditActivity extends LockCloseActivity {
 				PwEntryV3 newEntry = new PwEntryV3();
 				
 				newEntry.binaryDesc = mEntry.binaryDesc;
-				newEntry.groupId = mEntry.groupId;
+				//newEntry.groupId = mEntry.groupId;
+				newEntry.groupId = getSelectedGroupId();
+				newEntry.parent = (PwGroupV3)App.getDB().groups.get(new PwGroupIdV3(newEntry.groupId));
 
 				if (mSelectedIconID == -1) {
 					if (mIsNew) {
@@ -193,7 +201,7 @@ public class EntryEditActivity extends LockCloseActivity {
 					newEntry.icon = App.getDB().pm.iconFactory.getIcon(mSelectedIconID);
 				}
 
-				newEntry.parent = mEntry.parent;
+				//newEntry.parent = mEntry.parent;
 				newEntry.tCreation = mEntry.tCreation;
 				newEntry.tExpire = mEntry.tExpire;
 				newEntry.setUUID(mEntry.getUUID());
@@ -259,7 +267,40 @@ public class EntryEditActivity extends LockCloseActivity {
 			pass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 			conf.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 		}
+	}
 		
+	private void fillGroupsAndSelect(int groupId) {
+		mGroupsAdapter = new ArrayAdapter<PwGroup>(this, android.R.layout.simple_spinner_item);
+		mGroupsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		Spinner spinner = (Spinner) findViewById(R.id.entry_parent_spinner);
+		spinner.setAdapter(mGroupsAdapter);
+		addGroups(App.getDB().groups.values());
+		for(int i = 0; i < mGroupsAdapter.getCount(); ++i) {
+			PwGroup item = mGroupsAdapter.getItem(i);
+			if (item instanceof PwGroupV3 && ((PwGroupV3)item).groupId == groupId) {
+				spinner.setSelection(i, false);
+				return;
+			}
+		}
+	}
+
+	private void addGroups(Collection<PwGroup> groups) {
+		if (groups.isEmpty()) {
+			return;
+		}
+		for (PwGroup group : groups) {
+			mGroupsAdapter.add(group);
+//			addGroups(group.childGroups);
+		}
+	}
+
+	protected int getSelectedGroupId() {
+		Spinner spinner = (Spinner) findViewById(R.id.entry_parent_spinner);
+		Object obj = spinner.getSelectedItem();
+		if (obj instanceof PwGroupV3) {
+			return ((PwGroupV3)obj).groupId;
+		}
+		return 0;
 	}
 	
 	@Override
@@ -347,6 +388,7 @@ public class EntryEditActivity extends LockCloseActivity {
 	}
 
 	private void fillData() {
+		fillGroupsAndSelect(mEntry.groupId);
 		ImageButton currIconButton = (ImageButton) findViewById(R.id.icon_button);
 		App.getDB().drawFactory.assignDrawableTo(currIconButton, getResources(), mEntry.getIcon());
 		

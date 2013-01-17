@@ -43,10 +43,25 @@
 	  android:layout_above="@id/entry_divider">
 		<RelativeLayout android:layout_width="fill_parent"
 		  android:layout_height="wrap_content">
+		  	<!-- Parent -->
+			<TextView android:id="@+id/entry_parent_label"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content" 
+			  android:text="@string/entry_parent" />
+
+			<Spinner
+			    android:id="@+id/entry_parent_spinner"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignParentLeft="true"
+			    android:layout_alignParentRight="true"
+			    android:layout_below="@+id/entry_parent_label" />
+
 			<!--  Title -->	
 			<TextView android:id="@+id/entry_title_label"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content" 
+			  android:layout_below="@id/entry_parent_spinner"
 			  android:text="@string/entry_title" />
 			<ImageButton android:id="@+id/icon_button"
 			  android:layout_width="wrap_content"
