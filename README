@@ -1,7 +1,5 @@
-Native library build instructions:
-1. Make sure you have the latest MIPS Android NDK installed: 
-   http://developer.mips.com/android/download-android-ndk/
+This is a fork of KeePassDroid that fixes some UI issues I have. Mainly, the fonts used for displaying passwords are very small, there's no color, and the way the buttons are laid out is kind of awkward.
 
-2. From KeePassDroid/jni, call prep_build.sh to download and unpack the crypto sources.
+This fork only involves changes to the XML layouts--no Java code was changed. There may be edge cases with very large passwords that I'm not aware of yet that would require changes to the application code. I'll deal with these as they come to me. 
 
-3. From the KeePassDroid root directory, call ${path-to-ndk}/ndk-build
+Many, many thanks to Brian for the original version of KeePassDroid. I mean no disrespect with these changes--I just want to be able to see things without squinting quite as much!
