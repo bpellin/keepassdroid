@@ -212,7 +212,7 @@ public class DatabaseProvider extends ContentProvider {
             entries = Arrays.asList();
         }
         PwCursor(PwGroup group) {
-            entries = group.childEntries;
+            entries = group == null ? Arrays.<PwEntry>asList() : group.childEntries;
         }
         PwCursor(PwEntry entry) {
             entries = Arrays.asList(entry);
