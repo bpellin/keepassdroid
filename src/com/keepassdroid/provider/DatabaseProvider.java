@@ -56,23 +56,24 @@ public class DatabaseProvider extends ContentProvider {
         URI_MATCHER.addURI("com.keepassdroid.provider", "entries",   BY_SEARCH);
         URI_MATCHER.addURI("com.keepassdroid.provider", "entries/#", BY_ID);
     }
-    private int startingUid;
+    private volatile int startingUid;
     private Database db;
     private AuthzDatabaseHelper dbHelper;
 
     @Override
     public Bundle call(String method, String arg, Bundle extras) {
-        if (Contract.METHOD_OPEN.equals(method) && db == null) {
+        if (Contract.METHOD_OPEN.equals(method)) {
             startingUid = Binder.getCallingUid();
             Log.v(TAG, "content provider started by uid: " + startingUid);
             String database = extras.getString(Contract.EXTRA_DATABASE);
             String password = extras.getString(Contract.EXTRA_PASSWORD);
             String keyfile = extras.getString(Contract.EXTRA_KEYFILE);
-            db = new Database();
+            Database d = new Database();
             try {
-                db.LoadData(getContext(), database,
+                d.LoadData(getContext(), database,
                         password == null ? "" : password,
                         keyfile == null ? "" : keyfile);
+                db = d;
             } catch (IOException e) {
                 extras.putString(Contract.EXTRA_ERROR, e.toString());
             } catch (InvalidDBException e) {
