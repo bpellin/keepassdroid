@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:padding="8dp"
+              android:layout_width="match_parent"
+              android:layout_height="240dp">
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            >
+        <TextView
+                android:id="@+id/applications"
+                android:layout_gravity="top|left"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/timer"
+                android:layout_gravity="top|right"
+                android:gravity="top|right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <TextView
+            android:text="@string/authz_access_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    <LinearLayout
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+        <Button
+                android:id="@+id/deny"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/deny"/>
+        <Button
+                android:id="@+id/allow"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/allow"/>
+        <Button
+                android:id="@+id/always"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/always"/>
+    </LinearLayout>
+</LinearLayout>

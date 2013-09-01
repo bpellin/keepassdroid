@@ -2,13 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.android.keepass"
       android:installLocation="auto" android:versionCode="127" android:versionName="1.99.9">
-    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="12"/>
+    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="14"/>
 	<supports-screens
       android:smallScreens="true"
       android:normalScreens="true"
       android:largeScreens="true"
       android:anyDensity="true"
     />
+    <permission android:protectionLevel="dangerous"
+                android:description="@string/permission_description"
+                android:icon="@drawable/launcher"
+                android:label="KeePassDroid database access"
+                android:permissionGroup="@string/app_name"
+                android:name="com.keepassdroid.permission.READ_DATABASE"/>
+    <uses-permission android:name="com.keepassdroid.permission.READ_DATABASE"/>
+
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 	<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
     <application 
@@ -97,5 +105,12 @@
 			android:theme="@style/NoTitleBar"></activity>
 		<service android:name="com.keepassdroid.services.TimeoutService"></service>
 		<meta-data android:name="com.a0soft.gphone.aTrackDog.webURL" android:value="http://keepassdroid.com" />
+        <activity android:name="com.keepassdroid.provider.AuthzActivity"
+                  android:exported="false"
+                  android:theme="@android:style/Theme.DeviceDefault.Dialog"/>
+        <provider android:name="com.keepassdroid.provider.DatabaseProvider"
+                  android:authorities="com.keepassdroid.provider"
+                  android:grantUriPermissions="false"
+                  android:readPermission="com.keepassdroid.permission.READ_DATABASE"/>
 	</application>
-</manifest> 
+</manifest>
