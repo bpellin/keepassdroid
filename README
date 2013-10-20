@@ -5,3 +5,8 @@ Native library build instructions:
 2. From KeePassDroid/jni, call prep_build.sh to download and unpack the crypto sources.
 
 3. From the KeePassDroid root directory, call ${path-to-ndk}/ndk-build
+
+Google Drive Integration build instructions:
+To add the google drive dependency in eclipse after installing the google plugin, right click on the project and choose Google->Add Google APIs then choose Drive (v2)
+
+To add the google-play-services dependency, either refer to the project in the Android SDK samples or unzip the included zip file (google-play-services_lib) and then modify the KeePass project to reference the google-play-services as an Android library.
