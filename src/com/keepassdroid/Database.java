@@ -156,6 +156,11 @@ public class Database {
 		
 		mFilename = filename;
 		
+		//Required for Google Drive Integration
+		if(googleDriveAdapter != null) {
+			googleDriveAdapter.update(orig);
+		}
+		
 	}
 	
 	public void clear() {
@@ -180,4 +185,10 @@ public class Database {
 	}
 	
 	
+	//Required for Google Drive Integration
+	private GoogleDriveAdapter googleDriveAdapter = null;
+	
+	public void setGoogleDriveAdapter(GoogleDriveAdapter googleDriveAdapter) {
+		this.googleDriveAdapter = googleDriveAdapter;
+	}
 }

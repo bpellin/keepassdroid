@@ -1,0 +1,204 @@
+diff --git a/.classpath b/.classpath
+index dec02b3..18e6c1b 100644
+--- a/.classpath
++++ b/.classpath
+@@ -1,9 +1,11 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <classpath>
++	<classpathentry exported="true" kind="lib" path="/google-play-services_lib/libs/google-play-services.jar"/>
+ 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+ 	<classpathentry kind="src" path="src"/>
+ 	<classpathentry kind="src" path="gen"/>
+-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+ 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
++	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/drive-v2r70lv1.12.0-beta"/>
++	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+ 	<classpathentry kind="output" path="bin/classes"/>
+ </classpath>
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index a310edc..86308a8 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -2,7 +2,7 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+       package="com.android.keepass"
+       android:installLocation="auto" android:versionCode="128" android:versionName="1.99.10">
+-    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="12"/>
++    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16"/> <!--  Bumped version for Google Drive support -->
+ 	<supports-screens
+       android:smallScreens="true"
+       android:normalScreens="true"
+@@ -11,6 +11,13 @@
+     />
+ 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+ 	<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
++	
++	<!--  Required permissions for Google Drive-->
++	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
++	<uses-permission android:name="android.permission.INTERNET" />
++	<uses-permission android:name="android.permission.USE_CREDENTIALS" />
++	<!--  End required permissions for Google Drive -->
++    
+     <application 
+       android:label="@string/app_name"
+       android:icon="@drawable/launcher"
+@@ -56,6 +63,17 @@
+ 			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdbx" />
+ 			    <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdbx" />
+     		</intent-filter>
++    		
++    		<!-- Required meta-data and intent-filter for Google Drive -->
++    		<meta-data
++                android:name="com.google.android.apps.drive.APP_ID"
++                android:value="id=478530778027" />
++            <intent-filter>
++		        <action android:name="com.google.android.apps.drive.DRIVE_OPEN" />
++		        <category android:name="android.intent.category.DEFAULT" />
++		        <data android:mimeType="application/octet-stream"/>
++		    </intent-filter>
++		    <!-- End required meta-data and intent-filter for Google Drive -->
+     	</activity>
+     	<activity android:name="com.keepassdroid.GroupActivityV3" android:configChanges="orientation|keyboardHidden"
+     		android:theme="@style/NoTitleBar">
+diff --git a/project.properties b/project.properties
+index adea83f..6f54e24 100644
+--- a/project.properties
++++ b/project.properties
+@@ -10,5 +10,6 @@
+ # Indicates whether an apk should be generated for each density.
+ split.density=false
+ # Project target.
+-target=android-11
++target=Google Inc.:Google APIs:17
+ apk-configurations=
++android.library.reference.1=../google-play-services_lib
+diff --git a/src/com/keepassdroid/Database.java b/src/com/keepassdroid/Database.java
+index fce874b..bdaf07c 100644
+--- a/src/com/keepassdroid/Database.java
++++ b/src/com/keepassdroid/Database.java
+@@ -156,6 +156,11 @@ public class Database {
+ 		
+ 		mFilename = filename;
+ 		
++		//Required for Google Drive Integration
++		if(googleDriveAdapter != null) {
++			googleDriveAdapter.update(orig);
++		}
++		
+ 	}
+ 	
+ 	public void clear() {
+@@ -180,4 +185,10 @@ public class Database {
+ 	}
+ 	
+ 	
++	//Required for Google Drive Integration
++	private GoogleDriveAdapter googleDriveAdapter = null;
++	
++	public void setGoogleDriveAdapter(GoogleDriveAdapter googleDriveAdapter) {
++		this.googleDriveAdapter = googleDriveAdapter;
++	}
+ }
+diff --git a/src/com/keepassdroid/PasswordActivity.java b/src/com/keepassdroid/PasswordActivity.java
+index f589fb6..e8c0943 100644
+--- a/src/com/keepassdroid/PasswordActivity.java
++++ b/src/com/keepassdroid/PasswordActivity.java
+@@ -75,6 +75,9 @@ public class PasswordActivity extends LockingActivity {
+ 	private boolean mRememberKeyfile;
+ 	SharedPreferences prefs;
+ 	
++	//Required for Google Drive Integration
++	private GoogleDriveAdapter googleDriveAdapter;
++	
+ 	public static void Launch(Activity act, String fileName) throws FileNotFoundException {
+ 		Launch(act,fileName,"");
+ 	}
+@@ -97,6 +100,12 @@ public class PasswordActivity extends LockingActivity {
+ 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+ 		super.onActivityResult(requestCode, resultCode, data);
+ 		
++		if(googleDriveAdapter != null && 
++				googleDriveAdapter.handleActivityResult(requestCode, resultCode, data, this)) {
++			//Handled by google drive adapter
++			return;
++		}
++		
+ 		switch (requestCode) {
+ 		
+ 		case KeePass.EXIT_NORMAL:
+@@ -155,7 +164,20 @@ public class PasswordActivity extends LockingActivity {
+ 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+ 		mRememberKeyfile = prefs.getBoolean(getString(R.string.keyfile_key), getResources().getBoolean(R.bool.keyfile_default));
+ 		
+-		if ( action != null && action.equals(VIEW_INTENT) ) {
++		//Required for Google Drive Integration
++		googleDriveAdapter = new GoogleDriveAdapter();
++			    
++	    if("com.google.android.apps.drive.DRIVE_OPEN".equals(action)) { //if block added for Google Drive integration
++	    	//Was action handled successfully by google drive adapter?
++	    	if (googleDriveAdapter.handleDriveOpenAction(action, i.getStringExtra("resourceId"), this)) {
++	    		setFileName("drive://" + googleDriveAdapter.getDriveFileId(), false);
++			} else {
++				//There was a problem handling the google drive action
++				finish();
++	    		return;
++			}
++	    } else if ( action != null && action.equals(VIEW_INTENT) ) {
++	    
+ 			mFileName = i.getDataString();
+ 			
+ 			if ( ! mFileName.substring(0, 7).equals("file://") ) {
+@@ -372,6 +394,8 @@ public class PasswordActivity extends LockingActivity {
+ 		// Clear before we load
+ 		Database db = App.getDB();
+ 		db.clear();
++		//Load Google Drive info
++		db.setGoogleDriveAdapter(googleDriveAdapter);
+ 		
+ 		// Clear the shutdown flag
+ 		App.clearShutdown();
+@@ -394,7 +418,7 @@ public class PasswordActivity extends LockingActivity {
+ 			te.setText(str);
+ 		}
+ 	}
+-
++	
+ 	@Override
+ 	public boolean onCreateOptionsMenu(Menu menu) {
+ 		super.onCreateOptionsMenu(menu);
+@@ -437,4 +461,16 @@ public class PasswordActivity extends LockingActivity {
+ 		}
+ 	}
+ 	
++	//Required for Google Drive Integration
++	public void setFileName(String fileName, boolean populateView) {
++		mFileName = fileName;
++		if(populateView) {
++			PasswordActivity.this.runOnUiThread(new Runnable() {
++				public void run() {
++					populateView();
++				}
++			});
++		}
++	}
++	
+ }
+diff --git a/tests/.classpath b/tests/.classpath
+index 0807a52..d6cf49e 100644
+--- a/tests/.classpath
++++ b/tests/.classpath
+@@ -1,11 +1,11 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <classpath>
+-	<classpathentry kind="src" path="src"/>
+-	<classpathentry combineaccessrules="false" kind="src" path="/KeePassDroid"/>
+-	<classpathentry kind="src" path="gen"/>
+ 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+ 	<classpathentry kind="lib" path="libs/junit4.jar"/>
+ 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+ 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
++	<classpathentry kind="src" path="src"/>
++	<classpathentry combineaccessrules="false" kind="src" path="/KeePassDroid"/>
++	<classpathentry kind="src" path="gen"/>
+ 	<classpathentry kind="output" path="bin/classes"/>
+ </classpath>
