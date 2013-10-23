@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Brian Pellin.
+ * Copyright 2009-2013 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -138,14 +138,18 @@ public class EntryActivity extends LockCloseActivity {
 		mPos = i.getIntExtra(KEY_REFRESH_POS, -1);
 		assert(uuid != null);
 		
-		mEntry = db.entries.get(uuid);
-		
+		mEntry = db.pm.entries.get(uuid);
+		if (mEntry == null) {
+			Toast.makeText(this, R.string.entry_not_found, Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
 		
 		// Refresh Menu contents in case onCreateMenuOptions was called before mEntry was set
 		ActivityCompat.invalidateOptionsMenu(this);
 		
 		// Update last access time.
-		mEntry.stampLastAccess();
+		mEntry.touch(false, false);
 		
 		fillData(false);
 

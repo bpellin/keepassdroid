@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Brian Pellin.
+ * Copyright 2009-2013 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -53,7 +53,6 @@ import com.keepassdroid.compat.EditorCompat;
 import com.keepassdroid.database.edit.LoadDB;
 import com.keepassdroid.database.edit.OnFinish;
 import com.keepassdroid.fileselect.BrowserDialog;
-import com.keepassdroid.fileselect.FileDbHelper;
 import com.keepassdroid.intents.Intents;
 import com.keepassdroid.settings.AppSettingsActivity;
 import com.keepassdroid.utils.Interaction;
@@ -64,9 +63,12 @@ public class PasswordActivity extends LockingActivity {
 	public static final String KEY_DEFAULT_FILENAME = "defaultFileName";
 	private static final String KEY_FILENAME = "fileName";
 	private static final String KEY_KEYFILE = "keyFile";
+	private static final String KEY_PASSWORD = "password";
+	private static final String KEY_LAUNCH_IMMEDIATELY = "launchImmediately";
 	private static final String VIEW_INTENT = "android.intent.action.VIEW";
 	
 	private static final int FILE_BROWSE = 256;
+	public static final int GET_CONTENT = 257;
 
 	private String mFileName;
 	private String mKeyFile;
@@ -123,8 +125,22 @@ public class PasswordActivity extends LockingActivity {
 				}
 			}
 			break;
+		case GET_CONTENT:
+			if (resultCode == RESULT_OK) {
+				if (data != null) {
+					Uri uri = data.getData();
+					if (uri != null) {
+						String path = uri.getPath();
+						if (path != null) {
+							EditText fn = (EditText) findViewById(R.id.pass_keyfile);
+							fn.setText(path);
+							
+						}
+					}
+				}
+			}
+			break;
 		}
-		
 	}
 
 	@Override
@@ -133,6 +149,8 @@ public class PasswordActivity extends LockingActivity {
 	
 		Intent i = getIntent();
 		String action = i.getAction();
+		String password = "";
+		boolean launch_immediately = false;
 		
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mRememberKeyfile = prefs.getBoolean(getString(R.string.keyfile_key), getResources().getBoolean(R.bool.keyfile_default));
@@ -168,6 +186,9 @@ public class PasswordActivity extends LockingActivity {
 		} else {
 			mFileName = i.getStringExtra(KEY_FILENAME);
 			mKeyFile = i.getStringExtra(KEY_KEYFILE);
+			password = i.getStringExtra(KEY_PASSWORD);
+			launch_immediately = i.getBooleanExtra(KEY_LAUNCH_IMMEDIATELY, false);
+			
 			if ( mKeyFile == null || mKeyFile.length() == 0) {
 				mKeyFile = getKeyFile(mFileName);
 			}
@@ -196,6 +217,11 @@ public class PasswordActivity extends LockingActivity {
 			
 		});
 		
+		if (password != null) {
+			TextView tv_password = (TextView) findViewById(R.id.password);
+			tv_password.setText(password);
+		}
+		
 		CheckBox defaultCheck = (CheckBox) findViewById(R.id.default_database);
 		defaultCheck.setOnCheckedChangeListener(new DefaultCheckChange());
 		
@@ -203,8 +229,19 @@ public class PasswordActivity extends LockingActivity {
 		browse.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				if (Interaction.isIntentAvailable(PasswordActivity.this, Intents.FILE_BROWSE)) {
-					Intent i = new Intent(Intents.FILE_BROWSE);
+				Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+				i.setType("file/*");
+				
+				try {
+					startActivityForResult(i, GET_CONTENT);
+				} catch (ActivityNotFoundException e) {
+					lookForOpenIntentsFilePicker();
+				}
+			}
+			
+			private void lookForOpenIntentsFilePicker() {
+				if (Interaction.isIntentAvailable(PasswordActivity.this, Intents.OPEN_INTENTS_FILE_BROWSE)) {
+					Intent i = new Intent(Intents.OPEN_INTENTS_FILE_BROWSE);
 					
 					if (mFileName.length() > 0) {
 						File keyfile = new File(mFileName);
@@ -217,18 +254,23 @@ public class PasswordActivity extends LockingActivity {
 					try {
 						startActivityForResult(i, FILE_BROWSE);
 					} catch (ActivityNotFoundException e) {
-						BrowserDialog diag = new BrowserDialog(PasswordActivity.this);
-						diag.show();
+						showBrowserDialog();
 					}
 				} else {
-					BrowserDialog diag = new BrowserDialog(PasswordActivity.this);
-					diag.show();
+					showBrowserDialog();
 				}
-					
+			}
+			
+			private void showBrowserDialog() {
+				BrowserDialog diag = new BrowserDialog(PasswordActivity.this);
+				diag.show();
 			}
 		});
 		
 		retrieveSettings();
+		
+		if (launch_immediately)
+			loadDatabase(password, mKeyFile);
 	}
 	
 	@Override
@@ -256,9 +298,8 @@ public class PasswordActivity extends LockingActivity {
 	
 	private String getKeyFile(String filename) {
 		if ( mRememberKeyfile ) {
-			FileDbHelper dbHelp = App.fileDbHelper;
 			
-			String keyfile = dbHelp.getFileByName(filename);
+			String keyfile = App.getFileHistory().getFileByName(filename);
 			
 			return keyfile;
 		} else {
@@ -314,26 +355,31 @@ public class PasswordActivity extends LockingActivity {
 		public void onClick(View view) {
 			String pass = getEditText(R.id.password);
 			String key = getEditText(R.id.pass_keyfile);
-			if ( pass.length() == 0 && key.length() == 0 ) {
-				errorMessage(R.string.error_nopass);
-				return;
-			}
-			
-			String fileName = getEditText(R.id.filename);
-			
-			
-			// Clear before we load
-			Database db = App.getDB();
-			db.clear();
-			
-			// Clear the shutdown flag
-			App.clearShutdown();
-			
-			Handler handler = new Handler();
-			LoadDB task = new LoadDB(db, PasswordActivity.this, fileName, pass, key, new AfterLoad(handler));
-			ProgressTask pt = new ProgressTask(PasswordActivity.this, task, R.string.loading_database);
-			pt.run();
+			loadDatabase(pass, key);
 		}			
+	}
+	
+	private void loadDatabase(String pass, String keyfile)
+	{
+		if ( pass.length() == 0 && keyfile.length() == 0 ) {
+			errorMessage(R.string.error_nopass);
+			return;
+		}
+		
+		String fileName = getEditText(R.id.filename);
+		
+		
+		// Clear before we load
+		Database db = App.getDB();
+		db.clear();
+		
+		// Clear the shutdown flag
+		App.clearShutdown();
+		
+		Handler handler = new Handler();
+		LoadDB task = new LoadDB(db, PasswordActivity.this, fileName, pass, keyfile, new AfterLoad(handler));
+		ProgressTask pt = new ProgressTask(PasswordActivity.this, task, R.string.loading_database);
+		pt.run();		
 	}
 	
 	private String getEditText(int resId) {

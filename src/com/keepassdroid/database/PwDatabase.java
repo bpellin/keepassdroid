@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Brian Pellin.
+ * Copyright 2009-2013 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -28,7 +28,12 @@ import java.io.UnsupportedEncodingException;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import android.os.DropBoxManager.Entry;
 
 import com.keepassdroid.crypto.finalkey.FinalKey;
 import com.keepassdroid.crypto.finalkey.FinalKeyFactory;
@@ -43,6 +48,8 @@ public abstract class PwDatabase {
 	public String name = "KeePass database";
 	public PwGroup rootGroup;
 	public PwIconFactory iconFactory = new PwIconFactory();
+	public Map<PwGroupId, PwGroup> groups = new HashMap<PwGroupId, PwGroup>();
+	public Map<UUID, PwEntry> entries = new HashMap<UUID, PwEntry>();
 	
 	
 	public void makeFinalKey(byte[] masterSeed, byte[] masterSeed2, int numRounds) throws IOException {
@@ -242,21 +249,34 @@ public abstract class PwDatabase {
 		
 		parent.childGroups.add(newGroup);
 		newGroup.setParent(parent);
+		groups.put(newGroup.getId(), newGroup);
+		
+		parent.touch(true, true);
 	}
 	
 	public void removeGroupFrom(PwGroup remove, PwGroup parent) {
 		// Remove group from parent group
 		parent.childGroups.remove(remove);
+		
+		groups.remove(remove.getId());
 	}
 	
 	public void addEntryTo(PwEntry newEntry, PwGroup parent) {
 		// Add entry to parent
-		parent.childEntries.add(newEntry);
+		if (parent != null) {
+			parent.childEntries.add(newEntry);
+		}
+		newEntry.setParent(parent);
+		
+		entries.put(newEntry.getUUID(), newEntry);
 	}
 	
 	public void removeEntryFrom(PwEntry remove, PwGroup parent) {
 		// Remove entry for parent
-		parent.childEntries.remove(remove);
+		if (parent != null) {
+			parent.childEntries.remove(remove);
+		}
+		entries.remove(remove.getUUID());
 	}
 
 	public abstract PwGroupId newGroupId();
@@ -285,4 +305,56 @@ public abstract class PwDatabase {
 	
 	public abstract boolean isBackup(PwGroup group);
 	
+	public void populateGlobals(PwGroup currentGroup) {
+
+		List<PwGroup> childGroups = currentGroup.childGroups;
+		List<PwEntry> childEntries = currentGroup.childEntries;
+		
+		for (int i = 0; i < childEntries.size(); i++ ) {
+			PwEntry cur = childEntries.get(i);
+			entries.put(cur.getUUID(), cur);
+		}
+		
+		for (int i = 0; i < childGroups.size(); i++ ) {
+			PwGroup cur = childGroups.get(i);
+			groups.put(cur.getId(), cur);
+			populateGlobals(cur);
+		}
+	}
+	
+	public boolean canRecycle(PwGroup group) {
+		return false;
+	}
+	
+	public boolean canRecycle(PwEntry entry) {
+		return false;
+	}
+	
+	public void recycle(PwEntry entry) {
+		// Assume calls to this are protected by calling inRecyleBin
+		throw new RuntimeException("Call not valid for .kdb databases.");
+	}
+	
+	public void undoRecycle(PwEntry entry, PwGroup origParent) {
+		throw new RuntimeException("Call not valid for .kdb databases.");
+	}
+	
+	public void deleteEntry(PwEntry entry) {
+		PwGroup parent = entry.getParent();
+		removeEntryFrom(entry, parent);
+		parent.touch(false, true);
+		
+	}
+	
+	public void undoDeleteEntry(PwEntry entry, PwGroup origParent) {
+		addEntryTo(entry, origParent);
+	}
+	
+	public PwGroup getRecycleBin() {
+		return null;
+	}
+	
+	public boolean isGroupSearchable(PwGroup group, boolean omitBackup) {
+		return group != null;
+	}
 }

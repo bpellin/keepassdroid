@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Brian Pellin.
+ * Copyright 2010-2013 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -26,6 +26,19 @@ public class PwDeletedObject {
 	public UUID uuid;
 	private Date deletionTime;
 	
+	public PwDeletedObject() {
+		
+	}
+	
+	public PwDeletedObject(UUID u) {
+		this(u, new Date());
+	}
+	
+	public PwDeletedObject(UUID u, Date d) {
+		uuid = u;
+		deletionTime = d;
+	}
+	
 	public Date getDeletionTime() {
 		if ( deletionTime == null ) {
 			return new Date(System.currentTimeMillis());
@@ -36,5 +49,22 @@ public class PwDeletedObject {
 	
 	public void setDeletionTime(Date date) {
 		deletionTime = date;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		else if (o == null) {
+			return false;
+		}
+		else if (!(o instanceof PwDeletedObject)) {
+			return false;
+		}
+		
+		PwDeletedObject rhs = (PwDeletedObject) o;
+		
+		return uuid.equals(rhs.uuid);
 	}
 }
