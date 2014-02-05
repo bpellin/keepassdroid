@@ -48,6 +48,12 @@
 	  android:layout_height="wrap_content"
 	  android:layout_alignParentLeft="true"
 	  android:layout_alignParentBottom="true"/>
+	<Button android:id="@+id/entry_telepass"
+	  android:text="@string/telepass"
+	  android:layout_width="100sp"
+	  android:layout_height="wrap_content"
+	  android:layout_toRightOf="@id/entry_edit"
+	  android:layout_alignParentBottom="true"/>
 	<ImageView android:id="@+id/entry_divider2"
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"

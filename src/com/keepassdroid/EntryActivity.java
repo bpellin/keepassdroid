@@ -32,6 +32,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -72,6 +73,8 @@ public class EntryActivity extends LockCloseActivity {
 	public static final int NOTIFY_USERNAME = 1;
 	public static final int NOTIFY_PASSWORD = 2;
 	
+	final Context context = this;
+	
 	public static void Launch(Activity act, PwEntry pw, int pos) {
 		Intent i;
 		
@@ -109,6 +112,20 @@ public class EntryActivity extends LockCloseActivity {
 				EntryEditActivity.Launch(EntryActivity.this, mEntry);
 			}
 			
+		});
+		
+		Button telepass = (Button) findViewById(R.id.entry_telepass);
+		telepass.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setComponent(new ComponentName("com.a29apps.telepass", "com.a29apps.telepass.TelePassActivity"));
+				intent.putExtra(Intent.EXTRA_TEXT, mEntry.getPassword());
+				try {
+					startActivity(intent);
+				} catch (ActivityNotFoundException ex) {
+					Toast.makeText(context, R.string.telepass_err, Toast.LENGTH_LONG).show();
+				}
+			}
 		});
 	}
 
