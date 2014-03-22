@@ -75,6 +75,9 @@ public class PasswordActivity extends LockingActivity {
 	private boolean mRememberKeyfile;
 	SharedPreferences prefs;
 	
+	//Required for Google Drive Integration
+	private GoogleDriveAdapter googleDriveAdapter;
+	
 	public static void Launch(Activity act, String fileName) throws FileNotFoundException {
 		Launch(act,fileName,"");
 	}
@@ -96,6 +99,12 @@ public class PasswordActivity extends LockingActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(googleDriveAdapter != null && 
+				googleDriveAdapter.handleActivityResult(requestCode, resultCode, data, this)) {
+			//Handled by google drive adapter
+			return;
+		}
 		
 		switch (requestCode) {
 		
@@ -155,7 +164,20 @@ public class PasswordActivity extends LockingActivity {
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mRememberKeyfile = prefs.getBoolean(getString(R.string.keyfile_key), getResources().getBoolean(R.bool.keyfile_default));
 		
-		if ( action != null && action.equals(VIEW_INTENT) ) {
+		//Required for Google Drive Integration
+		googleDriveAdapter = new GoogleDriveAdapter();
+			    
+	    if("com.google.android.apps.drive.DRIVE_OPEN".equals(action)) { //if block added for Google Drive integration
+	    	//Was action handled successfully by google drive adapter?
+	    	if (googleDriveAdapter.handleDriveOpenAction(action, i.getStringExtra("resourceId"), this)) {
+	    		setFileName("drive://" + googleDriveAdapter.getDriveFileId(), false);
+			} else {
+				//There was a problem handling the google drive action
+				finish();
+	    		return;
+			}
+	    } else if ( action != null && action.equals(VIEW_INTENT) ) {
+	    
 			mFileName = i.getDataString();
 			
 			if ( ! mFileName.substring(0, 7).equals("file://") ) {
@@ -372,6 +394,8 @@ public class PasswordActivity extends LockingActivity {
 		// Clear before we load
 		Database db = App.getDB();
 		db.clear();
+		//Load Google Drive info
+		db.setGoogleDriveAdapter(googleDriveAdapter);
 		
 		// Clear the shutdown flag
 		App.clearShutdown();
@@ -394,7 +418,7 @@ public class PasswordActivity extends LockingActivity {
 			te.setText(str);
 		}
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -434,6 +458,18 @@ public class PasswordActivity extends LockingActivity {
 			} else {
 				displayMessage(PasswordActivity.this);
 			}
+		}
+	}
+	
+	//Required for Google Drive Integration
+	public void setFileName(String fileName, boolean populateView) {
+		mFileName = fileName;
+		if(populateView) {
+			PasswordActivity.this.runOnUiThread(new Runnable() {
+				public void run() {
+					populateView();
+				}
+			});
 		}
 	}
 	
