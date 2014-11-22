@@ -61,6 +61,18 @@
     	<item>30000</item>
     	<item>60000</item>
     	<item>300000</item>
+     <item>900000</item>
+     <item>1800000</item>
+     <item>3600000</item>
+     <item>900000</item>
+     <item>1800000</item>
+     <item>3600000</item>
+     <item>5400000</item>
+     <item>7200000</item>
+     <item>14400000</item>
+     <item>21600000</item>
+     <item>43200000</item>
+     <item>86400000</item
     	<item>-1</item>
     </string-array>
     <string name="list_size_default">28</string>
