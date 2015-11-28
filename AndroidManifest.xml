@@ -30,7 +30,8 @@
     	    android:theme="@style/NoTitleBar"
     	/>
     	<activity android:name="com.keepassdroid.PasswordActivity" android:configChanges="orientation|keyboardHidden"
-    	    android:theme="@style/NoTitleBar">
+    	    android:theme="@style/NoTitleBar"
+    	    android:exported="false">
     		<intent-filter>
 			    <action android:name="android.intent.action.VIEW" />
 			    <category android:name="android.intent.category.DEFAULT" />
@@ -87,7 +88,8 @@
 		<activity android:name="com.keepassdroid.GroupEditActivity" android:theme="@style/Dialog"></activity>
 		<activity android:name="com.keepassdroid.IconPickerActivity" android:theme="@style/NoTitleBar"></activity>
 		<activity android:name="com.keepassdroid.search.SearchResults" android:launchMode="standard"
-			android:theme="@style/NoTitleBar">
+			android:theme="@style/NoTitleBar"
+			android:exported="false">
 		    <intent-filter>
 			    <action android:name="android.intent.action.SEARCH" />
 			    <category android:name="android.intent.category.DEFAULT" />
