@@ -23,6 +23,7 @@ public class PanicResponderActivity extends Activity {
         if (intent != null && PANIC_TRIGGER_ACTION.equals(intent.getAction())) {
             App.setShutdown();
             setResult(KeePass.EXIT_LOCK);
+            ExitActivity.exitAndRemoveFromRecentApps(this);
         }
 
         if (Build.VERSION.SDK_INT >= 21) {

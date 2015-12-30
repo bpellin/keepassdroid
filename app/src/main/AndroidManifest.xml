@@ -108,6 +108,7 @@
             <category android:name="android.intent.category.DEFAULT" />
           </intent-filter>
         </activity>
+        <activity android:name="com.keepassdroid.ExitActivity" android:theme="@android:style/Theme.NoDisplay"></activity>
         <activity android:name="com.keepassdroid.settings.AppSettingsActivity"
             android:theme="@style/NoTitleBar"></activity>
         <activity android:name="com.keepassdroid.GeneratePasswordActivity"
