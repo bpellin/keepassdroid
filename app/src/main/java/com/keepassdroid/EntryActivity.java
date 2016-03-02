@@ -28,7 +28,6 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -41,6 +40,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -171,14 +171,14 @@ public class EntryActivity extends LockCloseHideActivity {
 		
 		if ( mEntry.getPassword().length() > 0 ) {
 			// only show notification if password is available
-			Notification password = getNotification(Intents.COPY_PASSWORD, R.string.copy_password);
-			mNM.notify(NOTIFY_PASSWORD, password);
+			NotificationCompat.Builder password = getNotification(Intents.COPY_PASSWORD, R.string.copy_password);
+			mNM.notify(NOTIFY_PASSWORD, password.build());
 		}
 		
 		if ( mEntry.getUsername().length() > 0 ) {
 			// only show notification if username is available
-			Notification username = getNotification(Intents.COPY_USERNAME, R.string.copy_username);
-			mNM.notify(NOTIFY_USERNAME, username);
+			NotificationCompat.Builder username = getNotification(Intents.COPY_USERNAME, R.string.copy_username);
+			mNM.notify(NOTIFY_USERNAME, username.build());
 		}
 			
 		mIntentReceiver = new BroadcastReceiver() {
@@ -226,17 +226,20 @@ public class EntryActivity extends LockCloseHideActivity {
 		super.onDestroy();
 	}
 
-	private Notification getNotification(String intentText, int descResId) {
+	private NotificationCompat.Builder getNotification(String intentText, int descResId) {
 		String desc = getString(descResId);
-		Notification notify = new Notification(R.drawable.notify, desc, System.currentTimeMillis());
-		
 		Intent intent = new Intent(intentText);
 		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		
-		notify.setLatestEventInfo(this, getString(R.string.app_name), desc, pending);
-		
-		return notify;
-	}
+
+		NotificationCompat.Builder mBuilder =
+				new NotificationCompat.Builder(this)
+				    .setContentTitle(getString(R.string.app_name))
+				    .setSmallIcon(R.drawable.notify)
+				    .setContentText(desc)
+				    .setContentIntent(pending);
+
+		return mBuilder;
+    }
 	
 	private String getDateTime(Date dt) {
 		return dateFormat.format(dt) + " " + timeFormat.format(dt);
