@@ -28,7 +28,6 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -41,6 +40,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -71,6 +71,7 @@ public class EntryActivity extends LockCloseHideActivity {
 	public static final String KEY_ENTRY = "entry";
 	public static final String KEY_REFRESH_POS = "refresh_pos";
 
+	public static final int NOTIFY_PASSWORD_USERNAME = 0;
 	public static final int NOTIFY_USERNAME = 1;
 	public static final int NOTIFY_PASSWORD = 2;
 	
@@ -168,19 +169,27 @@ public class EntryActivity extends LockCloseHideActivity {
 		
 		// Notification Manager
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		
-		if ( mEntry.getPassword().length() > 0 ) {
-			// only show notification if password is available
-			Notification password = getNotification(Intents.COPY_PASSWORD, R.string.copy_password);
-			mNM.notify(NOTIFY_PASSWORD, password);
+
+		if (mEntry.getPassword().length() > 0 && mEntry.getUsername().length() > 0 && android.os.Build.VERSION.SDK_INT >= 16) {
+			// only show compact notification if password and username is available
+			NotificationCompat.Builder password = getCompactNotification(Intents.COPY_USERNAME,Intents.COPY_PASSWORD,R.string.copy_username_password);
+			mNM.notify(NOTIFY_PASSWORD_USERNAME, password.build());
 		}
-		
-		if ( mEntry.getUsername().length() > 0 ) {
-			// only show notification if username is available
-			Notification username = getNotification(Intents.COPY_USERNAME, R.string.copy_username);
-			mNM.notify(NOTIFY_USERNAME, username);
+
+		else {
+			if ( mEntry.getPassword().length() > 0 ) {
+				// only show notification if password is available
+				NotificationCompat.Builder password = getNotification(Intents.COPY_PASSWORD, R.string.copy_password);
+				mNM.notify(NOTIFY_PASSWORD, password.build());
+			}
+
+			if ( mEntry.getUsername().length() > 0 ) {
+				// only show notification if username is available
+				NotificationCompat.Builder username = getNotification(Intents.COPY_USERNAME, R.string.copy_username);
+				mNM.notify(NOTIFY_USERNAME, username.build());
+			}
 		}
-			
+
 		mIntentReceiver = new BroadcastReceiver() {
 			
 			@Override
@@ -226,16 +235,44 @@ public class EntryActivity extends LockCloseHideActivity {
 		super.onDestroy();
 	}
 
-	private Notification getNotification(String intentText, int descResId) {
+	private NotificationCompat.Builder getNotification(String intentText, int descResId) {
 		String desc = getString(descResId);
-		Notification notify = new Notification(R.drawable.notify, desc, System.currentTimeMillis());
-		
 		Intent intent = new Intent(intentText);
 		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		
-		notify.setLatestEventInfo(this, getString(R.string.app_name), desc, pending);
-		
-		return notify;
+
+		NotificationCompat.Builder mBuilder =
+				new NotificationCompat.Builder(this)
+				    .setContentTitle(getString(R.string.app_name))
+				    .setSmallIcon(R.drawable.notify)
+				    .setContentText(desc)
+				    .setContentIntent(pending);
+
+		return mBuilder;
+    }
+
+	private NotificationCompat.Builder getCompactNotification(String intentTextun,String intentTextpw, int descResId) {
+		String desc = getString(descResId);
+
+		NotificationCompat.Action.Builder cpyus = getBuilderfromIntent(intentTextun,getString(R.string.hint_username));
+		NotificationCompat.Action.Builder cpypw = getBuilderfromIntent(intentTextpw,getString(R.string.hint_pass));
+
+		NotificationCompat.Builder mBuilder =
+				new NotificationCompat.Builder(this)
+						.setContentTitle(getString(R.string.app_name))
+						.setSmallIcon(R.drawable.notify)
+						.setContentText(desc)
+						.addAction(cpyus.build())
+						.addAction(cpypw.build());
+
+		return mBuilder;
+	}
+
+	private NotificationCompat.Action.Builder getBuilderfromIntent(String intentText, String desc){
+		Intent intent = new Intent(intentText);
+		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		NotificationCompat.Action.Builder mActionBuilder =
+				new NotificationCompat.Action.Builder(R.drawable.content_copy_black_24px, desc,pending);
+		return mActionBuilder;
 	}
 	
 	private String getDateTime(Date dt) {
