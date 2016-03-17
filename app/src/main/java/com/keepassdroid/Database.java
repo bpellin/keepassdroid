@@ -21,8 +21,6 @@ package com.keepassdroid;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +29,6 @@ import java.io.SyncFailedException;
 import java.util.HashSet;
 import java.util.Set;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 
@@ -52,12 +49,12 @@ import com.keepassdroid.utils.UriUtil;
  * @author bpellin
  */
 public class Database {
-    public Set<PwGroup> dirty = new HashSet<PwGroup>();
+    public Set<PwGroup> dirty = new HashSet<>();
     public PwDatabase pm;
     public Uri mUri;
-    public SearchDbHelper searchHelper;
+    private SearchDbHelper searchHelper;
     public boolean readOnly = false;
-    public boolean passwordEncodingError = false;
+    boolean passwordEncodingError = false;
 
     public DrawableFactory drawFactory = new DrawableFactory();
 
@@ -71,19 +68,11 @@ public class Database {
         loaded = true;
     }
 
-    public void LoadData(Context ctx, InputStream is, String password, InputStream keyInputStream) throws IOException, InvalidDBException {
-        LoadData(ctx, is, password, keyInputStream, new UpdateStatus(), !Importer.DEBUG);
-    }
-
-    public void LoadData(Context ctx, Uri uri, String password, Uri keyfile) throws IOException, FileNotFoundException, InvalidDBException {
-        LoadData(ctx, uri, password, keyfile, new UpdateStatus(), !Importer.DEBUG);
-    }
-
-    public void LoadData(Context ctx, Uri uri, String password, Uri keyfile, UpdateStatus status) throws IOException, FileNotFoundException, InvalidDBException {
+    public void LoadData(Context ctx, Uri uri, String password, Uri keyfile, UpdateStatus status) throws IOException, InvalidDBException {
         LoadData(ctx, uri, password, keyfile, status, !Importer.DEBUG);
     }
 
-    public void LoadData(Context ctx, Uri uri, String password, Uri keyfile, UpdateStatus status, boolean debug) throws IOException, FileNotFoundException, InvalidDBException {
+    private void LoadData(Context ctx, Uri uri, String password, Uri keyfile, UpdateStatus status, boolean debug) throws IOException, InvalidDBException {
         mUri = uri;
         readOnly = false;
         if (uri.getScheme().equals("file")) {
@@ -111,7 +100,7 @@ public class Database {
         LoadData(ctx, is, password, kfIs, new UpdateStatus(), debug);
     }
 
-    public void LoadData(Context ctx, InputStream is, String password, InputStream kfIs, UpdateStatus status, boolean debug) throws IOException, InvalidDBException {
+    private void LoadData(Context ctx, InputStream is, String password, InputStream kfIs, UpdateStatus status, boolean debug) throws IOException, InvalidDBException {
 
         BufferedInputStream bis = new BufferedInputStream(is);
 
@@ -132,13 +121,13 @@ public class Database {
 
             pm.populateGlobals(root);
 
-            LoadData(ctx, pm, password, kfIs, status);
+            LoadData(ctx, pm, password);
         }
 
         loaded = true;
     }
 
-    public void LoadData(Context ctx, PwDatabase pm, String password, InputStream keyInputStream, UpdateStatus status) {
+    private void LoadData(Context ctx, PwDatabase pm, String password) {
         if ( pm != null ) {
             passwordEncodingError = !pm.validatePasswordEncoding(password);
         }
@@ -151,9 +140,7 @@ public class Database {
     public PwGroup Search(String str) {
         if (searchHelper == null) { return null; }
 
-        PwGroup group = searchHelper.search(this, str);
-
-        return group;
+        return searchHelper.search(this, str);
 
     }
 
@@ -161,7 +148,7 @@ public class Database {
         SaveData(ctx, mUri);
     }
 
-    public void SaveData(Context ctx, Uri uri) throws IOException, PwDbOutputException {
+    private void SaveData(Context ctx, Uri uri) throws IOException, PwDbOutputException {
         if (uri.getScheme().equals("file")) {
             String filename = uri.getPath();
             File tempFile = new File(filename + ".tmp");
@@ -170,6 +157,7 @@ public class Database {
 
             //PwDbV3Output pmo = new PwDbV3Output(pm, bos, App.getCalendar());
             PwDbOutput pmo = PwDbOutput.getInstance(pm, fos);
+            assert pmo != null;
             pmo.output();
             //bos.flush();
             //bos.close();
@@ -197,7 +185,9 @@ public class Database {
             }
 
             PwDbOutput pmo = PwDbOutput.getInstance(pm, os);
+            assert pmo != null;
             pmo.output();
+            assert os != null;
             os.close();
         }
 
@@ -215,7 +205,7 @@ public class Database {
         passwordEncodingError = false;
     }
 
-    public void markAllGroupsAsDirty() {
+    void markAllGroupsAsDirty() {
         for ( PwGroup group : pm.getGroups() ) {
             dirty.add(group);
         }
