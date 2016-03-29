@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -38,6 +39,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -49,6 +51,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,6 +59,7 @@ import android.widget.Toast;
 
 import com.android.keepass.KeePass;
 import com.android.keepass.R;
+import com.google.zxing.WriterException;
 import com.keepassdroid.app.App;
 import com.keepassdroid.compat.ActivityCompat;
 import com.keepassdroid.database.PwDatabase;
@@ -64,6 +68,7 @@ import com.keepassdroid.database.PwEntryV4;
 import com.keepassdroid.database.exception.SamsungClipboardException;
 import com.keepassdroid.intents.Intents;
 import com.keepassdroid.utils.EmptyUtils;
+import com.keepassdroid.utils.QrCodeGenerator;
 import com.keepassdroid.utils.Types;
 import com.keepassdroid.utils.Util;
 
@@ -73,22 +78,24 @@ public class EntryActivity extends LockCloseHideActivity {
 
 	public static final int NOTIFY_USERNAME = 1;
 	public static final int NOTIFY_PASSWORD = 2;
-	
+	public static final int NOTIFY_QRCODE = 3;
+
+
 	public static void Launch(Activity act, PwEntry pw, int pos) {
 		Intent i;
-		
+
 		if ( pw instanceof PwEntryV4 ) {
 			i = new Intent(act, EntryActivityV4.class);
 		} else {
 			i = new Intent(act, EntryActivity.class);
 		}
-		
+
 		i.putExtra(KEY_ENTRY, Types.UUIDtoBytes(pw.getUUID()));
 		i.putExtra(KEY_REFRESH_POS, pos);
-		
+
 		act.startActivityForResult(i,0);
 	}
-	
+
 	protected PwEntry mEntry;
 	private Timer mTimer = new Timer();
 	private boolean mShowPassword;
@@ -96,14 +103,14 @@ public class EntryActivity extends LockCloseHideActivity {
 	private NotificationManager mNM;
 	private BroadcastReceiver mIntentReceiver;
 	protected boolean readOnly = false;
-	
+
 	private DateFormat dateFormat;
 	private DateFormat timeFormat;
-	
+
 	protected void setEntryView() {
 		setContentView(R.layout.entry_view);
 	}
-	
+
 	protected void setupEditButtons() {
 		Button edit = (Button) findViewById(R.id.entry_edit);
 		edit.setOnClickListener(new View.OnClickListener() {
@@ -111,12 +118,12 @@ public class EntryActivity extends LockCloseHideActivity {
 			public void onClick(View v) {
 				EntryEditActivity.Launch(EntryActivity.this, mEntry);
 			}
-			
+
 		});
-		
+
 		if (readOnly) {
 			edit.setVisibility(View.GONE);
-			
+
 			View divider = findViewById(R.id.entry_divider2);
 			divider.setVisibility(View.GONE);
 		}
@@ -126,10 +133,10 @@ public class EntryActivity extends LockCloseHideActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mShowPassword = ! prefs.getBoolean(getString(R.string.maskpass_key), getResources().getBoolean(R.bool.maskpass_default));
-		
+
 		super.onCreate(savedInstanceState);
 		setEntryView();
-		
+
 		Context appCtx = getApplicationContext();
 		dateFormat = android.text.format.DateFormat.getDateFormat(appCtx);
 		timeFormat = android.text.format.DateFormat.getTimeFormat(appCtx);
@@ -148,41 +155,49 @@ public class EntryActivity extends LockCloseHideActivity {
 		UUID uuid = Types.bytestoUUID(i.getByteArrayExtra(KEY_ENTRY));
 		mPos = i.getIntExtra(KEY_REFRESH_POS, -1);
 		assert(uuid != null);
-		
+
 		mEntry = db.pm.entries.get(uuid);
 		if (mEntry == null) {
 			Toast.makeText(this, R.string.entry_not_found, Toast.LENGTH_LONG).show();
 			finish();
 			return;
 		}
-		
+
 		// Refresh Menu contents in case onCreateMenuOptions was called before mEntry was set
 		ActivityCompat.invalidateOptionsMenu(this);
-		
+
 		// Update last access time.
 		mEntry.touch(false, false);
-		
+
 		fillData(false);
 
 		setupEditButtons();
-		
+
 		// Notification Manager
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		
+
 		if ( mEntry.getPassword().length() > 0 ) {
 			// only show notification if password is available
 			Notification password = getNotification(Intents.COPY_PASSWORD, R.string.copy_password);
 			mNM.notify(NOTIFY_PASSWORD, password);
 		}
-		
+
 		if ( mEntry.getUsername().length() > 0 ) {
 			// only show notification if username is available
 			Notification username = getNotification(Intents.COPY_USERNAME, R.string.copy_username);
 			mNM.notify(NOTIFY_USERNAME, username);
 		}
-			
+
+		//Ajouter la notification pour le qr code
+		if ( mEntry.getPassword().length() > 0 ) {
+			// only show notification if password is available
+			Notification qrcode = getNotification(Intents.SHOW_QRCODE, R.string.notify_qrcode);
+			mNM.notify(NOTIFY_QRCODE, qrcode);
+		}
+
+
 		mIntentReceiver = new BroadcastReceiver() {
-			
+
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
@@ -197,70 +212,88 @@ public class EntryActivity extends LockCloseHideActivity {
 					if ( password.length() > 0 ) {
 						timeoutCopyToClipboard(new String(mEntry.getPassword()));
 					}
+				} else if (action.equals(Intents.SHOW_QRCODE)) {
+					String password = new String(mEntry.getPassword());
+					if ( password.length() > 0 ) {
+						//Open a dialog with qrcode
+						try {
+							Bitmap qrCode = QrCodeGenerator.genQrCodeBitmap(password);
+							Dialog dialogQrCode = new Dialog(context);
+							dialogQrCode.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+							dialogQrCode.setContentView(getLayoutInflater().inflate(R.layout.qrcode
+									, null));
+							dialogQrCode.show();
+							ImageView qrCodeView = (ImageView) dialogQrCode.findViewById(R.id.qrcode);
+							qrCodeView.setImageBitmap(qrCode);
+						} catch (WriterException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		};
-		
+
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intents.COPY_USERNAME);
 		filter.addAction(Intents.COPY_PASSWORD);
+		filter.addAction(Intents.SHOW_QRCODE);
 		registerReceiver(mIntentReceiver, filter);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		// These members might never get initialized if the app timed out
 		if ( mIntentReceiver != null ) {
 			unregisterReceiver(mIntentReceiver);
 		}
-		
+
 		if ( mNM != null ) {
 			try {
-			    mNM.cancelAll();
+				mNM.cancelAll();
 			} catch (SecurityException e) {
 				// Some android devices give a SecurityException when trying to cancel notifications without the WAKE_LOCK permission,
 				// we'll ignore these.
 			}
 		}
-		
+
 		super.onDestroy();
 	}
 
 	private Notification getNotification(String intentText, int descResId) {
 		String desc = getString(descResId);
 		Notification notify = new Notification(R.drawable.notify, desc, System.currentTimeMillis());
-		
+
 		Intent intent = new Intent(intentText);
 		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		
+
 		notify.setLatestEventInfo(this, getString(R.string.app_name), desc, pending);
-		
+
 		return notify;
 	}
-	
+
 	private String getDateTime(Date dt) {
 		return dateFormat.format(dt) + " " + timeFormat.format(dt);
-		
+
 	}
-	
+
 	protected void fillData(boolean trimList) {
 		ImageView iv = (ImageView) findViewById(R.id.entry_icon);
 		Database db = App.getDB();
 		db.drawFactory.assignDrawableTo(iv, getResources(), mEntry.getIcon());
-		
+
 		PwDatabase pm = db.pm;
 
 		populateText(R.id.entry_title, mEntry.getTitle(true, pm));
 		populateText(R.id.entry_user_name, mEntry.getUsername(true, pm));
-		
+
 		populateText(R.id.entry_url, mEntry.getUrl(true, pm));
 		populateText(R.id.entry_password, mEntry.getPassword(true, pm));
 		setPasswordStyle();
-		
+
 		populateText(R.id.entry_created, getDateTime(mEntry.getCreationTime()));
 		populateText(R.id.entry_modified, getDateTime(mEntry.getLastModificationTime()));
 		populateText(R.id.entry_accessed, getDateTime(mEntry.getLastAccessTime()));
-		
+
 		Date expires = mEntry.getExpiryTime();
 		if ( mEntry.expires() ) {
 			populateText(R.id.entry_expires, getDateTime(expires));
@@ -270,7 +303,7 @@ public class EntryActivity extends LockCloseHideActivity {
 		populateText(R.id.entry_comment, mEntry.getNotes(true, pm));
 
 	}
-	
+
 	private void populateText(int viewId, int resId) {
 		TextView tv = (TextView) findViewById(viewId);
 		tv.setText(resId);
@@ -297,21 +330,21 @@ public class EntryActivity extends LockCloseHideActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		
+
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.entry, menu);
-		
+
 		MenuItem togglePassword = menu.findItem(R.id.menu_toggle_pass);
 		if ( mShowPassword ) {
 			togglePassword.setTitle(R.string.menu_hide_password);
 		} else {
 			togglePassword.setTitle(R.string.menu_showpass);
 		}
-		
+
 		MenuItem gotoUrl = menu.findItem(R.id.menu_goto_url);
 		MenuItem copyUser = menu.findItem(R.id.menu_copy_user);
 		MenuItem copyPass = menu.findItem(R.id.menu_copy_pass);
-		
+
 		// In API >= 11 onCreateOptionsMenu may be called before onCreate completes
 		// so mEntry may not be set
 		if (mEntry == null) {
@@ -334,10 +367,10 @@ public class EntryActivity extends LockCloseHideActivity {
 				copyPass.setVisible(false);
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	private void setPasswordStyle() {
 		TextView password = (TextView) findViewById(R.id.entry_password);
 
@@ -351,61 +384,61 @@ public class EntryActivity extends LockCloseHideActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch ( item.getItemId() ) {
-		case R.id.menu_donate:
-			try {
-				Util.gotoUrl(this, R.string.donate_url);
-			} catch (ActivityNotFoundException e) {
-				Toast.makeText(this, R.string.error_failed_to_launch_link, Toast.LENGTH_LONG).show();
-				return false;
-			}
-			
-			return true;
-		case R.id.menu_toggle_pass:
-			if ( mShowPassword ) {
-				item.setTitle(R.string.menu_showpass);
-				mShowPassword = false;
-			} else {
-				item.setTitle(R.string.menu_hide_password);
-				mShowPassword = true;
-			}
-			setPasswordStyle();
+			case R.id.menu_donate:
+				try {
+					Util.gotoUrl(this, R.string.donate_url);
+				} catch (ActivityNotFoundException e) {
+					Toast.makeText(this, R.string.error_failed_to_launch_link, Toast.LENGTH_LONG).show();
+					return false;
+				}
 
-			return true;
-			
-		case R.id.menu_goto_url:
-			String url;
-			url = mEntry.getUrl();
-			
-			// Default http:// if no protocol specified
-			if ( ! url.contains("://") ) {
-				url = "http://" + url;
-			}
-			
-			try {
-				Util.gotoUrl(this, url);
-			} catch (ActivityNotFoundException e) {
-				Toast.makeText(this, R.string.no_url_handler, Toast.LENGTH_LONG).show();
-			}
-			return true;
-			
-		case R.id.menu_copy_user:
-			timeoutCopyToClipboard(mEntry.getUsername(true, App.getDB().pm));
-			return true;
-			
-		case R.id.menu_copy_pass:
-			timeoutCopyToClipboard(new String(mEntry.getPassword(true, App.getDB().pm)));
-			return true;
-			
-		case R.id.menu_lock:
-			App.setShutdown();
-			setResult(KeePass.EXIT_LOCK);
-			finish();
-			return true;
+				return true;
+			case R.id.menu_toggle_pass:
+				if ( mShowPassword ) {
+					item.setTitle(R.string.menu_showpass);
+					mShowPassword = false;
+				} else {
+					item.setTitle(R.string.menu_hide_password);
+					mShowPassword = true;
+				}
+				setPasswordStyle();
+
+				return true;
+
+			case R.id.menu_goto_url:
+				String url;
+				url = mEntry.getUrl();
+
+				// Default http:// if no protocol specified
+				if ( ! url.contains("://") ) {
+					url = "http://" + url;
+				}
+
+				try {
+					Util.gotoUrl(this, url);
+				} catch (ActivityNotFoundException e) {
+					Toast.makeText(this, R.string.no_url_handler, Toast.LENGTH_LONG).show();
+				}
+				return true;
+
+			case R.id.menu_copy_user:
+				timeoutCopyToClipboard(mEntry.getUsername(true, App.getDB().pm));
+				return true;
+
+			case R.id.menu_copy_pass:
+				timeoutCopyToClipboard(new String(mEntry.getPassword(true, App.getDB().pm)));
+				return true;
+
+			case R.id.menu_lock:
+				App.setShutdown();
+				setResult(KeePass.EXIT_LOCK);
+				finish();
+				return true;
 		}
-		
+
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	private void timeoutCopyToClipboard(String text) {
 		try {
 			Util.copyToClipboard(this, text);
@@ -413,36 +446,36 @@ public class EntryActivity extends LockCloseHideActivity {
 			showSamsungDialog();
 			return;
 		}
-		
+
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String sClipClear = prefs.getString(getString(R.string.clipboard_timeout_key), getString(R.string.clipboard_timeout_default));
-		
+
 		long clipClearTime = Long.parseLong(sClipClear);
-		
+
 		if ( clipClearTime > 0 ) {
 			mTimer.schedule(new ClearClipboardTask(this, text), clipClearTime);
 		}
 	}
-	
+
 
 	// Setup to allow the toast to happen in the foreground
 	final Handler uiThreadCallback = new Handler();
 
 	// Task which clears the clipboard, and sends a toast to the foreground.
 	private class ClearClipboardTask extends TimerTask {
-		
+
 		private final String mClearText;
 		private final Context mCtx;
-		
+
 		ClearClipboardTask(Context ctx, String clearText) {
 			mClearText = clearText;
 			mCtx = ctx;
 		}
-		
+
 		@Override
 		public void run() {
 			String currentClip = Util.getClipboard(mCtx);
-			
+
 			if ( currentClip.equals(mClearText) ) {
 				try {
 					Util.copyToClipboard(mCtx, "");
@@ -453,7 +486,7 @@ public class EntryActivity extends LockCloseHideActivity {
 			}
 		}
 	}
-	
+
 	private void showSamsungDialog() {
 		String text = getString(R.string.clipboard_error).concat(System.getProperty("line.separator")).concat(getString(R.string.clipboard_error_url));
 		SpannableString s = new SpannableString(text);
@@ -462,17 +495,17 @@ public class EntryActivity extends LockCloseHideActivity {
 		tv.setAutoLinkMask(RESULT_OK);
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		Linkify.addLinks(s, Linkify.WEB_URLS);
-		
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.clipboard_error_title)
-			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			})
-			.setView(tv)
-			.show();
-		
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				})
+				.setView(tv)
+				.show();
+
 	}
 }

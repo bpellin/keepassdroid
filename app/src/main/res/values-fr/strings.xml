@@ -50,6 +50,7 @@
     <string name="clipboard_timeout_summary">Temps avant le vidage du presse-papier après copie du nom d\'utilisateur ou du mot de passe</string>
     <string name="copy_username">Copier le nom d\'utilisateur dans le presse-papier</string>
     <string name="copy_password">Copier le mot de passe dans le presse-papier</string>
+    <string name="notify_qrcode">Générer le mot de passe sous forme de qr code</string>
     <string name="creating_db_key">Création de la clé de base de données&#8230;</string>
     <string name="current_group">Groupe actuel\u00A0:</string>
     <string name="current_group_root">Groupe actuel\u00A0: Racine</string>

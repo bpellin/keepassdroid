@@ -7,7 +7,7 @@ model {
 
         defaultConfig.with {
             applicationId = "com.android.keepass"
-            minSdkVersion.apiLevel = 3
+            minSdkVersion.apiLevel = 9
             targetSdkVersion.apiLevel = 12
             versionCode = 151
             versionName = "2.0.6.1"
@@ -71,6 +71,8 @@ model {
 
 dependencies {
     androidTestCompile files('libs/junit4.jar')
+    compile 'com.journeyapps:zxing-android-embedded:3.0.0@aar'
+    compile 'com.google.zxing:core:3.2.0'
     // Set this dependency if you want to use Hamcrest matching
     //androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
 }
