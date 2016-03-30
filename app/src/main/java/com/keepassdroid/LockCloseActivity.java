@@ -27,34 +27,29 @@ import com.keepassdroid.app.App;
 
 public abstract class LockCloseActivity extends LockingActivity {
 
-	@Override
-	protected void onResume() {
-		super.onResume();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-		checkShutdown();
-	}
-	
-	private void checkShutdown() {
-		if ( App.isShutdown() && App.getDB().Loaded() ) {
-			setResult(KeePass.EXIT_LOCK);
-			finish();
-		}
-		
-	}
+        if (App.isShutdown() && App.getDB().Loaded()) {
+            setResult(KeePass.EXIT_LOCK);
+            finish();
+        }
+    }
 
-	/* (non-Javadoc) Workaround for HTC Linkify issues 
-	 * @see android.app.Activity#startActivity(android.content.Intent)
-	 */
-	@Override
-	public void startActivity(Intent intent) {
-		try {
-			if (intent.getComponent() != null && intent.getComponent().getShortClassName().equals(".HtcLinkifyDispatcherActivity")) {
-				intent.setComponent(null);
-			}
-			super.startActivity(intent);
-		} catch (ActivityNotFoundException e) {
-			/* Catch the bad HTC implementation case */
-			super.startActivity(Intent.createChooser(intent, null));
-		}
-	}
+    /* (non-Javadoc) Workaround for HTC Linkify issues
+     * @see android.app.Activity#startActivity(android.content.Intent)
+     */
+    @Override
+    public void startActivity(Intent intent) {
+        try {
+            if (intent.getComponent() != null && intent.getComponent().getShortClassName().equals(".HtcLinkifyDispatcherActivity")) {
+                intent.setComponent(null);
+            }
+            super.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            /* Catch the bad HTC implementation case */
+            super.startActivity(Intent.createChooser(intent, null));
+        }
+    }
 }
