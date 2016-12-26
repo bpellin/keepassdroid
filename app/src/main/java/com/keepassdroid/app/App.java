@@ -24,10 +24,11 @@ import java.util.Calendar;
 import android.app.Application;
 
 import com.keepassdroid.Database;
+import com.keepassdroid.InjectedApplication;
 import com.keepassdroid.compat.PRNGFixes;
 import com.keepassdroid.fileselect.RecentFileHistory;
 
-public class App extends Application {
+public class App extends InjectedApplication {
 	private static Database db = null;
 	private static boolean shutdown = false;
 	private static Calendar calendar = null;
