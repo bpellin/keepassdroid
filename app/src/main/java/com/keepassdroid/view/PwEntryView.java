@@ -36,7 +36,9 @@ import com.keepassdroid.ProgressTask;
 import com.keepassdroid.app.App;
 import com.keepassdroid.database.PwEntry;
 import com.keepassdroid.database.edit.DeleteEntry;
+import com.keepassdroid.database.exception.SamsungClipboardException;
 import com.keepassdroid.settings.PrefsUtil;
+import com.keepassdroid.utils.Util;
 
 public class PwEntryView extends ClickView {
 
@@ -47,6 +49,8 @@ public class PwEntryView extends ClickView {
 	
 	protected static final int MENU_OPEN = Menu.FIRST;
 	private static final int MENU_DELETE = MENU_OPEN + 1;
+	private static final int MENU_COPY_PASSWORD = MENU_OPEN + 2;
+	private static final int MENU_COPY_USERNAME = MENU_OPEN + 3;
 	
 	public static PwEntryView getInstance(GroupBaseActivity act, PwEntry pw, int pos) {
 		return new PwEntryView(act, pw, pos);
@@ -102,13 +106,33 @@ public class PwEntryView extends ClickView {
 		pt.run();
 		
 	}
-	
+
+	private void copyPassword() {
+		try {
+			Util.copyToClipboard(this.getContext(), mPw.getPassword());
+		} catch (SamsungClipboardException e) {
+			Util.showSamsungDialog(this.getContext());
+			return;
+		}
+	}
+
+	private void copyUsername() {
+		try {
+			Util.copyToClipboard(this.getContext(), mPw.getUsername());
+		} catch (SamsungClipboardException e) {
+			Util.showSamsungDialog(this.getContext());
+			return;
+		}
+	}
+
 	@Override
 	public void onCreateMenu(ContextMenu menu, ContextMenuInfo menuInfo) {
 		menu.add(0, MENU_OPEN, 0, R.string.menu_open);
 		if (!readOnly) {
 		    menu.add(0, MENU_DELETE, 0, R.string.menu_delete);
 		}
+		menu.add(0, MENU_COPY_PASSWORD, 0, R.string.menu_copy_pass);
+		menu.add(0, MENU_COPY_USERNAME, 0, R.string.menu_copy_user);
 	}
 
 	@Override
@@ -121,7 +145,12 @@ public class PwEntryView extends ClickView {
 		case MENU_DELETE:
 			deleteEntry();
 			return true;
-			
+		case MENU_COPY_PASSWORD:
+			copyPassword();
+			return true;
+		case MENU_COPY_USERNAME:
+			copyUsername();
+			return true;
 		default:
 			return false;
 		}
