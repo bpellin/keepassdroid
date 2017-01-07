@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2017 Brian Pellin
  * Copyright (C) 2015 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +19,10 @@ package com.keepassdroid;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.SharedPreferences;
-import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,8 +94,9 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     public void onResume() {
         super.onResume();
         mFingerprintUiHelper.stopListening();
+        FingerprintManagerCompat test;
 
-        mFingerprintUiHelper.startListening(new FingerprintManager.CryptoObject(mEncryptCipher));
+        mFingerprintUiHelper.startListening(new FingerprintManagerCompat.CryptoObject(mEncryptCipher));
     }
 
     @Override

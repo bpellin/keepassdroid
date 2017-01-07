@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2017 Brian Pellin
  * Copyright (C) 2015 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +21,8 @@ import com.android.keepass.R;
 import com.google.common.annotations.VisibleForTesting;
 
 import android.annotation.TargetApi;
-import android.hardware.fingerprint.FingerprintManager;
-import android.os.CancellationSignal;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
+import android.support.v4.os.CancellationSignal;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,12 +33,12 @@ import javax.inject.Inject;
  * Small helper class to manage text/icon around fingerprint authentication UI.
  */
 @TargetApi(23)
-public class FingerprintUiHelper extends FingerprintManager.AuthenticationCallback {
+public class FingerprintUiHelper extends FingerprintManagerCompat.AuthenticationCallback {
 
     @VisibleForTesting static final long ERROR_TIMEOUT_MILLIS = 1600;
     @VisibleForTesting static final long SUCCESS_DELAY_MILLIS = 1300;
 
-    private final FingerprintManager mFingerprintManager;
+    private final FingerprintManagerCompat mFingerprintManager;
     private final ImageView mIcon;
     private final TextView mErrorTextView;
     private final Callback mCallback;
@@ -50,10 +51,10 @@ public class FingerprintUiHelper extends FingerprintManager.AuthenticationCallba
      * holds its fields and takes other arguments in the {@link #build} method.
      */
     public static class FingerprintUiHelperBuilder {
-        private final FingerprintManager mFingerPrintManager;
+        private final FingerprintManagerCompat mFingerPrintManager;
 
         @Inject
-        public FingerprintUiHelperBuilder(FingerprintManager fingerprintManager) {
+        public FingerprintUiHelperBuilder(FingerprintManagerCompat fingerprintManager) {
             mFingerPrintManager = fingerprintManager;
         }
 
@@ -67,7 +68,7 @@ public class FingerprintUiHelper extends FingerprintManager.AuthenticationCallba
      * Constructor for {@link FingerprintUiHelper}. This method is expected to be called from
      * only the {@link FingerprintUiHelperBuilder} class.
      */
-    private FingerprintUiHelper(FingerprintManager fingerprintManager,
+    private FingerprintUiHelper(FingerprintManagerCompat fingerprintManager,
             ImageView icon, TextView errorTextView, Callback callback) {
         mFingerprintManager = fingerprintManager;
         mIcon = icon;
@@ -80,14 +81,14 @@ public class FingerprintUiHelper extends FingerprintManager.AuthenticationCallba
                 && mFingerprintManager.hasEnrolledFingerprints();
     }
 
-    public void startListening(FingerprintManager.CryptoObject cryptoObject) {
+    public void startListening(FingerprintManagerCompat.CryptoObject cryptoObject) {
         if (!isFingerprintAuthAvailable()) {
             return;
         }
         mCancellationSignal = new CancellationSignal();
         mSelfCancelled = false;
         mFingerprintManager
-                .authenticate(cryptoObject, mCancellationSignal, 0 /* flags */, this, null);
+                .authenticate(cryptoObject, 0 /* flags */, mCancellationSignal, this, null);
         mIcon.setImageResource(R.drawable.ic_fp_40px);
     }
 
@@ -124,7 +125,7 @@ public class FingerprintUiHelper extends FingerprintManager.AuthenticationCallba
     }
 
     @Override
-    public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
+    public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
         mErrorTextView.removeCallbacks(mResetErrorTextRunnable);
         mIcon.setImageResource(R.drawable.ic_fingerprint_success);
         mErrorTextView.setTextColor(

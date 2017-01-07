@@ -20,10 +20,11 @@
 package com.keepassdroid;
 
 import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 
 import com.keepassdroid.timeout.TimeoutHelper;
 
-public abstract class LockingActivity extends Activity {
+public abstract class LockingActivity extends FragmentActivity {
 
 	@Override
 	protected void onPause() {

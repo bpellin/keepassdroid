@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2017 Brian Pellin
  * Copyright (C) 2015 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,14 +17,15 @@
 
 package com.keepassdroid;
 
-import android.annotation.TargetApi;
+//import android.annotation.TargetApi;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.hardware.fingerprint.FingerprintManager;
 import android.preference.PreferenceManager;
-import android.security.keystore.KeyProperties;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.view.inputmethod.InputMethodManager;
+
+import com.keepassdroid.compat.KeyPropertiesCompat;
 
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -44,10 +46,11 @@ import dagger.Provides;
         library = true,
         injects = {PasswordActivity.class}
 )
-@TargetApi(23)
+//@TargetApi(23)
 public class FingerprintModule {
 
     private final Context mContext;
+    private final String FINGERPRINT_SERVICE = "fingerprint";
 
     public FingerprintModule(Context context) {
         mContext = context;
@@ -59,13 +62,13 @@ public class FingerprintModule {
     }
 
     @Provides
-    public FingerprintManager providesFingerprintManager(Context context) {
-        return context.getSystemService(FingerprintManager.class);
+    public FingerprintManagerCompat providesFingerprintManager(Context context) {
+        return FingerprintManagerCompat.from(context);
     }
 
     @Provides
     public KeyguardManager providesKeyguardManager(Context context) {
-        return context.getSystemService(KeyguardManager.class);
+        return (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
     }
 
     @Provides
@@ -80,7 +83,7 @@ public class FingerprintModule {
     @Provides
     public KeyGenerator providesKeyGenerator() {
         try {
-            return KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+            return KeyGenerator.getInstance(KeyPropertiesCompat.KEY_ALGORITHM_AES, "AndroidKeyStore");
         } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
             throw new RuntimeException("Failed to get an instance of KeyGenerator", e);
         }
@@ -89,9 +92,9 @@ public class FingerprintModule {
     @Provides
     public Cipher providesCipher(KeyStore keyStore) {
         try {
-            return Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/"
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+            return Cipher.getInstance(KeyPropertiesCompat.KEY_ALGORITHM_AES + "/"
+                    + KeyPropertiesCompat.BLOCK_MODE_CBC + "/"
+                    + KeyPropertiesCompat.ENCRYPTION_PADDING_PKCS7);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new RuntimeException("Failed to get an instance of Cipher", e);
         }

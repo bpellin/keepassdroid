@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2016 Brian Pellin.
+ * Copyright 2009-2017 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,16 +19,14 @@
  */
 package com.keepassdroid;
 
-import android.annotation.TargetApi;
+//import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.ActivityNotFoundException;
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.hardware.fingerprint.FingerprintManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -37,6 +35,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
@@ -58,8 +57,10 @@ import com.android.keepass.KeePass;
 import com.android.keepass.R;
 import com.keepassdroid.app.App;
 import com.keepassdroid.compat.BackupManagerCompat;
+import com.keepassdroid.compat.BuildCompat;
 import com.keepassdroid.compat.ClipDataCompat;
 import com.keepassdroid.compat.EditorCompat;
+import com.keepassdroid.compat.KeyGenParameterSpecCompat;
 import com.keepassdroid.compat.StorageAF;
 import com.keepassdroid.database.edit.LoadDB;
 import com.keepassdroid.database.edit.OnFinish;
@@ -93,6 +94,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.inject.Inject;
 
+import biz.source_code.base64Coder.Base64Coder;
+
 public class PasswordActivity extends LockingActivity implements FingerprintUiHelper.Callback {
     private static final String TAG = PasswordActivity.class.getSimpleName();
 
@@ -125,7 +128,7 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
     @Inject
     KeyguardManager mKeyguardManager;
     @Inject
-    FingerprintManager mFingerprintManager;
+    FingerprintManagerCompat mFingerprintManager;
     @Inject
     FingerprintAuthenticationDialogFragment mFragment;
     @Inject
@@ -221,7 +224,7 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (BuildCompat.getSdkVersion() >= BuildCompat.VERSION_M) {
             ((InjectedApplication) getApplication()).inject(this);
         }
 
@@ -255,16 +258,16 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
             editor.commit();
         }
 
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (BuildCompat.getSdkVersion() >= BuildCompat.VERSION_M) {
             mFingerprintUiHelper = mFingerprintUiHelperBuilder.build(
                     mFingerprintIcon,
                     (TextView) findViewById(R.id.fingerprint_status_decrypt), this);
         }
 
-        if (Build.VERSION.SDK_INT >= 23 && prefs.getString(FINGERPRINT_KEY_PASSWORD, "") != "") {
+        if (BuildCompat.getSdkVersion() >= BuildCompat.VERSION_M && prefs.getString(FINGERPRINT_KEY_PASSWORD, "") != "") {
             if (initDecryptCipher()) {
                 mFingerprintUiHelper.stopListening();
-                mFingerprintUiHelper.startListening(new FingerprintManager.CryptoObject(mDecryptCipher));
+                mFingerprintUiHelper.startListening(new FingerprintManagerCompat.CryptoObject(mDecryptCipher));
                 mFingerprintIcon.setVisibility(View.VISIBLE);
             }
         } else {
@@ -277,7 +280,7 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
     @Override
     protected void onPause() {
         super.onPause();
-        if (Build.VERSION.SDK_INT >= 23 && prefs.getString(FINGERPRINT_KEY_PASSWORD, "") != "") {
+        if (BuildCompat.getSdkVersion() >= BuildCompat.VERSION_M && prefs.getString(FINGERPRINT_KEY_PASSWORD, "") != "") {
             if (mFingerprintUiHelper != null) {
                 mFingerprintUiHelper.stopListening();
                 mFingerprintIcon.setVisibility(View.INVISIBLE);
@@ -428,7 +431,7 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
             this.db = db;
         }
 
-        @TargetApi(Build.VERSION_CODES.M)
+        //@TargetApi(Build.VERSION_CODES.M)
         @Override
         public void run() {
             if (db.passwordEncodingError) {
@@ -442,9 +445,9 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
 
                 });
             } else if (mSuccess) {
-                if (Build.VERSION.SDK_INT >= 23 && prefs.getString(FINGERPRINT_KEY_PASSWORD, "") == "" && mFingerprintUiHelper.isFingerprintAuthAvailable() && initEncryptCipher()) {
+                if (BuildCompat.getSdkVersion() >= BuildCompat.VERSION_M && prefs.getString(FINGERPRINT_KEY_PASSWORD, "") == "" && mFingerprintUiHelper.isFingerprintAuthAvailable() && initEncryptCipher()) {
                     mFragment.setEncryptCipher(mEncryptCipher);
-                    mFragment.show(getFragmentManager(), FINGERPRINT_DIALOG_FRAGMENT_TAG);
+                    mFragment.show(getSupportFragmentManager(), FINGERPRINT_DIALOG_FRAGMENT_TAG);
                 } else {
                     GroupActivity.Launch(PasswordActivity.this);
                 }
@@ -569,7 +572,7 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
                         i.addCategory(Intent.CATEGORY_OPENABLE);
                         i.setType("*/*");
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        if (BuildCompat.getSdkVersion() >= BuildCompat.VERSION_KITKAT) {
                             i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                             i.addCategory(Intent.CATEGORY_OPENABLE);
                             i.setType("*/*");
@@ -646,17 +649,17 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
      * Tries to encrypt some data with the generated key in {@link #createKey} which is
      * only works if the user has just authenticated via fingerprint.
      */
-    @TargetApi(23)
+    //@TargetApi(23)
     public boolean tryEncrypt() {
         try {
             String secret = getEditText(R.id.password);
             byte[] encrypted = mEncryptCipher.doFinal(secret.getBytes());
 
             IvParameterSpec ivParams = mEncryptCipher.getParameters().getParameterSpec(IvParameterSpec.class);
-            String iv = Base64.encodeToString(ivParams.getIV(), Base64.DEFAULT);
+            String iv = new String(Base64Coder.encode(ivParams.getIV()));
 
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(FINGERPRINT_KEY_PASSWORD, Base64.encodeToString(encrypted, Base64.DEFAULT));
+            editor.putString(FINGERPRINT_KEY_PASSWORD, new String(Base64Coder.encode(encrypted)));
             editor.putString(FINGERPRINT_KEY_PASSWORD_IV, iv);
             editor.putString(FINGERPRINT_DB_KEY, mDbUri.getPath());
             editor.commit();
@@ -678,11 +681,11 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
      * Tries to decrypt some data with the generated key in {@link #createKey} which is
      * only works if the user has just authenticated via fingerprint.
      */
-    @TargetApi(23)
+    //@TargetApi(23)
     public String tryDecrypt() {
         try {
 
-            byte[] encodedData = Base64.decode(prefs.getString(FINGERPRINT_KEY_PASSWORD, ""), Base64.DEFAULT);
+            byte[] encodedData = Base64Coder.decode(prefs.getString(FINGERPRINT_KEY_PASSWORD, ""));
             byte[] decodedData = mDecryptCipher.doFinal(encodedData);
             return new String(decodedData);
 
@@ -717,20 +720,13 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
         return null;
     }
 
-    @TargetApi(23)
+    //@TargetApi(23)
     private SecretKey createKey() {
         try {
 
             // Set the alias of the entry in Android KeyStore where the key will appear
             // and the constrains (purposes) in the constructor of the Builder
-            mKeyGenerator.init(new KeyGenParameterSpec.Builder(FINGERPRINT_KEY_NAME,
-                    KeyProperties.PURPOSE_DECRYPT | KeyProperties.PURPOSE_ENCRYPT)
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    // Require the user to authenticate with a fingerprint to authorize every use
-                    // of the key
-                    .setUserAuthenticationRequired(true)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                    .build());
+            KeyGenParameterSpecCompat.init(mKeyGenerator, FINGERPRINT_KEY_NAME);
             return mKeyGenerator.generateKey();
 
         } catch (Exception e) {
@@ -739,7 +735,7 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
         return null;
     }
 
-    @TargetApi(23)
+    //@TargetApi(23)
     public Cipher getCipher(int mode) {
         Cipher cipher;
 
@@ -755,7 +751,7 @@ public class PasswordActivity extends LockingActivity implements FingerprintUiHe
 
             } else {
                 SecretKey key = (SecretKey) mKeyStore.getKey(FINGERPRINT_KEY_NAME, null);
-                iv = Base64.decode(prefs.getString(FINGERPRINT_KEY_PASSWORD_IV, ""), Base64.DEFAULT);
+                iv = Base64Coder.decode(prefs.getString(FINGERPRINT_KEY_PASSWORD_IV, ""));
                 ivParams = new IvParameterSpec(iv);
                 cipher.init(mode, key, ivParams);
             }
