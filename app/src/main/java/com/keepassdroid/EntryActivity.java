@@ -41,6 +41,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -228,14 +229,17 @@ public class EntryActivity extends LockCloseHideActivity {
 
 	private Notification getNotification(String intentText, int descResId) {
 		String desc = getString(descResId);
-		Notification notify = new Notification(R.drawable.notify, desc, System.currentTimeMillis());
-		
+
 		Intent intent = new Intent(intentText);
 		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		
-		notify.setLatestEventInfo(this, getString(R.string.app_name), desc, pending);
-		
-		return notify;
+
+		NotificationCompat.Builder builder  = new NotificationCompat.Builder(this);
+		builder.setContentTitle(getString(R.string.app_name));
+		builder.setContentText(desc);
+		builder.setContentIntent(pending);
+		builder.setSmallIcon(R.drawable.notify);
+
+		return builder.build();
 	}
 	
 	private String getDateTime(Date dt) {

@@ -21,19 +21,25 @@ package com.keepassdroid;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.fingerprint.FingerprintManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
 import android.text.InputType;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,6 +50,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,8 +74,27 @@ import com.keepassdroid.utils.Util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.spec.InvalidParameterSpecException;
 
-public class PasswordActivity extends LockingActivity {
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.inject.Inject;
+
+public class PasswordActivity extends LockingActivity implements FingerprintUiHelper.Callback {
+    private static final String TAG = PasswordActivity.class.getSimpleName();
 
     public static final String KEY_DEFAULT_FILENAME = "defaultFileName";
     private static final String KEY_FILENAME = "fileName";
@@ -76,6 +102,12 @@ public class PasswordActivity extends LockingActivity {
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_LAUNCH_IMMEDIATELY = "launchImmediately";
     private static final String VIEW_INTENT = "android.intent.action.VIEW";
+
+    private static final String FINGERPRINT_KEY_NAME = "keepass_key";
+    private static final String FINGERPRINT_KEY_PASSWORD = "EncryptedPassword";
+    private static final String FINGERPRINT_KEY_PASSWORD_IV = "EncryptedPasswordIV";
+    private static final String FINGERPRINT_DIALOG_FRAGMENT_TAG = "fingerfrint_Fragment";
+    private static final String FINGERPRINT_DB_KEY = "fingerfrint_db_key";
 
     private static final int FILE_BROWSE = 256;
     public static final int GET_CONTENT = 257;
@@ -85,9 +117,32 @@ public class PasswordActivity extends LockingActivity {
     private Uri mKeyUri = null;
     private boolean mRememberKeyfile;
     SharedPreferences prefs;
+    private FingerprintUiHelper mFingerprintUiHelper;
+
+    private ImageView mFingerprintIcon;
+
+
+    @Inject
+    KeyguardManager mKeyguardManager;
+    @Inject
+    FingerprintManager mFingerprintManager;
+    @Inject
+    FingerprintAuthenticationDialogFragment mFragment;
+    @Inject
+    KeyStore mKeyStore;
+    @Inject
+    KeyGenerator mKeyGenerator;
+    @Inject
+    Cipher mEncryptCipher;
+    @Inject
+    Cipher mDecryptCipher;
+
+    @Inject
+    FingerprintUiHelper.FingerprintUiHelperBuilder mFingerprintUiHelperBuilder;
+
 
     public static void Launch(Activity act, String fileName) throws FileNotFoundException {
-        Launch(act,fileName,"");
+        Launch(act, fileName, "");
     }
 
     public static void Launch(Activity act, String fileName, String keyFile) throws FileNotFoundException {
@@ -166,12 +221,17 @@ public class PasswordActivity extends LockingActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ((InjectedApplication) getApplication()).inject(this);
+        }
 
         Intent i = getIntent();
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mRememberKeyfile = prefs.getBoolean(getString(R.string.keyfile_key), getResources().getBoolean(R.bool.keyfile_default));
         setContentView(R.layout.password);
+
+        mFingerprintIcon = (ImageView) findViewById(R.id.fingerprint_icon_decrypt);
 
         new InitTask().execute(i);
     }
@@ -189,6 +249,40 @@ public class PasswordActivity extends LockingActivity {
 
         // Clear the shutdown flag
         App.clearShutdown();
+        if (mDbUri != null && prefs.getString(FINGERPRINT_KEY_PASSWORD, "") != "" && !prefs.getString(FINGERPRINT_DB_KEY, "").equals(mDbUri.getPath())) {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(FINGERPRINT_KEY_PASSWORD, "");
+            editor.commit();
+        }
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            mFingerprintUiHelper = mFingerprintUiHelperBuilder.build(
+                    mFingerprintIcon,
+                    (TextView) findViewById(R.id.fingerprint_status_decrypt), this);
+        }
+
+        if (Build.VERSION.SDK_INT >= 23 && prefs.getString(FINGERPRINT_KEY_PASSWORD, "") != "") {
+            if (initDecryptCipher()) {
+                mFingerprintUiHelper.stopListening();
+                mFingerprintUiHelper.startListening(new FingerprintManager.CryptoObject(mDecryptCipher));
+                mFingerprintIcon.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mFingerprintIcon != null) {
+                mFingerprintIcon.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (Build.VERSION.SDK_INT >= 23 && prefs.getString(FINGERPRINT_KEY_PASSWORD, "") != "") {
+            if (mFingerprintUiHelper != null) {
+                mFingerprintUiHelper.stopListening();
+                mFingerprintIcon.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     private void retrieveSettings() {
@@ -200,7 +294,7 @@ public class PasswordActivity extends LockingActivity {
     }
 
     private Uri getKeyFile(Uri dbUri) {
-        if ( mRememberKeyfile ) {
+        if (mRememberKeyfile) {
 
             return App.getFileHistory().getFileByName(dbUri);
         } else {
@@ -334,9 +428,10 @@ public class PasswordActivity extends LockingActivity {
             this.db = db;
         }
 
+        @TargetApi(Build.VERSION_CODES.M)
         @Override
         public void run() {
-            if ( db.passwordEncodingError) {
+            if (db.passwordEncodingError) {
                 PasswordEncodingDialogHelper dialog = new PasswordEncodingDialogHelper();
                 dialog.show(PasswordActivity.this, new OnClickListener() {
 
@@ -346,10 +441,22 @@ public class PasswordActivity extends LockingActivity {
                     }
 
                 });
-            } else if ( mSuccess ) {
-                GroupActivity.Launch(PasswordActivity.this);
+            } else if (mSuccess) {
+                if (Build.VERSION.SDK_INT >= 23 && prefs.getString(FINGERPRINT_KEY_PASSWORD, "") == "" && mFingerprintUiHelper.isFingerprintAuthAvailable() && initEncryptCipher()) {
+                    mFragment.setEncryptCipher(mEncryptCipher);
+                    mFragment.show(getFragmentManager(), FINGERPRINT_DIALOG_FRAGMENT_TAG);
+                } else {
+                    GroupActivity.Launch(PasswordActivity.this);
+                }
             } else {
                 displayMessage(PasswordActivity.this);
+            }
+
+            if (mFingerprintIcon != null && prefs.getString(FINGERPRINT_KEY_PASSWORD, "") != "") {
+                mFingerprintIcon.setImageResource(R.drawable.ic_fp_40px);
+                if (mSuccess == false) {
+                    mFingerprintIcon.setVisibility(View.INVISIBLE);
+                }
             }
         }
     }
@@ -404,7 +511,7 @@ public class PasswordActivity extends LockingActivity {
                 password = i.getStringExtra(KEY_PASSWORD);
                 launch_immediately = i.getBooleanExtra(KEY_LAUNCH_IMMEDIATELY, false);
 
-                if ( mKeyUri == null || mKeyUri.toString().length() == 0) {
+                if (mKeyUri == null || mKeyUri.toString().length() == 0) {
                     mKeyUri = getKeyFile(mDbUri);
                 }
             }
@@ -431,7 +538,7 @@ public class PasswordActivity extends LockingActivity {
                         boolean isChecked) {
                     TextView password = (TextView) findViewById(R.id.password);
 
-                    if ( isChecked ) {
+                    if (isChecked) {
                         password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     } else {
                         password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -457,11 +564,16 @@ public class PasswordActivity extends LockingActivity {
                         i.addCategory(Intent.CATEGORY_OPENABLE);
                         i.setType("*/*");
                         startActivityForResult(i, OPEN_DOC);
-                    }
-                    else {
+                    } else {
                         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                         i.addCategory(Intent.CATEGORY_OPENABLE);
                         i.setType("*/*");
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                            i.addCategory(Intent.CATEGORY_OPENABLE);
+                            i.setType("*/*");
+                        }
 
                         try {
                             startActivityForResult(i, GET_CONTENT);
@@ -511,5 +623,172 @@ public class PasswordActivity extends LockingActivity {
             if (launch_immediately)
                 loadDatabase(password, mKeyUri);
         }
+    }
+
+    private boolean initEncryptCipher() {
+
+        mEncryptCipher = getCipher(Cipher.ENCRYPT_MODE);
+        if (mEncryptCipher == null) {
+            // try again after recreating the keystore
+            createKey();
+            mEncryptCipher = getCipher(Cipher.ENCRYPT_MODE);
+        }
+        return (mEncryptCipher != null);
+
+    }
+
+    public boolean initDecryptCipher() {
+        mDecryptCipher = getCipher(Cipher.DECRYPT_MODE);
+        return (mDecryptCipher != null);
+    }
+
+    /**
+     * Tries to encrypt some data with the generated key in {@link #createKey} which is
+     * only works if the user has just authenticated via fingerprint.
+     */
+    @TargetApi(23)
+    public boolean tryEncrypt() {
+        try {
+            String secret = getEditText(R.id.password);
+            byte[] encrypted = mEncryptCipher.doFinal(secret.getBytes());
+
+            IvParameterSpec ivParams = mEncryptCipher.getParameters().getParameterSpec(IvParameterSpec.class);
+            String iv = Base64.encodeToString(ivParams.getIV(), Base64.DEFAULT);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(FINGERPRINT_KEY_PASSWORD, Base64.encodeToString(encrypted, Base64.DEFAULT));
+            editor.putString(FINGERPRINT_KEY_PASSWORD_IV, iv);
+            editor.putString(FINGERPRINT_DB_KEY, mDbUri.getPath());
+            editor.commit();
+            GroupActivity.Launch(PasswordActivity.this);
+            return true;
+
+
+        } catch (BadPaddingException | IllegalBlockSizeException e) {
+            Toast.makeText(this, "Failed to encrypt the data with the generated key. "
+                    + "Retry the purchase", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Failed to encrypt the data with the generated key." + e.getMessage());
+        } catch (InvalidParameterSpecException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Tries to decrypt some data with the generated key in {@link #createKey} which is
+     * only works if the user has just authenticated via fingerprint.
+     */
+    @TargetApi(23)
+    public String tryDecrypt() {
+        try {
+
+            byte[] encodedData = Base64.decode(prefs.getString(FINGERPRINT_KEY_PASSWORD, ""), Base64.DEFAULT);
+            byte[] decodedData = mDecryptCipher.doFinal(encodedData);
+            return new String(decodedData);
+
+        } catch (BadPaddingException | IllegalBlockSizeException e) {
+            Toast.makeText(this, "Failed to decrypt the data with the generated key. "
+                    + "Retry the purchase", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Failed to decrypt the data with the generated key." + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    private SecretKey getKey() {
+        try {
+            mKeyStore.load(null);
+            SecretKey key = (SecretKey) mKeyStore.getKey(FINGERPRINT_KEY_NAME, null);
+            if (key != null) return key;
+            return createKey();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @TargetApi(23)
+    private SecretKey createKey() {
+        try {
+
+            // Set the alias of the entry in Android KeyStore where the key will appear
+            // and the constrains (purposes) in the constructor of the Builder
+            mKeyGenerator.init(new KeyGenParameterSpec.Builder(FINGERPRINT_KEY_NAME,
+                    KeyProperties.PURPOSE_DECRYPT | KeyProperties.PURPOSE_ENCRYPT)
+                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                    // Require the user to authenticate with a fingerprint to authorize every use
+                    // of the key
+                    .setUserAuthenticationRequired(true)
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                    .build());
+            return mKeyGenerator.generateKey();
+
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+
+    @TargetApi(23)
+    public Cipher getCipher(int mode) {
+        Cipher cipher;
+
+        try {
+            mKeyStore.load(null);
+            byte[] iv;
+            cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
+                    + KeyProperties.BLOCK_MODE_CBC + "/"
+                    + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+            IvParameterSpec ivParams;
+            if (mode == Cipher.ENCRYPT_MODE) {
+                cipher.init(mode, getKey());
+
+            } else {
+                SecretKey key = (SecretKey) mKeyStore.getKey(FINGERPRINT_KEY_NAME, null);
+                iv = Base64.decode(prefs.getString(FINGERPRINT_KEY_PASSWORD_IV, ""), Base64.DEFAULT);
+                ivParams = new IvParameterSpec(iv);
+                cipher.init(mode, key, ivParams);
+            }
+            return cipher;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void onAuthenticated(Cipher cipher) {
+        String pass = tryDecrypt();
+        String key = getEditText(R.id.pass_keyfile);
+        loadDatabase(pass, key);
+    }
+
+    @Override
+    public void onError() {
+
     }
 }

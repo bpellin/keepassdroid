@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -219,6 +220,12 @@ public class FileSelectActivity extends Activity {
 					i.addCategory(Intent.CATEGORY_OPENABLE);
 					i.setType("*/*");
 
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+						i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+						i.addCategory(Intent.CATEGORY_OPENABLE);
+						i.setType("*/*");
+					}
+
 					try {
 						startActivityForResult(i, GET_CONTENT);
 					} catch (ActivityNotFoundException e) {
@@ -372,7 +379,7 @@ public class FileSelectActivity extends Activity {
 				
 				filename = URLDecoder.decode(filename);
 			}
-			
+
 		}
 		else if ((requestCode == GET_CONTENT || requestCode == OPEN_DOC) && resultCode == RESULT_OK) {
 			if (data != null) {
