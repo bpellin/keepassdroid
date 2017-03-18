@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 Brian Pellin.
+ * Copyright 2009-2016 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -20,11 +20,15 @@
 package com.keepassdroid.database.edit;
 
 
+import android.content.Context;
+import android.net.Uri;
+
 import com.keepassdroid.Database;
 import com.keepassdroid.app.App;
 import com.keepassdroid.database.PwDatabase;
 import com.keepassdroid.database.PwDatabaseV3;
 import com.keepassdroid.database.PwEncryptionAlgorithm;
+import com.keepassdroid.utils.UriUtil;
 
 public class CreateDB extends RunnableOnFinish {
 
@@ -32,12 +36,14 @@ public class CreateDB extends RunnableOnFinish {
 	
 	private String mFilename;
 	private boolean mDontSave;
-	
-	public CreateDB(String filename, OnFinish finish, boolean dontSave) {
+	private Context ctx;
+
+	public CreateDB(Context ctx, String filename, OnFinish finish, boolean dontSave) {
 		super(finish);
 
 		mFilename = filename;
 		mDontSave = dontSave;
+		this.ctx = ctx;
 	}
 
 	@Override
@@ -51,13 +57,14 @@ public class CreateDB extends RunnableOnFinish {
 		
 		// Set Database state
 		db.pm = pm;
-		db.mFilename = mFilename;
+		Uri.Builder b = new Uri.Builder();
+		db.mUri = UriUtil.parseDefaultFile(mFilename);
 		db.setLoaded();
-		
+		App.clearShutdown();
+
 		// Commit changes
-		SaveDB save = new SaveDB(db, mFinish, mDontSave);
+		SaveDB save = new SaveDB(ctx, db, mFinish, mDontSave);
 		mFinish = null;
 		save.run();
 	}
-
 }

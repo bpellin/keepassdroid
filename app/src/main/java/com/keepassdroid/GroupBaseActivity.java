@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Brian Pellin.
+ * Copyright 2009-2016 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -50,6 +51,9 @@ import com.keepassdroid.view.ClickView;
 import com.keepassdroid.view.GroupViewOnlyView;
 
 public abstract class GroupBaseActivity extends LockCloseListActivity {
+	protected ListView mList;
+	protected ListAdapter mAdapter;
+
 	public static final String KEY_ENTRY = "entry";
 	public static final String KEY_MODE = "mode";
 	
@@ -68,18 +72,12 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
 		Database db = App.getDB();
 		if ( db.dirty.contains(mGroup) ) {
 			db.dirty.remove(mGroup);
-			BaseAdapter adapter = (BaseAdapter) getListAdapter();
-			adapter.notifyDataSetChanged();
-			
+			((BaseAdapter) mAdapter).notifyDataSetChanged();
 		}
 	}
 
-	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-
-		ListAdapter adapt = getListAdapter();
-		ClickView cv = (ClickView) adapt.getView(position, null, null);
+		ClickView cv = (ClickView) mAdapter.getView(position, null, null);
 		cv.onClick();
 		
 	}
@@ -96,7 +94,7 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
 		
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-
+		ActivityCompat.invalidateOptionsMenu(this);
 
 		setContentView(new GroupViewOnlyView(this));
 		setResult(KeePass.EXIT_NORMAL);
@@ -106,9 +104,9 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
 	}
 	
 	protected void styleScrollBars() {
-		ListView lv = getListView();
-		lv.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
-		lv.setTextFilterEnabled(true);
+		ensureCorrectListView();
+		mList.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
+		mList.setTextFilterEnabled(true);
 		
 	}
 	
@@ -136,6 +134,29 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
 			App.getDB().drawFactory.assignDrawableTo(iv, getResources(), mGroup.getIcon());
 		}
 	}
+
+	protected void setListAdapter(ListAdapter adapter) {
+		ensureCorrectListView();
+		mAdapter = adapter;
+		mList.setAdapter(adapter);
+	}
+
+	protected ListView getListView() {
+		ensureCorrectListView();
+		return mList;
+	}
+
+	private void ensureCorrectListView(){
+		mList = (ListView)findViewById(R.id.group_list);
+		mList.setOnItemClickListener(
+				new AdapterView.OnItemClickListener() {
+					public void onItemClick(AdapterView<?> parent, View v, int position, long id)
+					{
+						onListItemClick((ListView)parent, v, position, id);
+					}
+				}
+		);
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -148,7 +169,12 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
 	}
 
 	private void setSortMenuText(Menu menu) {
-		boolean sortByName = prefs.getBoolean(getString(R.string.sort_key), getResources().getBoolean(R.bool.sort_default));
+		boolean sortByName = false;
+
+		// Will be null if onPrepareOptionsMenu is called before onCreate
+		if (prefs != null) {
+			sortByName = prefs.getBoolean(getString(R.string.sort_key), getResources().getBoolean(R.bool.sort_default));
+		}
 		
 		int resId;
 		if ( sortByName ) {
@@ -158,7 +184,6 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
 		}
 			
 		menu.findItem(R.id.menu_sort).setTitle(resId);
-
 	}
 	
 	@Override
@@ -229,14 +254,12 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
 		db.dirty.remove(mGroup);
 		
 		// Tell the adapter to refresh it's list
-		BaseAdapter adapter = (BaseAdapter) getListAdapter();
-		adapter.notifyDataSetChanged();
+		((BaseAdapter) mAdapter).notifyDataSetChanged();
 		
 	}
 
 	private void setPassword() {
 		SetPasswordDialog dialog = new SetPasswordDialog(this);
-		
 		dialog.show();
 	}
 	
@@ -270,7 +293,5 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
 				finish();
 			}
 		}
-
 	}
-	
 }

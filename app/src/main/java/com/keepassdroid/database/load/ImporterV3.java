@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Brian Pellin.
+ * Copyright 2009-2016 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -105,9 +105,8 @@ public class ImporterV3 extends Importer {
 	/**
 	 * Load a v3 database file, return contents in a new PwDatabaseV3.
 	 * 
-	 * @param infile  Existing file to load.
+	 * @param inStream  Existing file to load.
 	 * @param password Pass phrase for infile.
-	 * @param pRepair (unused)
 	 * @return new PwDatabaseV3 container.
 	 * 
 	 * @throws IOException on any file error.
@@ -123,13 +122,13 @@ public class ImporterV3 extends Importer {
 	 * @throws InvalidAlgorithmParameterException if error decrypting main file body. 
 	 * @throws ShortBufferException if error decrypting main file body.
 	 */
-	public PwDatabaseV3 openDatabase( InputStream inStream, String password, String keyfile )
+	public PwDatabaseV3 openDatabase( InputStream inStream, String password, InputStream kfIs)
 	throws IOException, InvalidDBException
 	{
-		return openDatabase(inStream, password, keyfile, new UpdateStatus());
+		return openDatabase(inStream, password, kfIs, new UpdateStatus());
 	}
 
-	public PwDatabaseV3 openDatabase( InputStream inStream, String password, String keyfile, UpdateStatus status )
+	public PwDatabaseV3 openDatabase( InputStream inStream, String password, InputStream kfIs, UpdateStatus status )
 	throws IOException, InvalidDBException
 	{
 		PwDatabaseV3        newManager;
@@ -157,7 +156,7 @@ public class ImporterV3 extends Importer {
 
 		status.updateMessage(R.string.creating_db_key);
 		newManager = createDB();
-		newManager.setMasterKey( password, keyfile );
+		newManager.setMasterKey(password, kfIs);
 
 		// Select algorithm
 		if( (hdr.flags & PwDbHeaderV3.FLAG_RIJNDAEL) != 0 ) {
@@ -185,7 +184,7 @@ public class ImporterV3 extends Importer {
 			if ( newManager.algorithm == PwEncryptionAlgorithm.Rjindal ) {
 				cipher = CipherFactory.getInstance("AES/CBC/PKCS5Padding");
 			} else if ( newManager.algorithm == PwEncryptionAlgorithm.Twofish ) {
-				cipher = CipherFactory.getInstance("TWOFISH/CBC/PKCS7PADDING");
+				cipher = CipherFactory.getInstance("Twofish/CBC/PKCS7PADDING");
 			} else {
 				throw new IOException( "Encryption algorithm is not supported" );
 			}

@@ -37,7 +37,7 @@ import java.util.zip.GZIPInputStream;
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 
-import org.bouncycastle.crypto.StreamCipher;
+import org.spongycastle.crypto.StreamCipher;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -84,14 +84,14 @@ public class ImporterV4 extends Importer {
 
 	@Override
 	public PwDatabaseV4 openDatabase(InputStream inStream, String password,
-			String keyfile) throws IOException, InvalidDBException {
+			InputStream keyInputStream) throws IOException, InvalidDBException {
 
-		return openDatabase(inStream, password, keyfile, new UpdateStatus());
+		return openDatabase(inStream, password, keyInputStream, new UpdateStatus());
 	}
 	
 	@Override
 	public PwDatabaseV4 openDatabase(InputStream inStream, String password,
-			String keyfile, UpdateStatus status) throws IOException,
+			InputStream keyInputStream, UpdateStatus status) throws IOException,
 			InvalidDBException {
 
 		db = createDB();
@@ -100,7 +100,7 @@ public class ImporterV4 extends Importer {
 		
 		hashOfHeader = header.loadFromFile(inStream);
 			
-		db.setMasterKey(password, keyfile);
+		db.setMasterKey(password, keyInputStream);
 		db.makeFinalKey(header.masterSeed, header.transformSeed, (int)db.numKeyEncRounds);
 		
 		// Attach decryptor
@@ -723,8 +723,12 @@ public class ImporterV4 extends Importer {
 			return KdbContext.RootDeletedObjects;
 		} else {
 			assert(false);
-			
-			throw new RuntimeException("Invalid end element");
+
+			String contextName = "";
+			if (ctx != null) {
+				contextName = ctx.name();
+			}
+			throw new RuntimeException("Invalid end element: Context " +  contextName + "End element: " + name);
 		}
 	}
 	

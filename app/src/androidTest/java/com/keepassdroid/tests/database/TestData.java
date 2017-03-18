@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2009-2016 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -23,10 +23,14 @@ import java.io.InputStream;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.net.Uri;
 
 import com.keepassdroid.Database;
 import com.keepassdroid.database.PwDatabaseV3Debug;
 import com.keepassdroid.database.load.Importer;
+import com.keepassdroid.tests.TestUtil;
+import com.keepassdroid.utils.EmptyUtils;
+import com.keepassdroid.utils.UriUtil;
 
 public class TestData {
 	private static final String TEST1_KEYFILE = "";
@@ -53,8 +57,13 @@ public class TestData {
 		InputStream is = am.open(asset, AssetManager.ACCESS_STREAMING);
 
 		Database Db = new Database();
-		Db.LoadData(ctx, is, password, keyfile, Importer.DEBUG);
-		Db.mFilename = filename;
+
+		InputStream keyIs = TestUtil.getKeyFileInputStream(ctx, keyfile);
+
+		Db.LoadData(ctx, is, password, keyIs, Importer.DEBUG);
+		Uri.Builder b = new Uri.Builder();
+
+		Db.mUri = b.scheme("file").path(filename).build();
 		
 		return Db;
 		
