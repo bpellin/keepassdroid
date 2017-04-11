@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -210,15 +211,21 @@ public class FileSelectActivity extends Activity {
 		browseButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
+				Intent i;
 				if (StorageAF.useStorageFramework(FileSelectActivity.this)) {
-					Intent i = new Intent(StorageAF.ACTION_OPEN_DOCUMENT);
+					i = new Intent(StorageAF.ACTION_OPEN_DOCUMENT);
 					i.addCategory(Intent.CATEGORY_OPENABLE);
 					i.setType("*/*");
 					i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 					startActivityForResult(i, OPEN_DOC);
 				}
 				else {
-					Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+						i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+					} else {
+						i = new Intent(Intent.ACTION_GET_CONTENT);
+					}
+
 					i.addCategory(Intent.CATEGORY_OPENABLE);
 					i.setType("*/*");
 
