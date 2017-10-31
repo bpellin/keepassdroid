@@ -23,15 +23,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.android.keepass.R;
 import com.keepassdroid.database.exception.SamsungClipboardException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.ClipboardManager;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.widget.TextView;
+
+import static android.app.Activity.RESULT_OK;
 
 public class Util {
 	public static String getClipboard(Context context) {
@@ -91,6 +99,26 @@ public class Util {
 		}
 	}
 
-	
+		public static void showSamsungDialog(Context context) {
+		String text =  context.getString(R.string.clipboard_error).concat(System.getProperty("line.separator")).concat(context.getString(R.string.clipboard_error_url));
+		SpannableString s = new SpannableString(text);
+		TextView tv = new TextView(context);
+		tv.setText(s);
+		tv.setAutoLinkMask(RESULT_OK);
+		tv.setMovementMethod(LinkMovementMethod.getInstance());
+		Linkify.addLinks(s, Linkify.WEB_URLS);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.clipboard_error_title)
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				})
+				.setView(tv)
+				.show();
+
+	}
 	
 }
