@@ -121,6 +121,7 @@
 			  android:singleLine="true"
 			  android:layout_toLeftOf="@id/generate_button"
 			  android:hint="@string/hint_pass"
+			  android:importantForAccessibility="no"
 			  android:layout_alignTop="@id/generate_button"/>
 			<View android:id="@+id/divider_password"
 			  android:layout_below="@id/generate_button"
@@ -140,6 +141,7 @@
 			  android:typeface="monospace"
 			  android:singleLine="true"
 			  android:layout_below="@id/entry_confpassword_label"
+              android:importantForAccessibility="no"
 			  android:hint="@string/hint_conf_pass"/>
 			<View android:id="@+id/divider_confpassword"
 			  android:layout_below="@id/entry_confpassword"
