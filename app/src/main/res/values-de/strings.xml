@@ -195,11 +195,11 @@
     <string name="use_saf_summary">Storage Access Framework als Dateimanager verwenden (Android KitKat und später)</string>
     <string name="use_saf_title">Storage Access Framework</string>
     <string name="warning">Warnung</string>
-    <string name="warning_password_encoding">Das .kdb Format unterstützt nur den Latin1 Zeichensatz. Ihr Passwort enthällt andere Zeichen. Diese Zeichen werden umgewandelt. Dies reduziert die Sicherheit des Passwortes. Es wird empfohen ihr Passwort zu ändern.</string>
+    <string name="warning_password_encoding">Das .kdb Format unterstützt nur den Latin1 Zeichensatz. Ihr Passwort enthält andere Zeichen. Diese Zeichen werden umgewandelt. Dies reduziert die Sicherheit des Passwortes. Es wird empfohlen ihr Passwort zu ändern.</string>
     <string name="warning_read_only">Die SD-Karte ist schreibgeschützt. Etwaige Änderungen in den Datensätzen können daher nicht in der Datenbank gespeichert werden.</string>
     <string name="warning_unmounted">Keine SD-Karte vorhanden oder derzeit nicht im Gerät eingebunden. Daher kann weder eine Datenbank geöffnet, noch erstellt werden.</string>
     <string name="version_label">Version:</string>
-    <string name="configure_fingerprint">Fingerabdruck wird unterstützt, ist aber nicht eingerchtet</string>
+    <string name="configure_fingerprint">Fingerabdruck wird unterstützt, ist aber nicht eingerichtet</string>
     <string name="scanning_fingerprint">Fingerabdruck erfassen</string>
     <string name="encrypted_value_stored">Verschlüsselungspasswort gespeichert</string>
     <string name="fingerprint_invalid_key">Ungültiger Schlüssel</string>
