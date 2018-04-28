@@ -6,7 +6,7 @@
 
   KeePassDroid is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
+  the Free Software Foundation, either version 2 of the License, or
   (at your option) any later version.
 
   KeePassDroid is distributed in the hope that it will be useful,
@@ -26,6 +26,7 @@
     <string name="add_entry">Новая запись</string>
     <string name="add_group">Новая группа</string>
     <string name="add_group_title">Новая группа</string>
+    <string name="add_string">Новая строка</string>
     <string name="algorithm">Алгоритм</string>
     <string name="algorithm_colon">Алгоритм:</string>
     <string name="app_name">KeePass</string>
@@ -34,7 +35,7 @@
     <string name="application">Программа</string>
     <string name="application_settings">Настройки KeePassDroid</string>
     <string name="beta_dontask">Не показывать снова</string>
-    <string name="beta_warning">Поддержка сохранения баз kdbx ЭКСПЕРИМЕНТАЛЬНАЯ. Сделайте резервную копию базы перед сохранением</string>
+    <string name="beta_warning">Поддержка сохранения баз kdbx ЭКСПЕРИМЕНТАЛЬНАЯ. Сделайте резервную копию базы перед сохранением.</string>
     <string name="brackets">{[(Скобки)]}</string>
     <string name="browser_intall_text">Для функции обзора необходим менеджер файлов – например, OI File Manager</string>
     <string name="building_search_idx">Индексирование…</string>
@@ -58,7 +59,7 @@
     <string name="disclaimer_formal">"KeePassDroid © 2009–2017
 Разработчик Brian Pellin
 
-Программа предоставляется БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ. Распространяется свободно по лицензии GPL v2 или новее"</string>
+Программа предоставляется БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ. Распространяется свободно по лицензии GPL v2 или новее."</string>
     <string name="ellipsis">…</string>
     <string name="enter_filename">Путь к базе KeePass:</string>
     <string name="entry_accessed">Доступ:</string>
@@ -68,7 +69,7 @@
     <string name="entry_confpassword">Подтверждение:</string>
     <string name="entry_created">Создано:</string>
     <string name="entry_expires">Истекает:</string>
-    <string name="entry_keyfile">файл-ключ</string>
+    <string name="entry_keyfile">файл-ключ (необязательно)</string>
     <string name="entry_modified">Изменено:</string>
     <string name="entry_not_found">Данные записи не найдены.</string>
     <string name="entry_password">Пароль:</string>
@@ -100,6 +101,7 @@
     <string name="field_name">Имя поля</string>
     <string name="field_value">Значение поля</string>
     <string name="FileNotFound">Файл не найден</string>
+    <string name="file_not_found_content">Файл не найден. Попробуйте повторно открыть через встроенный поставщик содержимого.</string>
     <string name="file_browser">Обзор файлов</string>
     <string name="generate_password">Создать пароль</string>
     <string name="group">Группа</string>
@@ -114,8 +116,8 @@
     <string name="hint_title">название</string>
     <string name="hint_url">ссылка</string>
     <string name="hint_username">логин</string>
-    <string name="install_from_market">Google Play</string>
-    <string name="install_from_website">OpenIntents</string>
+    <string name="install_from_market">Установить из Play Маркета</string>
+    <string name="install_from_website">Установить с сайта</string>
     <string name="InvalidPassword">Неверный пароль или файл-ключ</string>
     <string name="invalid_algorithm">Неверный криптоалгоритм</string>
     <string name="invalid_db_sig">Формат базы не определён</string>
@@ -160,7 +162,8 @@
     <string name="progress_create">Создание базы…</string>
     <string name="progress_title">Обработка</string>
     <string name="protection">Защита</string>
-    <string name="read_only_warning">KeePassDroid не имеет разрешений на запись по указанному пути. База будет открыта только для чтения</string>
+    <string name="read_only">Только чтение</string>
+    <string name="read_only_warning">KeePassDroid не имеет разрешений на запись по указанному пути. База будет открыта только для чтения.</string>
     <string name="read_only_kitkat_warning">Начиная с Android KitKat, на некоторых устройствах приложениям запрещена запись на SD-карту</string>
     <string name="recentfile_title">Недавно открытые</string>
     <string name="recentfile_summary">Хранить имена открытых файлов</string>
@@ -187,18 +190,25 @@
     <string name="underline">_Подчёркивание_</string>
     <string name="unsupported_db_version">Неподдерживаемая версия базы</string>
     <string name="uppercase">ЗАГЛАВНЫЕ</string>
-    <string name="use_saf_summary">Storage Access Framework для обзора файлов (KK+)</string>
+    <string name="use_saf_summary">Storage Access Framework для обзора файлов (KitKat+)</string>
     <string name="use_saf_title">Обзор через SAF</string>
     <string name="warning">Внимание</string>
-    <string name="warning_password_encoding">Пароль содержит символы вне кодировки Latin1, поддерживаемой форматом .kdb! ВСЕ не-Latin1 символы будут преобразованы в одинаковый символ. Рекомендуется изменить пароль</string>
-    <string name="warning_read_only">Запись на карту памяти невозможна. Изменения не будут сохранены</string>
-    <string name="warning_unmounted">Карта памяти не подключена. Работа с базой невозможна</string>
+    <string name="warning_password_encoding">Пароль содержит символы вне кодировки Latin1, поддерживаемой форматом .kdb! ВСЕ не-Latin1 символы будут преобразованы в одинаковый символ. Рекомендуется изменить пароль.</string>
+    <string name="warning_read_only">Запись на карту памяти невозможна. Изменения не будут сохранены.</string>
+    <string name="warning_unmounted">Карта памяти не подключена. Работа с базой невозможна.</string>
     <string name="version_label">Версия:</string>
+    <string name="configure_fingerprint">Отпечатки пальцев поддерживаются, но не настроены на устройстве</string>
+    <string name="scanning_fingerprint">Ожидание отпечатка пальца</string>
+    <string name="encrypted_value_stored">Зашифрованный пароль сохранён</string>
+    <string name="fingerprint_invalid_key">Проблема из-за неверного ключа</string>
+    <string name="fingerprint_error">Проблема с отпечатком пальца</string>
+    <string name="store_with_fingerprint">Используйте отпечаток пальца, чтобы сохранить пароль</string>
+    <string name="no_password_stored">Для этой базы пароль ещё не сохранён</string>
 
     <string-array name="clipboard_timeout_options">
-       <item>30 сек.</item>
-       <item>1 мин.</item>
-       <item>5 мин.</item>
+       <item>30 секунд</item>
+       <item>1 минута</item>
+       <item>5 минут</item>
        <item>Никогда</item>
     </string-array>
     <string-array name="list_size_options">
