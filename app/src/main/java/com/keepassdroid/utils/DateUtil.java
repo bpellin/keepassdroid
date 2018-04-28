@@ -51,7 +51,14 @@ public class DateUtil {
     }
 
     public static long convertDateToKDBX4Time(DateTime dt) {
-        Seconds secs = Seconds.secondsBetween(javaEpoch, dt);
-        return secs.getSeconds() + epochOffset;
+        try {
+            Seconds secs = Seconds.secondsBetween(javaEpoch, dt);
+            return secs.getSeconds() + epochOffset;
+        } catch (ArithmeticException e) {
+            // secondsBetween overflowed an int
+            Date javaDt = dt.toDate();
+            long seconds = javaDt.getTime() / 1000L;
+            return seconds + epochOffset;
+        }
     }
 }
