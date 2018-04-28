@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2017 Brian Pellin.
+ * Copyright 2009-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -362,6 +362,15 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         return PREF_KEY_IV_PREFIX + (mDbUri != null ? mDbUri.getPath() : "");
     }
 
+    private void toggleModeOrStartListening(final int newMode) {
+        if (mode == newMode) {
+            fingerPrintHelper.startListening();
+        }
+        else {
+            toggleMode(newMode);
+        }
+    }
+
     private int toggleMode(final int newMode) {
         // check if mode is different so we can update fingerprint helper
         if (mode != newMode) {
@@ -442,7 +451,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
                 confirmationView.setText(R.string.scanning_fingerprint);
                 // listen for decryption by default
-                toggleMode(Cipher.DECRYPT_MODE);
+                toggleModeOrStartListening(Cipher.DECRYPT_MODE);
             }
         }
     }
