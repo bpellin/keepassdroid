@@ -1,3 +1,6 @@
+KeePassDroid (2.2.2.1)
+ * Prevent fingerprint exception
+
 KeePassDroid (2.2.2)
  * Fix date integer overflow
  * Fix fingerprint listening on resume
