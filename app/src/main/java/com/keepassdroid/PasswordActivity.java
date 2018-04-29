@@ -362,33 +362,20 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         return PREF_KEY_IV_PREFIX + (mDbUri != null ? mDbUri.getPath() : "");
     }
 
-    private void toggleModeOrStartListening(final int newMode) {
-        if (mode == newMode) {
-            fingerPrintHelper.startListening();
-        }
-        else {
-            toggleMode(newMode);
-        }
-    }
-
     private int toggleMode(final int newMode) {
-        // check if mode is different so we can update fingerprint helper
-        if (mode != newMode) {
-            mode = newMode;
-            switch (mode) {
-                case Cipher.ENCRYPT_MODE:
-                    fingerPrintHelper.initEncryptData();
-                    break;
-                case Cipher.DECRYPT_MODE:
-                    final String ivSpecValue = prefsNoBackup.getString(getPreferenceKeyIvSpec(), null);
-                    if (ivSpecValue != null) {
-                        fingerPrintHelper.initDecryptData(ivSpecValue);
-                    }
-                    break;
-            }
-            return newMode;
+        mode = newMode;
+        switch (mode) {
+            case Cipher.ENCRYPT_MODE:
+                fingerPrintHelper.initEncryptData();
+                break;
+            case Cipher.DECRYPT_MODE:
+                final String ivSpecValue = prefsNoBackup.getString(getPreferenceKeyIvSpec(), null);
+                if (ivSpecValue != null) {
+                    fingerPrintHelper.initDecryptData(ivSpecValue);
+                }
+                break;
         }
-        // remains in current mode
+
         return mode;
     }
 
@@ -451,7 +438,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
                 confirmationView.setText(R.string.scanning_fingerprint);
                 // listen for decryption by default
-                toggleModeOrStartListening(Cipher.DECRYPT_MODE);
+                toggleMode(Cipher.DECRYPT_MODE);
             }
         }
     }
