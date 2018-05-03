@@ -1,3 +1,7 @@
+KeePassDroid (2.2.2.2)
+ * Prevent fingerprint infinite loop
+ * Update Italian translations
+
 KeePassDroid (2.2.2.1)
  * Prevent fingerprint exception
 
