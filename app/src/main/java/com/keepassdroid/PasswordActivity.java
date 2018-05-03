@@ -480,8 +480,6 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         if (showMessage) {
             Toast.makeText(this, R.string.fingerprint_error, Toast.LENGTH_SHORT).show();
         }
-        checkAvailability(); // restarts listening
-
     }
 
     private class DefaultCheckChange implements CompoundButton.OnCheckedChangeListener {
