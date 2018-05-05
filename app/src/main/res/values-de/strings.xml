@@ -87,6 +87,7 @@
     <string name="error_database_settings">Fehler beim Ermitteln der Datenbankeinstellungen.</string>
     <string name="error_failed_to_launch_link">Fehler beim Öffnen der Verknüpfung.</string>
     <string name="error_filename_required">Ein Dateiname wird benötigt.</string>
+    <string name="error_path_required">Ein Pfad wird benötigt.</string>
     <string name="error_file_not_create">Konnte Datei nicht erstellen:</string>
     <string name="error_invalid_db">Ungültige Datenbank.</string>
     <string name="error_invalid_path">Ungültiger Pfad.</string>
@@ -197,6 +198,13 @@
     <string name="warning_read_only">Die SD-Karte ist schreibgeschützt. Etwaige Änderungen in den Datensätzen können daher nicht in der Datenbank gespeichert werden.</string>
     <string name="warning_unmounted">Keine SD-Karte vorhanden oder derzeit nicht im Gerät eingebunden. Daher kann weder eine Datenbank geöffnet, noch erstellt werden.</string>
     <string name="version_label">Version:</string>
+
+    <!-- Create Dialog -->
+    <string name="create_database">Datenbank anlegen</string>
+    <string name="path_hint">Pfad</string>
+    <string name="filename_hint">Dateiname</string>
+    <string name="title_database_file">Datenbank Einstellungen</string>
+    <string name="title_password">Datenbank Passwort Einstellungen</string>
 
     <string-array name="clipboard_timeout_options">
       <item>30 Sekunden</item>

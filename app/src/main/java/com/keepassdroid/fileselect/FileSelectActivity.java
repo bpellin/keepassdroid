@@ -20,7 +20,6 @@
 package com.keepassdroid.fileselect;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -32,8 +31,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -47,6 +50,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -64,6 +68,9 @@ import com.keepassdroid.compat.StorageAF;
 import com.keepassdroid.database.edit.CreateDB;
 import com.keepassdroid.database.edit.FileOnFinish;
 import com.keepassdroid.database.exception.ContentFileNotFoundException;
+import com.keepassdroid.fileselect.adapter.KeePassFileListAdapter;
+import com.keepassdroid.fileselect.adapter.KeePassFileListItem;
+import com.keepassdroid.fileselect.handler.CreateDatabaseClickHandler;
 import com.keepassdroid.intents.Intents;
 import com.keepassdroid.settings.AppSettingsActivity;
 import com.keepassdroid.utils.EmptyUtils;
@@ -75,13 +82,20 @@ import com.keepassdroid.view.FileNameView;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URLDecoder;
+import java.util.LinkedList;
+import java.util.List;
 
-public class FileSelectActivity extends Activity {
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+
+public class FileSelectActivity extends AppCompatActivity {
 
 	private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 111;
 	private ListView mList;
 	private ListAdapter mAdapter;
+
+	private FloatingActionButton floatingActionButton;
 
 	private static final int CMENU_CLEAR = Menu.FIRST;
 	
@@ -96,7 +110,7 @@ public class FileSelectActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		fileHistory = App.getFileHistory();
 
 		if (fileHistory.hasRecentFiles()) {
@@ -109,161 +123,51 @@ public class FileSelectActivity extends Activity {
 		mList = (ListView)findViewById(R.id.file_list);
 
 		mList.setOnItemClickListener(
-				new AdapterView.OnItemClickListener() {
-					public void onItemClick(AdapterView<?> parent, View v, int position, long id)
-					{
-						onListItemClick((ListView)parent, v, position, id);
-					}
+			new AdapterView.OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+					onListItemClick((ListView) parent, v, position, id);
 				}
+			}
 		);
 
-		// Open button
-		Button openButton = (Button) findViewById(R.id.open);
-		openButton.setOnClickListener(new View.OnClickListener() {
+		if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+			// Use material design (no more buttons but a FloatingActionButton with a BottomSheetDialog)
+			floatingActionButton = (FloatingActionButton)findViewById(R.id.f_action);
+			floatingActionButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(FileSelectActivity.this);
 
-			public void onClick(View v) {
-				String fileName = Util.getEditText(FileSelectActivity.this,
-						R.id.file_filename);
+					View sheetView = FileSelectActivity.this.getLayoutInflater().inflate(R.layout.file_selection_bottom_sheet, null);
+					mBottomSheetDialog.setContentView(sheetView);
+					mBottomSheetDialog.show();
 
-				try {
-					PasswordActivity.Launch(FileSelectActivity.this, fileName);
+					// We not only want to call the ClickHandler for the item, but also close the BottomSheetDialog.
+					LinearLayout add = (LinearLayout) sheetView.findViewById(R.id.file_selection_bottom_sheet_add);
+					add.setOnClickListener(
+							new MaterialBottomSheetAutoCloseClickListener(
+									mBottomSheetDialog,
+									new CreateDatabaseClickHandler(FileSelectActivity.this)));
+					LinearLayout open = (LinearLayout) sheetView.findViewById(R.id.file_selection_bottom_sheet_open);
+					open.setOnClickListener(
+							new MaterialBottomSheetAutoCloseClickListener(
+									mBottomSheetDialog,
+									new BrowseButtonClickHandler()));
 				}
-				catch (ContentFileNotFoundException e) {
-					Toast.makeText(FileSelectActivity.this,
-							R.string.file_not_found_content, Toast.LENGTH_LONG).show();
-				}
-				catch (FileNotFoundException e) {
-					Toast.makeText(FileSelectActivity.this,
-							R.string.FileNotFound, Toast.LENGTH_LONG).show();
-				}
+			});
+		} else {
+			// Use old design (only buttons)
+			// Open button
+			Button openButton = (Button) findViewById(R.id.open);
+			openButton.setOnClickListener(new OpenButtonClickHandler());
 
-			}
-		});
+			// Create button
+			Button createButton = (Button) findViewById(R.id.create);
+			createButton.setOnClickListener(new CreateButtonClickHandler());
 
-		// Create button
-		Button createButton = (Button) findViewById(R.id.create);
-		createButton.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View v) {
-				String filename = Util.getEditText(FileSelectActivity.this,
-						R.id.file_filename);
-
-				// Make sure file name exists
-				if (filename.length() == 0) {
-					Toast
-							.makeText(FileSelectActivity.this,
-									R.string.error_filename_required,
-									Toast.LENGTH_LONG).show();
-					return;
-				}
-
-				// Try to create the file
-				File file = new File(filename);
-				try {
-					if (file.exists()) {
-						Toast.makeText(FileSelectActivity.this,
-								R.string.error_database_exists,
-								Toast.LENGTH_LONG).show();
-						return;
-					}
-					File parent = file.getParentFile();
-					
-					if ( parent == null || (parent.exists() && ! parent.isDirectory()) ) {
-						Toast.makeText(FileSelectActivity.this,
-								R.string.error_invalid_path,
-								Toast.LENGTH_LONG).show();
-						return;
-					}
-					
-					if ( ! parent.exists() ) {
-						// Create parent dircetory
-						if ( ! parent.mkdirs() ) {
-							Toast.makeText(FileSelectActivity.this,
-									R.string.error_could_not_create_parent,
-									Toast.LENGTH_LONG).show();
-							return;
-							
-						}
-					}
-					
-					file.createNewFile();
-				} catch (IOException e) {
-					Toast.makeText(
-							FileSelectActivity.this,
-							getText(R.string.error_file_not_create) + " "
-									+ e.getLocalizedMessage(),
-							Toast.LENGTH_LONG).show();
-					return;
-				}
-
-				// Prep an object to collect a password once the database has
-				// been created
-				CollectPassword password = new CollectPassword(
-						new LaunchGroupActivity(filename));
-
-				// Create the new database
-				CreateDB create = new CreateDB(FileSelectActivity.this, filename, password, true);
-				ProgressTask createTask = new ProgressTask(
-						FileSelectActivity.this, create,
-						R.string.progress_create);
-				createTask.run();
-
-			}
-
-		});
-		
-		ImageButton browseButton = (ImageButton) findViewById(R.id.browse_button);
-		browseButton.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				if (StorageAF.useStorageFramework(FileSelectActivity.this)) {
-					Intent i = new Intent(StorageAF.ACTION_OPEN_DOCUMENT);
-					i.addCategory(Intent.CATEGORY_OPENABLE);
-					i.setType("*/*");
-					i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-					startActivityForResult(i, OPEN_DOC);
-				}
-				else {
-					Intent i;
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-						i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-					} else {
-						i = new Intent(Intent.ACTION_GET_CONTENT);
-					}
-					i.addCategory(Intent.CATEGORY_OPENABLE);
-					i.setType("*/*");
-
-					try {
-						startActivityForResult(i, GET_CONTENT);
-					} catch (ActivityNotFoundException e) {
-						lookForOpenIntentsFilePicker();
-					} catch (SecurityException e) {
-						lookForOpenIntentsFilePicker();
-					}
-				}
-			}
-			
-			private void lookForOpenIntentsFilePicker() {
-				
-				if (Interaction.isIntentAvailable(FileSelectActivity.this, Intents.OPEN_INTENTS_FILE_BROWSE)) {
-					Intent i = new Intent(Intents.OPEN_INTENTS_FILE_BROWSE);
-					i.setData(Uri.parse("file://" + Util.getEditText(FileSelectActivity.this, R.id.file_filename)));
-					try {
-						startActivityForResult(i, FILE_BROWSE);
-					} catch (ActivityNotFoundException e) {
-						showBrowserDialog();
-					}
-					
-				} else {
-					showBrowserDialog();
-				}
-			}
-			
-			private void showBrowserDialog() {
-				BrowserDialog diag = new BrowserDialog(FileSelectActivity.this);
-				diag.show();
-			}
-		});
+			ImageButton browseButton = (ImageButton) findViewById(R.id.browse_button);
+			browseButton.setOnClickListener(new BrowseButtonClickHandler());
+		}
 
 		fillData();
 		
@@ -334,11 +238,28 @@ public class FileSelectActivity extends Activity {
 	}
 
 	private void fillData() {
-		// Set the initial value of the filename
-		EditText filename = (EditText) findViewById(R.id.file_filename);
-		filename.setText(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_file_path));
-		
-		mAdapter = new ArrayAdapter<String>(this, R.layout.file_row, R.id.file_filename, fileHistory.getDbList());
+		if (Build.VERSION.SDK_INT < LOLLIPOP) {
+			// Set the initial value of the filename
+			AppCompatTextView filename = (AppCompatTextView) findViewById(R.id.file_filename);
+			if (filename != null) {
+				filename.setText(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_file_path));
+			}
+			List<String> recentOpenedDatabases = new LinkedList<>();
+			for (String db : fileHistory.getDbList()) {
+				File file = new File(URI.create(db).getPath());
+				recentOpenedDatabases.add(file.getPath());
+			}
+
+			mAdapter = new ArrayAdapter<>(this, R.layout.file_row, R.id.file_filename, recentOpenedDatabases);
+		} else {
+			List<KeePassFileListItem> recentOpenedDatabases = new LinkedList<>();
+			for (String db : fileHistory.getDbList()) {
+				File file = new File(URI.create(db).getPath());
+				recentOpenedDatabases.add(new KeePassFileListItem(file.getName(), file.getPath()));
+			}
+
+			mAdapter = new KeePassFileListAdapter(this, recentOpenedDatabases);
+		}
 		mList.setAdapter(mAdapter);
 	}
 
@@ -411,8 +332,12 @@ public class FileSelectActivity extends Activity {
 		}
 
 		if (filename != null) {
-			EditText fn = (EditText) findViewById(R.id.file_filename);
-			fn.setText(filename);
+			if (Build.VERSION.SDK_INT < LOLLIPOP) {
+				EditText fn = (EditText) findViewById(R.id.file_filename);
+				fn.setText(filename);
+			} else {
+				openPasswordActivity(filename);
+			}
 		}
 	}
 
@@ -432,7 +357,9 @@ public class FileSelectActivity extends Activity {
 		}
 		
 		FileNameView fnv = (FileNameView) findViewById(R.id.file_select);
-		fnv.updateExternalStorageWarning();
+		if (fnv != null) {
+			fnv.updateExternalStorageWarning();
+		}
 	}
 
 	private void checkStoragePermission() {
@@ -563,4 +490,171 @@ public class FileSelectActivity extends Activity {
 		((BaseAdapter) mAdapter).notifyDataSetChanged();
 	}
 
+
+	/**
+	 * ClickHandler Class for the open button.
+	 * This tries to open the given filename (Requires file_filename to be a filled input field)
+	 */
+	private class OpenButtonClickHandler implements View.OnClickListener {
+
+		public void onClick(View v) {
+            String fileName = Util.getEditText(FileSelectActivity.this,
+                    R.id.file_filename);
+			openPasswordActivity(fileName);
+		}
+	}
+
+	private void openPasswordActivity(String fileName) {
+		try {
+            PasswordActivity.Launch(FileSelectActivity.this, fileName);
+        } catch (ContentFileNotFoundException e) {
+            Toast.makeText(FileSelectActivity.this,
+                    R.string.file_not_found_content, Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            Toast.makeText(FileSelectActivity.this,
+                    R.string.FileNotFound, Toast.LENGTH_LONG).show();
+        }
+	}
+
+	private class CreateButtonClickHandler implements View.OnClickListener {
+
+		public void onClick(View v) {
+            String filename = Util.getEditText(FileSelectActivity.this,
+                    R.id.file_filename);
+
+            // Make sure file name exists
+            if (filename.length() == 0) {
+                Toast
+                        .makeText(FileSelectActivity.this,
+                                R.string.error_filename_required,
+                                Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // Try to create the file
+            File file = new File(filename);
+            try {
+                if (file.exists()) {
+                    Toast.makeText(FileSelectActivity.this,
+                            R.string.error_database_exists,
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+                File parent = file.getParentFile();
+
+                if (parent == null || (parent.exists() && !parent.isDirectory())) {
+                    Toast.makeText(FileSelectActivity.this,
+                            R.string.error_invalid_path,
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (!parent.exists()) {
+                    // Create parent dircetory
+                    if (!parent.mkdirs()) {
+                        Toast.makeText(FileSelectActivity.this,
+                                R.string.error_could_not_create_parent,
+                                Toast.LENGTH_LONG).show();
+                        return;
+
+                    }
+                }
+
+                file.createNewFile();
+            } catch (IOException e) {
+                Toast.makeText(
+                        FileSelectActivity.this,
+                        getText(R.string.error_file_not_create) + " "
+                                + e.getLocalizedMessage(),
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // Prep an object to collect a password once the database has
+            // been created
+            CollectPassword password = new CollectPassword(
+                    new LaunchGroupActivity(filename));
+
+            // Create the new database
+            CreateDB create = new CreateDB(FileSelectActivity.this, filename, password, true);
+            ProgressTask createTask = new ProgressTask(
+                    FileSelectActivity.this, create,
+                    R.string.progress_create);
+            createTask.run();
+
+        }
+
+	}
+
+	private class BrowseButtonClickHandler implements View.OnClickListener {
+
+		public void onClick(View v) {
+            if (StorageAF.useStorageFramework(FileSelectActivity.this)) {
+                Intent i = new Intent(StorageAF.ACTION_OPEN_DOCUMENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("*/*");
+                i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                startActivityForResult(i, OPEN_DOC);
+            }
+            else {
+                Intent i;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                } else {
+                    i = new Intent(Intent.ACTION_GET_CONTENT);
+                }
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("*/*");
+
+                try {
+                    startActivityForResult(i, GET_CONTENT);
+                } catch (ActivityNotFoundException e) {
+                    lookForOpenIntentsFilePicker();
+                } catch (SecurityException e) {
+                    lookForOpenIntentsFilePicker();
+                }
+            }
+        }
+
+		private void lookForOpenIntentsFilePicker() {
+
+            if (Interaction.isIntentAvailable(FileSelectActivity.this, Intents.OPEN_INTENTS_FILE_BROWSE)) {
+                Intent i = new Intent(Intents.OPEN_INTENTS_FILE_BROWSE);
+                i.setData(Uri.parse("file://" + Util.getEditText(FileSelectActivity.this, R.id.file_filename)));
+                try {
+                    startActivityForResult(i, FILE_BROWSE);
+                } catch (ActivityNotFoundException e) {
+                    showBrowserDialog();
+                }
+
+            } else {
+                showBrowserDialog();
+            }
+        }
+
+		private void showBrowserDialog() {
+            BrowserDialog diag = new BrowserDialog(FileSelectActivity.this);
+            diag.show();
+        }
+	}
+
+	private class MaterialBottomSheetAutoCloseClickListener implements View.OnClickListener {
+		private final BottomSheetDialog bottomSheetDialog;
+		private final View.OnClickListener additionalClickListener;
+
+		public MaterialBottomSheetAutoCloseClickListener(BottomSheetDialog bottomSheetDialog, View.OnClickListener additionalClickListener) {
+			this.bottomSheetDialog = bottomSheetDialog;
+			this.additionalClickListener = additionalClickListener;
+		}
+
+		@Override
+		public void onClick(View v) {
+			if (bottomSheetDialog != null) {
+				bottomSheetDialog.cancel();
+			}
+			if (additionalClickListener != null) {
+				additionalClickListener.onClick(v);
+			}
+		}
+	}
 }

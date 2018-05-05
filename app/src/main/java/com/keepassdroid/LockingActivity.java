@@ -20,10 +20,11 @@
 package com.keepassdroid;
 
 import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.keepassdroid.timeout.TimeoutHelper;
 
-public abstract class LockingActivity extends Activity {
+public abstract class LockingActivity extends AppCompatActivity {
 
 	@Override
 	protected void onPause() {

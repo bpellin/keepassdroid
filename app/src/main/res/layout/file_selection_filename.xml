@@ -38,7 +38,7 @@
 	  android:layout_alignParentRight="true"
 	  android:layout_below="@id/label_open_by_filename"
 	/>
-  	<EditText android:id="@+id/file_filename"
+  	<android.support.v7.widget.AppCompatEditText android:id="@+id/file_filename"
   	  android:layout_width="fill_parent"
   	  android:layout_height="wrap_content"
   	  android:singleLine="true"

@@ -5,12 +5,12 @@ android {
     buildToolsVersion = '26.0.2'
 
     defaultConfig {
-        applicationId = "com.android.keepass"
-        minSdkVersion 4
+        applicationId = "com.android.keepass.test"
+        minSdkVersion 7
         targetSdkVersion 12
 
-        versionCode = 158
-        versionName = "2.2.0.2"
+        versionCode = 159
+        versionName = "2.2.0.3-SNAPSHOT"
 
         testApplicationId = "com.keepassdroid.tests"
         testInstrumentationRunner = "android.test.InstrumentationTestRunner"
@@ -35,7 +35,7 @@ android {
     productFlavors {
         flavor1 {
             dimension = "all"
-            applicationId = "com.android.keepass"
+            applicationId = "com.android.keepass.test"
         }
     }
 
@@ -48,6 +48,8 @@ dependencies {
     compile 'com.madgag.spongycastle:core:1.58.0.0'
     compile 'com.madgag.spongycastle:prov:1.58.0.0'
     compile 'joda-time:joda-time:2.9.4'
+    compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:design:23.4.0'
 
 }

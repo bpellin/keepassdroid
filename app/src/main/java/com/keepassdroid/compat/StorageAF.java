@@ -19,6 +19,7 @@
  */
 package com.keepassdroid.compat;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +28,8 @@ import android.preference.PreferenceManager;
 import com.android.keepass.R;
 
 import java.lang.reflect.Field;
+
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 /**
  * Created by bpellin on 3/10/16.

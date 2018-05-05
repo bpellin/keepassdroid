@@ -17,8 +17,22 @@
   You should have received a copy of the GNU General Public License
   along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<TextView android:id="@+id/file_filename" xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/file_filename" xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:padding="4sp"
-    style="@style/GroupText"/>
+    android:layout_height="wrap_content">
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/file_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="4sp"
+        android:inputType="none"
+        style="@style/GroupText"/>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/file_path"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="4sp"
+        android:inputType="none"
+        style="@style/GroupTextSmall"
+        android:layout_below="@id/file_name"/>
+</RelativeLayout>

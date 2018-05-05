@@ -19,13 +19,13 @@
  */
 package com.android.keepass;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.keepassdroid.fileselect.FileSelectActivity;
 
-public class KeePass extends Activity {
+public class KeePass extends AppCompatActivity {
 
 	public static final int EXIT_NORMAL = 0;
 	public static final int EXIT_LOCK = 1;

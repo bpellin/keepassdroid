@@ -18,18 +18,30 @@
   along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-    <style name="NoTitleBar" parent="android:Theme.Material"></style>
-    <style name="Dialog" parent="android:Theme.Material.Dialog"></style>
+	<style name="AppTheme" parent="Theme.AppCompat.Light">
+		<item name="colorAccent">@color/accent</item>
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorPrimaryDark">@color/primary_dark</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<item name="android:textColor">@color/textColor</item>
+		<item name="android:textColorPrimary">@color/actionBarTextColor</item>
+		<item name="android:windowBackground">@color/background</item>
+
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:windowContentTransitions">true</item>
+	</style>
+
+	<style name="Dialog" parent="android:Theme.Material.Dialog"></style>
 	<style name="GroupTextSmall" parent="android:Theme.Material">
-		<item name="android:textColor">@color/group</item>
+		<item name="android:textColor">@color/textColor</item>
 		<item name="android:textSize">15sp</item>
 	</style>
 	<style name="GroupText" parent="android:Theme.Material">
-		<item name="android:textColor">@color/group</item>
+		<item name="android:textColor">@color/textColor</item>
 		<item name="android:textSize">20sp</item>
 	</style>
 	<style name="GroupTextLarge" parent="android:Theme.Material">
-		<item name="android:textColor">@color/group</item>
+		<item name="android:textColor">@color/textColor</item>
 		<item name="android:textSize">28sp</item>
 	</style>
 	<style name="ElementTextSmall">
@@ -47,7 +59,7 @@
 	<style name="WhiteOnBlack">
 		<!-- <item name="android:background">#666666</item> -->
 		<item 
-name="android:textColor">@android:color/primary_text_dark</item>
+name="android:textColor">@android:color/primary_text_light</item>
 		<item name="android:textSize">20sp</item>
 	</style>
 	<style name="WhiteOnBlackSmall" parent="WhiteOnBlack">
@@ -58,7 +70,7 @@ name="android:textColor">@android:color/primary_text_dark</item>
 		<!-- <item name="android:background">#222222</item> -->
 	</style>
 	<style name="ElementTextTitle" parent="WhiteOnBlack">
-		<item name="android:textColor">@color/group</item>
+		<item name="android:textColor">@color/textColor</item>
 	</style>
 	<style name="EntryItem">
 		<item name="android:padding">5sp</item>
