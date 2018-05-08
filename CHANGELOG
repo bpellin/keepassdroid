@@ -1,3 +1,7 @@
+KeePassDroid (2.2.2.3)
+ * Improve fingerprint error handling
+ * Updated Russian translations
+
 KeePassDroid (2.2.2.2)
  * Prevent fingerprint infinite loop
  * Update Italian translations
