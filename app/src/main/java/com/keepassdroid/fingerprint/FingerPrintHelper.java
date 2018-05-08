@@ -101,6 +101,9 @@ public class FingerPrintHelper {
 
         void onException(boolean showWarningMessage);
 
+        void onException(CharSequence message);
+
+        void onException(int resId);
     }
 
     public FingerPrintHelper(

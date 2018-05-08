@@ -309,12 +309,9 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
                         final int errorCode,
                         final CharSequence errString) {
 
-                    // this is triggered on stop/start listening done by helper to switch between modes so don't restart here
-                    // errorCode = 5
-                    // errString = "Fingerprint operation canceled."
-                    //onException();
-                    //confirmationView.setText(errString);
-                    // true false fingerprint readings are handled otherwise with the toast messages, see below in code
+                    if (errorCode != 5) { // FINGERPRINT_ERROR_CANCELLED (not defined in support library)
+                        onException(errString);
+                    }
                 }
 
                 @Override
@@ -347,7 +344,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
                 @Override
                 public void onAuthenticationFailed() {
-                    onException();
+                    onException(R.string.fingerprint_notrecognized);
                 }
             });
         }
@@ -363,17 +360,23 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
     }
 
     private int toggleMode(final int newMode) {
-        mode = newMode;
-        switch (mode) {
-            case Cipher.ENCRYPT_MODE:
-                fingerPrintHelper.initEncryptData();
-                break;
-            case Cipher.DECRYPT_MODE:
-                final String ivSpecValue = prefsNoBackup.getString(getPreferenceKeyIvSpec(), null);
-                if (ivSpecValue != null) {
-                    fingerPrintHelper.initDecryptData(ivSpecValue);
-                }
-                break;
+        if (mode != newMode) {
+            mode = newMode;
+            switch (mode) {
+                case Cipher.ENCRYPT_MODE:
+                    fingerPrintHelper.initEncryptData();
+                    break;
+                case Cipher.DECRYPT_MODE:
+                    final String ivSpecValue = prefsNoBackup.getString(getPreferenceKeyIvSpec(), null);
+                    if (ivSpecValue != null) {
+                        fingerPrintHelper.initDecryptData(ivSpecValue);
+                    }
+                    break;
+            }
+        }
+        else {
+            fingerPrintHelper.stopListening();
+            fingerPrintHelper.startListening();
         }
 
         return mode;
@@ -467,7 +470,6 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
     @Override
     public void onInvalidKeyException() {
         Toast.makeText(this, R.string.fingerprint_invalid_key, Toast.LENGTH_SHORT).show();
-        checkAvailability(); // restarts listening
     }
 
     @Override
@@ -478,8 +480,18 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
     @Override
     public void onException(boolean showMessage) {
         if (showMessage) {
-            Toast.makeText(this, R.string.fingerprint_error, Toast.LENGTH_SHORT).show();
+            onException(R.string.fingerprint_error);
         }
+    }
+
+    @Override
+    public void onException(int resId) {
+        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onException(CharSequence message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private class DefaultCheckChange implements CompoundButton.OnCheckedChangeListener {
