@@ -1,3 +1,6 @@
+KeePassDroid (2.2.2.4)
+ * Handle fingerprint key invalidation
+
 KeePassDroid (2.2.2.3)
  * Improve fingerprint error handling
  * Updated Russian translations
