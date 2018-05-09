@@ -204,6 +204,7 @@
     <string name="store_with_fingerprint">Use fingerprint to store this password</string>
     <string name="no_password_stored">No password stored yet for this database</string>
     <string name="fingerprint_notrecognized">Fingerprint not recognized</string>
+    <string name="fingerprint_key_invalidated">Stored password no longer valid. Re-enter password</string>
 
     <string-array name="clipboard_timeout_options">
     	<item>30 seconds</item>

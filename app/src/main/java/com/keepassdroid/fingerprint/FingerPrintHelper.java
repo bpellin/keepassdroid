@@ -30,11 +30,16 @@ import com.keepassdroid.compat.BuildCompat;
 import com.keepassdroid.compat.KeyGenParameterSpecCompat;
 import com.keepassdroid.compat.KeyguardManagerCompat;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
+import java.security.UnrecoverableEntryException;
+import java.security.UnrecoverableKeyException;
 import java.security.spec.AlgorithmParameterSpec;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -53,6 +58,7 @@ public class FingerPrintHelper {
     private FingerprintManagerCompat.CryptoObject cryptoObject = null;
 
     private boolean initOk = false;
+    private boolean cryptoInitOk = false;
     private FingerPrintCallback fingerPrintCallback;
     private CancellationSignal cancellationSignal;
     private FingerprintManagerCompat.AuthenticationCallback authenticationCallback;
@@ -69,6 +75,12 @@ public class FingerPrintHelper {
             }
             return;
         }
+
+        if (!cryptoInitOk) {
+            // Crypto key didn't initialize correctly, don't start listening
+            return;
+        }
+
         // starts listening for fingerprints with the initialised crypto object
         cancellationSignal = new CancellationSignal();
         fingerprintManager.authenticate(
@@ -104,6 +116,8 @@ public class FingerPrintHelper {
         void onException(CharSequence message);
 
         void onException(int resId);
+
+        void onKeyInvalidated();
     }
 
     public FingerPrintHelper(
@@ -143,6 +157,7 @@ public class FingerPrintHelper {
     }
 
     public void initEncryptData() {
+        cryptoInitOk = false;
 
         if (!isFingerprintInitialized()) {
             if (fingerPrintCallback != null && hasEnrolledFingerprints()) {
@@ -151,19 +166,31 @@ public class FingerPrintHelper {
             return;
         }
         try {
-            createNewKeyIfNeeded(false); // no need to keep deleting existing keys
-            keyStore.load(null);
-            final SecretKey key = (SecretKey) keyStore.getKey(ALIAS_KEY, null);
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-
-            stopListening();
-            startListening();
-
+            initEncryptKey(false);
         } catch (final InvalidKeyException invalidKeyException) {
-            fingerPrintCallback.onInvalidKeyException();
+            try {
+                fingerPrintCallback.onKeyInvalidated();
+                initEncryptKey(true);
+            } catch (InvalidKeyException e) {
+                fingerPrintCallback.onInvalidKeyException();
+            } catch (Exception e) {
+                fingerPrintCallback.onException();;
+            }
         } catch (final Exception e) {
             fingerPrintCallback.onException();
         }
+
+    }
+
+    private void initEncryptKey(boolean deleteExistingKey) throws Exception {
+        createNewKeyIfNeeded(deleteExistingKey);
+        keyStore.load(null);
+        final SecretKey key = (SecretKey) keyStore.getKey(ALIAS_KEY, null);
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        cryptoInitOk = true;
+
+        stopListening();
+        startListening();
     }
 
     public void encryptData(final String value) {
@@ -192,6 +219,7 @@ public class FingerPrintHelper {
 
     public void initDecryptData(final String ivSpecValue) {
 
+        cryptoInitOk = false;
         if (!isFingerprintInitialized()) {
             if (fingerPrintCallback != null) {
                 fingerPrintCallback.onException(false);
@@ -201,23 +229,38 @@ public class FingerPrintHelper {
             return;
         }
         try {
-            createNewKeyIfNeeded(false);
-            keyStore.load(null);
-            final SecretKey key = (SecretKey) keyStore.getKey(ALIAS_KEY, null);
-
-            // important to restore spec here that was used for decryption
-            final byte[] iv = Base64Coder.decode(ivSpecValue);
-            final IvParameterSpec spec = new IvParameterSpec(iv);
-            cipher.init(Cipher.DECRYPT_MODE, key, spec);
-
-            stopListening();
-            startListening();
-
+            initDecryptKey(ivSpecValue,false);
         } catch (final InvalidKeyException invalidKeyException) {
-            fingerPrintCallback.onInvalidKeyException();
+            // Key was invalidated (maybe all registered fingerprints were changed)
+            // Retry with new key
+            try {
+                fingerPrintCallback.onKeyInvalidated();
+                initDecryptKey(ivSpecValue, true);
+            } catch (InvalidKeyException e) {
+                fingerPrintCallback.onInvalidKeyException();
+            } catch (Exception e) {
+                fingerPrintCallback.onException();
+            }
         } catch (final Exception e) {
             fingerPrintCallback.onException();
         }
+    }
+
+    private void initDecryptKey(final String ivSpecValue, boolean deleteExistingKey)
+            throws  Exception {
+
+        createNewKeyIfNeeded(deleteExistingKey);
+        keyStore.load(null);
+        final SecretKey key = (SecretKey) keyStore.getKey(ALIAS_KEY, null);
+
+        // important to restore spec here that was used for decryption
+        final byte[] iv = Base64Coder.decode(ivSpecValue);
+        final IvParameterSpec spec = new IvParameterSpec(iv);
+        cipher.init(Cipher.DECRYPT_MODE, key, spec);
+        cryptoInitOk = true;
+
+        stopListening();
+        startListening();
     }
 
     public void decryptData(final String encryptedValue) {
@@ -237,6 +280,8 @@ public class FingerPrintHelper {
             //final String encryptedString = Base64.encodeToString(encrypted, 0 /* flags */);
             fingerPrintCallback.handleDecryptedResult(decryptedString);
 
+        } catch (BadPaddingException | IllegalBlockSizeException e) {
+            fingerPrintCallback.onKeyInvalidated();
         } catch (final Exception e) {
             fingerPrintCallback.onException();
         }

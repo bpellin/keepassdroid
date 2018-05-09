@@ -296,7 +296,17 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
                 public void afterTextChanged(final Editable s) {
                     final boolean validInput = s.length() > 0;
                     // encrypt or decrypt mode based on how much input or not
-                    confirmationView.setText(validInput ? R.string.store_with_fingerprint : R.string.scanning_fingerprint);
+                    int messageId;
+                    if (validInput) {
+                        messageId = R.string.store_with_fingerprint;
+                    }
+                    else if (EmptyUtils.isNullOrEmpty(prefsNoBackup.getString(getPreferenceKeyValue(), null))) {
+                        messageId = R.string.no_password_stored;
+                    }
+                    else {
+                        messageId = R.string.scanning_fingerprint;
+                    }
+                    confirmationView.setText(messageId);
                     mode = validInput ? toggleMode(Cipher.ENCRYPT_MODE) : toggleMode(Cipher.DECRYPT_MODE);
 
                 }
@@ -492,6 +502,16 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
     @Override
     public void onException(CharSequence message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onKeyInvalidated() {
+        prefsNoBackup.edit()
+                .remove(getPreferenceKeyValue())
+                .remove(getPreferenceKeyIvSpec())
+                .commit();
+
+        confirmationView.setText(R.string.fingerprint_key_invalidated);
     }
 
     private class DefaultCheckChange implements CompoundButton.OnCheckedChangeListener {
