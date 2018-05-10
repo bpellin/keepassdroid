@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009-2017 Brian Pellin.
+ Copyright 2009-2018 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -203,6 +203,8 @@
     <string name="fingerprint_error">Fingerprint problem</string>
     <string name="store_with_fingerprint">Use fingerprint to store this password</string>
     <string name="no_password_stored">No password stored yet for this database</string>
+    <string name="fingerprint_notrecognized">Fingerprint not recognized</string>
+    <string name="fingerprint_key_invalidated">Stored password no longer valid. Re-enter password</string>
 
     <string-array name="clipboard_timeout_options">
     	<item>30 seconds</item>
