@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009-2017 Brian Pellin.
+ Copyright 2009-2018 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -56,7 +56,7 @@
     <string name="decrypting_entry">Расшифровка записи…</string>
     <string name="default_checkbox">По умолчанию</string>
     <string name="digits">Цифры 0…9</string>
-    <string name="disclaimer_formal">"KeePassDroid © 2009–2017
+    <string name="disclaimer_formal">"KeePassDroid © 2009–2018
 Разработчик Brian Pellin
 
 Программа предоставляется БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ. Распространяется свободно по лицензии GPL v2 или новее."</string>
@@ -200,11 +200,13 @@
     <string name="configure_fingerprint">Отпечатки пальцев поддерживаются, но не настроены на устройстве</string>
     <string name="scanning_fingerprint">Ожидание отпечатка пальца</string>
     <string name="encrypted_value_stored">Зашифрованный пароль сохранён</string>
-    <string name="fingerprint_invalid_key">Проблема из-за неверного ключа</string>
+    <string name="fingerprint_invalid_key">Проблема из-за недействительного ключа</string>
     <string name="fingerprint_error">Проблема с отпечатком пальца</string>
     <string name="store_with_fingerprint">Используйте отпечаток пальца, чтобы сохранить пароль</string>
     <string name="no_password_stored">Для этой базы пароль ещё не сохранён</string>
-
+    <string name="fingerprint_notrecognized">Отпечаток пальца не распознан</string>
+    <string name="fingerprint_key_invalidated">Сохранённый пароль больше не действителен, введите его заново</string>
+ 
     <string-array name="clipboard_timeout_options">
        <item>30 секунд</item>
        <item>1 минута</item>
