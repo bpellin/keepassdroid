@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Brian Pellin.
+ * Copyright 2009-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,25 +19,23 @@
  */
 package com.keepassdroid.settings;
 
+import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceManager;
 
 import com.android.keepass.R;
 import com.keepassdroid.Database;
 import com.keepassdroid.LockingClosePreferenceActivity;
 import com.keepassdroid.app.App;
-import com.keepassdroid.compat.BackupManagerCompat;
 import com.keepassdroid.database.PwEncryptionAlgorithm;
 
 public class AppSettingsActivity extends LockingClosePreferenceActivity {
 	public static boolean KEYFILE_DEFAULT = false;
 	
-	private BackupManagerCompat backupManager;
+	private BackupManager backupManager;
 	
 	public static void Launch(Context ctx) {
 		Intent i = new Intent(ctx, AppSettingsActivity.class);
@@ -104,7 +102,7 @@ public class AppSettingsActivity extends LockingClosePreferenceActivity {
 			dbSettings.setEnabled(false);
 		}
 		
-		backupManager = new BackupManagerCompat(this);
+		backupManager = new BackupManager(this);
 		
 	}
 	

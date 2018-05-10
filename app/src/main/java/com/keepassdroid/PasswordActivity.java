@@ -20,6 +20,7 @@
 package com.keepassdroid;
 
 import android.app.Activity;
+import android.app.backup.BackupManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -53,7 +54,6 @@ import android.widget.Toast;
 import com.android.keepass.KeePass;
 import com.android.keepass.R;
 import com.keepassdroid.app.App;
-import com.keepassdroid.compat.BackupManagerCompat;
 import com.keepassdroid.compat.ClipDataCompat;
 import com.keepassdroid.compat.EditorCompat;
 import com.keepassdroid.compat.StorageAF;
@@ -529,7 +529,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
             editor.putString(KEY_DEFAULT_FILENAME, newDefaultFileName);
             EditorCompat.apply(editor);
 
-            BackupManagerCompat backupManager = new BackupManagerCompat(PasswordActivity.this);
+            BackupManager backupManager = new BackupManager(PasswordActivity.this);
             backupManager.dataChanged();
 
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Brian Pellin.
+ * Copyright 2015-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,8 +19,6 @@
  */
 package com.keepassdroid;
 
-import com.keepassdroid.compat.BuildCompat;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager.LayoutParams;
@@ -38,8 +36,8 @@ public abstract class LockCloseHideActivity extends LockCloseActivity {
 		super.onCreate(savedInstanceState);
 		
 		// Several gingerbread devices have problems with FLAG_SECURE
-		int ver = BuildCompat.getSdkVersion();
-		if (ver >= BuildCompat.VERSION_CODE_ICE_CREAM_SANDWICH || ver < BuildCompat.VERSION_CODE_GINGERBREAD) {
+		int ver = Build.VERSION.SDK_INT;
+		if (ver >= Build.VERSION_CODES.ICE_CREAM_SANDWICH || ver < Build.VERSION_CODES.GINGERBREAD) {
 		    getWindow().setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE);
 		}
 	}

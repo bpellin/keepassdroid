@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Brian Pellin.
+ * Copyright 2014-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -20,9 +20,9 @@
 package com.keepassdroid.dialog;
 
 import android.content.Context;
+import android.os.Build;
 
 import com.android.keepass.R;
-import com.keepassdroid.compat.BuildCompat;
 
 public class ReadOnlyDialog extends WarningDialog {
 	
@@ -31,7 +31,7 @@ public class ReadOnlyDialog extends WarningDialog {
 		
 		warning = context.getString(R.string.read_only_warning);
 		
-		if (BuildCompat.getSdkVersion() >= BuildCompat.VERSION_KITKAT) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			warning = warning.concat("\n\n").concat(context.getString(R.string.read_only_kitkat_warning));
 		}
 	}
