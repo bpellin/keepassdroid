@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2016 Brian Pellin.
+ * Copyright 2010-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -41,6 +41,7 @@ import com.keepassdroid.stream.CopyInputStream;
 import com.keepassdroid.tests.TestUtil;
 
 public class Kdb4 extends AndroidTestCase {
+    Context ctx;
 
     public void testDetection() throws IOException, InvalidDBException {
         Context ctx = getContext();
@@ -56,8 +57,6 @@ public class Kdb4 extends AndroidTestCase {
     }
 
     public void testParsing() throws IOException, InvalidDBException {
-        Context ctx = getContext();
-
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("test.kdbx", AssetManager.ACCESS_STREAMING);
 
@@ -94,7 +93,7 @@ public class Kdb4 extends AndroidTestCase {
 
         byte[] data = bos.toByteArray();
 
-        FileOutputStream fos = new FileOutputStream(TestUtil.getSdPath(outputFile), false);
+        FileOutputStream fos = new FileOutputStream(TestUtil.getAppPath(ctx, outputFile), false);
 
         InputStream bis = new ByteArrayInputStream(data);
         bis = new CopyInputStream(bis, fos);
@@ -110,44 +109,40 @@ public class Kdb4 extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        TestUtil.extractKey(getContext(), "keyfile.key", TestUtil.getSdPath("key"));
-        TestUtil.extractKey(getContext(), "binary.key", TestUtil.getSdPath("key-binary"));
+        ctx = getContext();
+        TestUtil.extractKey(getContext(), "keyfile.key", TestUtil.getAppPath(ctx,"key"));
+        TestUtil.extractKey(getContext(), "binary.key", TestUtil.getAppPath(ctx,"key-binary"));
+
     }
 
     public void testComposite() throws IOException, InvalidDBException {
-        Context ctx = getContext();
-
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("keyfile.kdbx", AssetManager.ACCESS_STREAMING);
 
         ImporterV4 importer = new ImporterV4();
-        importer.openDatabase(is, "12345", TestUtil.getKeyFileInputStream(ctx, TestUtil.getSdPath("key")));
+        importer.openDatabase(is, "12345", TestUtil.getKeyFileInputStream(ctx, TestUtil.getAppPath(ctx, "key")));
 
         is.close();
 
     }
 
     public void testCompositeBinary() throws IOException, InvalidDBException {
-        Context ctx = getContext();
-
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("keyfile-binary.kdbx", AssetManager.ACCESS_STREAMING);
 
         ImporterV4 importer = new ImporterV4();
-        importer.openDatabase(is, "12345", TestUtil.getKeyFileInputStream(ctx,TestUtil.getSdPath("key-binary")));
+        importer.openDatabase(is, "12345", TestUtil.getKeyFileInputStream(ctx,TestUtil.getAppPath(ctx,"key-binary")));
 
         is.close();
 
     }
 
     public void testKeyfile() throws IOException, InvalidDBException {
-        Context ctx = getContext();
-
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("key-only.kdbx", AssetManager.ACCESS_STREAMING);
 
         ImporterV4 importer = new ImporterV4();
-        importer.openDatabase(is, "", TestUtil.getKeyFileInputStream(ctx, TestUtil.getSdPath("key")));
+        importer.openDatabase(is, "", TestUtil.getKeyFileInputStream(ctx, TestUtil.getAppPath(ctx, "key")));
 
         is.close();
 

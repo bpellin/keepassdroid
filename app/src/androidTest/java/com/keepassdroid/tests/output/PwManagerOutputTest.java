@@ -1,5 +1,5 @@
 /*
-* Copyright 2009-2014 Brian Pellin.
+* Copyright 2009-2018 Brian Pellin.
 *
 * This file is part of KeePassDroid.
 *
@@ -137,7 +137,7 @@ public class PwManagerOutputTest extends AndroidTestCase {
 	pActual.output();
 	//pActual.close();
 
-	FileOutputStream fos = new FileOutputStream(TestUtil.getSdPath("test1_out.kdb"));
+	FileOutputStream fos = new FileOutputStream(TestUtil.getAppPath(getContext(),"test1_out.kdb"));
 	fos.write(bActual.toByteArray());
 	fos.close();
 	assertArrayEquals("Databases do not match.", bExpected.toByteArray(), bActual.toByteArray());
