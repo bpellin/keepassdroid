@@ -1,3 +1,7 @@
+KeePassDroid (2.3)
+ * Drop support for pre-Ice Cream Sandwhich devices
+ * Implement runtime permissions Marshamllow and later
+
 KeePassDroid (2.2.2.4)
  * Handle fingerprint key invalidation
 
