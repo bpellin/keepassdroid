@@ -55,7 +55,6 @@ import com.android.keepass.KeePass;
 import com.android.keepass.R;
 import com.keepassdroid.app.App;
 import com.keepassdroid.compat.ClipDataCompat;
-import com.keepassdroid.compat.EditorCompat;
 import com.keepassdroid.compat.StorageAF;
 import com.keepassdroid.database.edit.LoadDB;
 import com.keepassdroid.database.edit.OnFinish;
@@ -527,7 +526,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(KEY_DEFAULT_FILENAME, newDefaultFileName);
-            EditorCompat.apply(editor);
+            editor.apply();
 
             BackupManager backupManager = new BackupManager(PasswordActivity.this);
             backupManager.dataChanged();

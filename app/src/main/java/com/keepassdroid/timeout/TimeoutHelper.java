@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Brian Pellin.
+ * Copyright 2012-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -26,7 +26,6 @@ import android.preference.PreferenceManager;
 import com.android.keepass.KeePass;
 import com.android.keepass.R;
 import com.keepassdroid.app.App;
-import com.keepassdroid.compat.EditorCompat;
 import com.keepassdroid.timers.Timeout;
 
 public class TimeoutHelper {
@@ -40,9 +39,9 @@ public class TimeoutHelper {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(act);
 		SharedPreferences.Editor edit = prefs.edit();
 		edit.putLong(act.getString(R.string.timeout_key), time);
-		
-		EditorCompat.apply(edit);
-		
+
+		edit.apply();
+
 		if ( App.getDB().Loaded() ) {
 	        Timeout.start(act);
 		}

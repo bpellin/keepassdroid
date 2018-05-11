@@ -1,6 +1,6 @@
 /*
  * 
- * Copyright 2009-2015 Brian Pellin.
+ * Copyright 2009-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -58,7 +58,6 @@ import android.widget.Toast;
 import com.android.keepass.KeePass;
 import com.android.keepass.R;
 import com.keepassdroid.app.App;
-import com.keepassdroid.compat.ActivityCompat;
 import com.keepassdroid.database.PwDatabase;
 import com.keepassdroid.database.PwEntry;
 import com.keepassdroid.database.PwEntryV4;
@@ -158,8 +157,8 @@ public class EntryActivity extends LockCloseHideActivity {
 		}
 		
 		// Refresh Menu contents in case onCreateMenuOptions was called before mEntry was set
-		ActivityCompat.invalidateOptionsMenu(this);
-		
+        this.invalidateOptionsMenu();
+
 		// Update last access time.
 		mEntry.touch(false, false);
 		

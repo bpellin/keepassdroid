@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Brian Pellin.
+ * Copyright 2009-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -29,8 +29,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.keepassdroid.compat.EditorCompat;
 
 public class FileDbHelper {
 	
@@ -102,7 +100,7 @@ public class FileDbHelper {
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.remove(LAST_FILENAME);
 				editor.remove(LAST_KEYFILE);
-				EditorCompat.apply(editor);
+				editor.apply();
 			} catch (Exception e) {
 				assert(true);
 			}

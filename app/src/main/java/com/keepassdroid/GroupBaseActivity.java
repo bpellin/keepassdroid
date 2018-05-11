@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2016 Brian Pellin.
+ * Copyright 2009-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -42,8 +42,6 @@ import android.widget.Toast;
 import com.android.keepass.KeePass;
 import com.android.keepass.R;
 import com.keepassdroid.app.App;
-import com.keepassdroid.compat.ActivityCompat;
-import com.keepassdroid.compat.EditorCompat;
 import com.keepassdroid.database.PwGroup;
 import com.keepassdroid.database.edit.OnFinish;
 import com.keepassdroid.settings.AppSettingsActivity;
@@ -95,7 +93,7 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
 		
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		ActivityCompat.invalidateOptionsMenu(this);
+		this.invalidateOptionsMenu();
 
 		setContentView(new GroupViewOnlyView(this));
 		setResult(KeePass.EXIT_NORMAL);
@@ -244,11 +242,11 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
 		boolean sortByName = prefs.getBoolean(sortKey, getResources().getBoolean(R.bool.sort_default));
 		Editor editor = prefs.edit();
 		editor.putBoolean(sortKey, ! sortByName);
-		EditorCompat.apply(editor);
-		
+		editor.apply();
+
 		// Refresh menu titles
-		ActivityCompat.invalidateOptionsMenu(this);
-		
+        this.invalidateOptionsMenu();
+
 		// Mark all groups as dirty now to refresh them on load
 		Database db = App.getDB();
 		db.markAllGroupsAsDirty();
