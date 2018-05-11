@@ -19,20 +19,25 @@
  */
 package com.keepassdroid;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.backup.BackupManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.text.Editable;
 import android.text.InputType;
@@ -68,6 +73,8 @@ import com.keepassdroid.utils.Interaction;
 import com.keepassdroid.utils.UriUtil;
 import com.keepassdroid.utils.Util;
 
+import org.spongycastle.util.Pack;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -86,11 +93,19 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
     public static final int GET_CONTENT = 257;
     private static final int OPEN_DOC = 258;
 
+    private static final String[] READ_WRITE_PERMISSIONS =
+            {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private static final int PERMISSION_REQUEST_ID = 1;
+
     private Uri mDbUri = null;
     private Uri mKeyUri = null;
     private boolean mRememberKeyfile;
     SharedPreferences prefs;
     SharedPreferences prefsNoBackup;
+
+    private Uri storedKeyUri = null;
+    private String storedPassword = null;
+
 
     private FingerPrintHelper fingerPrintHelper;
     private int mode;
@@ -547,7 +562,45 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
     private void loadDatabase(
             String pass,
             String keyfile) {
+
         loadDatabase(pass, UriUtil.parseDefaultFile(keyfile));
+    }
+
+    private boolean checkFilePermissions(Uri db, Uri keyfile) {
+        boolean hasFileUri = db.getScheme().equals("file") ||
+                keyfile.getScheme().equals("file");
+
+        if (!hasFileUri) return true;
+
+
+        boolean hasRead = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        boolean hasWrite = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (!hasRead || !hasWrite) {
+            ActivityCompat.requestPermissions(this, READ_WRITE_PERMISSIONS,
+                    PERMISSION_REQUEST_ID);
+
+            return false;
+        }
+
+        return true;
+
+    }
+
+    public void onRequestPermissionsResult (int requestCode,
+                String[] permissions,
+                int[] grantResults) {
+
+        if (requestCode == PERMISSION_REQUEST_ID &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                grantResults[1] == PackageManager.PERMISSION_GRANTED){
+
+            loadDatabaseWithPermission();
+        } else {
+            errorMessage(R.string.no_external_permissions);
+        }
     }
 
     private void loadDatabase(
@@ -557,6 +610,21 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
             errorMessage(R.string.error_nopass);
             return;
         }
+
+        storedPassword = pass;
+        storedKeyUri = keyfile;
+
+        if (checkFilePermissions(mDbUri, keyfile)) {
+            loadDatabaseWithPermission();
+        }
+    }
+
+    private void loadDatabaseWithPermission() {
+        String pass = storedPassword;
+        storedPassword = null;
+        Uri keyfile = storedKeyUri;
+        storedKeyUri = null;
+
 
         // Clear before we load
         Database db = App.getDB();
