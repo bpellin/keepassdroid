@@ -33,7 +33,7 @@ public class NotificationUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             NotificationChannel channel = new NotificationChannel(COPY_CHANNEL_ID,
-                    COPY_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+                    COPY_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
 
             channel.enableLights(false);
             channel.enableVibration(false);
