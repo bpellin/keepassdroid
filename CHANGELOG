@@ -1,3 +1,7 @@
+KeePassDroid (2.3.1)
+ * Fix notifications
+ * Add adaptive icon
+
 KeePassDroid (2.3)
  * Drop support for pre-Ice Cream Sandwhich devices
  * Implement runtime permissions Marshamllow and later
