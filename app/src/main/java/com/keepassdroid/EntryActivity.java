@@ -64,6 +64,7 @@ import com.keepassdroid.database.PwEntryV4;
 import com.keepassdroid.database.exception.SamsungClipboardException;
 import com.keepassdroid.intents.Intents;
 import com.keepassdroid.utils.EmptyUtils;
+import com.keepassdroid.utils.NotificationUtil;
 import com.keepassdroid.utils.Types;
 import com.keepassdroid.utils.Util;
 
@@ -167,6 +168,7 @@ public class EntryActivity extends LockCloseHideActivity {
 		setupEditButtons();
 		
 		// Notification Manager
+        NotificationUtil.createChannels(getApplicationContext());
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		
 		if ( mEntry.getPassword().length() > 0 ) {
@@ -235,7 +237,8 @@ public class EntryActivity extends LockCloseHideActivity {
 		// no longer supported for api level >22
 		// notify.setLatestEventInfo(this, getString(R.string.app_name), desc, pending);
 		// so instead using compat builder and create new notification
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
+				NotificationUtil.COPY_CHANNEL_ID);
 		Notification notify = builder.setContentIntent(pending).setContentText(desc).setContentTitle(getString(R.string.app_name))
 				.setSmallIcon(R.drawable.notify).setTicker(desc).setWhen(System.currentTimeMillis()).build();
 
