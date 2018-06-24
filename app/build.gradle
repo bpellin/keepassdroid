@@ -9,8 +9,8 @@ android {
         minSdkVersion 4
         targetSdkVersion 12
 
-        versionCode = 171
-        versionName = "2.2.2.4"
+        versionCode = 174
+        versionName = "2.2.2.5"
 
         testApplicationId = "com.keepassdroid.tests"
         testInstrumentationRunner = "android.test.InstrumentationTestRunner"
@@ -35,12 +35,15 @@ android {
         }
     }
 
-    flavorDimensions "all"
+    flavorDimensions "store"
 
     productFlavors {
-        flavor1 {
-            dimension = "all"
-            applicationId = "com.android.keepass"
+        general {
+            dimension = "store"
+        }
+
+        play {
+            dimension = "store"
         }
     }
 
