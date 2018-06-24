@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Brian Pellin.
+ * Copyright 2013-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.android.keepass.R;
-import com.keepassdroid.compat.EditorCompat;
 import com.keepassdroid.utils.UriUtil;
 
 import android.content.Context;
@@ -190,7 +189,7 @@ public class RecentFileHistory {
         for (int i = 0; i < size; i++) {
             edit.putString(keyprefix + "_" + i, list.get(i));
         }
-        EditorCompat.apply(edit);
+        edit.apply();;
     }
 
     public void deleteFile(Uri uri) {

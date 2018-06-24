@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2016 Brian Pellin.
+ * Copyright 2010-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -38,7 +38,7 @@ public class Kdb3 extends AndroidTestCase {
 		Context ctx = getContext();
 
 		File sdcard = Environment.getExternalStorageDirectory();
-		String keyPath = sdcard.getAbsolutePath() + "/key";
+		String keyPath = ctx.getFilesDir().getAbsolutePath() + "/key";
 		
 		TestUtil.extractKey(ctx, keyAsset, keyPath);
 		

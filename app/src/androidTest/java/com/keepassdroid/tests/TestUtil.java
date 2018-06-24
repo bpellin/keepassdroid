@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2016 Brian Pellin.
+ * Copyright 2010-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -33,8 +33,6 @@ import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.UriUtil;
 
 public class TestUtil {
-	private static final File sdcard = Environment.getExternalStorageDirectory();
-
 	public static void extractKey(Context ctx, String asset, String target) throws Exception {
 		
 		InputStream key = ctx.getAssets().open(asset, AssetManager.ACCESS_STREAMING);
@@ -64,8 +62,8 @@ public class TestUtil {
 		return keyIs;
 	}
 
-	public static String getSdPath(String filename) {
-		File file = new File(sdcard, filename);
+	public static String getAppPath(Context ctx, String filename) {
+		File file = new File(ctx.getFilesDir(), filename);
 		return file.getAbsolutePath();
 	}
 }

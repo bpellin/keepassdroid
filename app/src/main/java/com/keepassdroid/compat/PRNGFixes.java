@@ -44,7 +44,7 @@ public final class PRNGFixes {
 
     private static final byte[] BUILD_FINGERPRINT_AND_DEVICE_SERIAL =
         getBuildFingerprintAndDeviceSerial();
-    private static int sdkVersion = BuildCompat.getSdkVersion();
+    private static int sdkVersion = Build.VERSION.SDK_INT;
 
     /** Hidden constructor to prevent instantiation. */
     private PRNGFixes() {}
@@ -67,11 +67,11 @@ public final class PRNGFixes {
     
     private static boolean supportedOnThisDevice() {
     	// Blacklist on samsung devices
-    	if (StrUtil.indexOfIgnoreCase(BuildCompat.getManufacturer(), "samsung", Locale.ENGLISH) >= 0) {
+    	if (StrUtil.indexOfIgnoreCase(Build.MANUFACTURER, "samsung", Locale.ENGLISH) >= 0) {
     		return false;
     	}
     	
-        if (sdkVersion > BuildCompat.VERSION_CODE_JELLY_BEAN_MR2) {
+        if (sdkVersion > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             return false;
         }
         
@@ -126,8 +126,8 @@ public final class PRNGFixes {
      * @throws SecurityException if the fix is needed but could not be applied.
      */
     private static void applyOpenSSLFix() throws SecurityException {
-        if ((sdkVersion < BuildCompat.VERSION_CODE_JELLY_BEAN)
-                || (sdkVersion > BuildCompat.VERSION_CODE_JELLY_BEAN_MR2)) {
+        if ((sdkVersion < Build.VERSION_CODES.JELLY_BEAN)
+                || (sdkVersion > Build.VERSION_CODES.JELLY_BEAN_MR2)) {
             // No need to apply the fix
             return;
         }
@@ -162,7 +162,7 @@ public final class PRNGFixes {
      */
     private static void installLinuxPRNGSecureRandom()
             throws SecurityException {
-        if (sdkVersion > BuildCompat.VERSION_CODE_JELLY_BEAN_MR2) {
+        if (sdkVersion > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             // No need to apply the fix
             return;
         }

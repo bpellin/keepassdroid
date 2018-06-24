@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2009-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -46,7 +46,7 @@ public class NativeAESCipherSpi extends CipherSpi {
 	
 	private static boolean mIsStaticInit = false;
 	private static HashMap<PhantomReference<NativeAESCipherSpi>, Long> mCleanup = new HashMap<PhantomReference<NativeAESCipherSpi>, Long>();
-	private static ReferenceQueue<NativeAESCipherSpi> mQueue = new ReferenceQueue<NativeAESCipherSpi>();
+	private static ReferenceQueue<NativeAESCipherSpi> mQueue;
 	
 	private final int AES_BLOCK_SIZE = 16;
 	private byte[] mIV;
@@ -59,7 +59,10 @@ public class NativeAESCipherSpi extends CipherSpi {
 	
 	private static void staticInit() {
 		mIsStaticInit = true;
-		
+
+		// Init queue here to guarentee it isn't null in the cleanup thread
+		mQueue = new ReferenceQueue<NativeAESCipherSpi>();
+
 		// Start the cipher context cleanup thread to run forever
 		(new Thread(new Cleanup())).start();
 	}
@@ -80,7 +83,7 @@ public class NativeAESCipherSpi extends CipherSpi {
 			while (true) {
 				try {
 					Reference<? extends NativeAESCipherSpi> ref = mQueue.remove();
-					
+
 					long ctx = mCleanup.remove(ref);
 					nCleanup(ctx);
 					Log.d("KeePassDroid", "Cleaned up cipher context: " + ctx);

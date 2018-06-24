@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Brian Pellin.
+ * Copyright 2016-2018 Brian Pellin.
  *
  * This file is part of KeePassDroid.
  *
@@ -55,6 +55,10 @@ public class UriUtil {
     }
 
     public static boolean equalsDefaultfile(Uri left, String right) {
+        if (left == null || right == null) {
+            return false;
+        }
+
         left = parseDefaultFile(left);
         Uri uriRight = parseDefaultFile(right);
 

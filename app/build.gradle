@@ -1,16 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion = 23
+    compileSdkVersion = 27
     buildToolsVersion = '27.0.3'
 
     defaultConfig {
         applicationId = "com.android.keepass"
-        minSdkVersion 4
-        targetSdkVersion 12
+        minSdkVersion 14
+        targetSdkVersion 26
 
-        versionCode = 176
-        versionName = "2.2.2.6"
+        versionCode = 175
+        versionName = "2.3.2"
 
         testApplicationId = "com.keepassdroid.tests"
         testInstrumentationRunner = "android.test.InstrumentationTestRunner"
@@ -56,6 +56,5 @@ dependencies {
     implementation 'com.madgag.spongycastle:core:1.58.0.0'
     implementation 'com.madgag.spongycastle:prov:1.58.0.0'
     implementation 'joda-time:joda-time:2.9.4'
-    implementation 'com.android.support:support-v4:23.4.0'
-
+    implementation 'com.android.support:support-compat:27.1.1'
 }

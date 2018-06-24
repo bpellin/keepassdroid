@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Brian Pellin.
+ * Copyright 2010-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -25,11 +25,11 @@ import org.apache.commons.collections.map.ReferenceMap;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import com.android.keepass.R;
-import com.keepassdroid.compat.BitmapDrawableCompat;
 import com.keepassdroid.database.PwIcon;
 import com.keepassdroid.database.PwIconCustom;
 import com.keepassdroid.database.PwIconStandard;
@@ -105,8 +105,8 @@ public class DrawableFactory {
 			}
 			
 			bitmap = resize(bitmap);
-			
-			draw = BitmapDrawableCompat.getBitmapDrawable(res, bitmap);
+
+			draw = new BitmapDrawable(res, bitmap);
 			customIconMap.put(icon.uuid, draw);
 		}
 		

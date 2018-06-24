@@ -26,7 +26,6 @@ import android.support.v4.os.CancellationSignal;
 import android.security.keystore.KeyProperties;
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 
-import com.keepassdroid.compat.BuildCompat;
 import com.keepassdroid.compat.KeyGenParameterSpecCompat;
 import com.keepassdroid.compat.KeyguardManagerCompat;
 
@@ -338,7 +337,7 @@ public class FingerPrintHelper {
     }
 
     public boolean isFingerprintSupported() {
-        return Build.VERSION.SDK_INT >= BuildCompat.VERSION_CODE_M;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
 }
