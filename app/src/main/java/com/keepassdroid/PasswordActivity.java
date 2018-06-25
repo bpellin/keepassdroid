@@ -566,9 +566,20 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         loadDatabase(pass, UriUtil.parseDefaultFile(keyfile));
     }
 
+    private boolean hasFileUri(Uri uri) {
+        try {
+            if (uri == null) { return false; }
+
+            return uri.getScheme().equalsIgnoreCase("file");
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
     private boolean checkFilePermissions(Uri db, Uri keyfile) {
-        boolean hasFileUri = db.getScheme().equals("file") ||
-                keyfile.getScheme().equals("file");
+        boolean hasFileUri = hasFileUri(db) ||
+                hasFileUri(keyfile);
 
         if (!hasFileUri) return true;
 
