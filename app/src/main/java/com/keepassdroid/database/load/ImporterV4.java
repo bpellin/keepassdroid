@@ -19,38 +19,12 @@
  */
 package com.keepassdroid.database.load;
 
-import static com.keepassdroid.database.PwDatabaseV4XML.*;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Stack;
-import java.util.TimeZone;
-import java.util.UUID;
-import java.util.zip.GZIPInputStream;
-
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-
-import org.spongycastle.crypto.StreamCipher;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import biz.source_code.base64Coder.Base64Coder;
+import android.util.Log;
 
 import com.keepassdroid.UpdateStatus;
 import com.keepassdroid.crypto.CipherFactory;
 import com.keepassdroid.crypto.PwStreamCipherFactory;
 import com.keepassdroid.crypto.engine.CipherEngine;
-import com.keepassdroid.database.BinaryPool;
 import com.keepassdroid.database.ITimeLogger;
 import com.keepassdroid.database.PwCompressionAlgorithm;
 import com.keepassdroid.database.PwDatabaseV4;
@@ -73,6 +47,117 @@ import com.keepassdroid.utils.DateUtil;
 import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.MemUtil;
 import com.keepassdroid.utils.Types;
+
+import org.spongycastle.crypto.StreamCipher;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Stack;
+import java.util.TimeZone;
+import java.util.UUID;
+import java.util.zip.GZIPInputStream;
+
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+
+import biz.source_code.base64Coder.Base64Coder;
+
+import static com.keepassdroid.database.PwDatabaseV4XML.AttrCompressed;
+import static com.keepassdroid.database.PwDatabaseV4XML.AttrId;
+import static com.keepassdroid.database.PwDatabaseV4XML.AttrProtected;
+import static com.keepassdroid.database.PwDatabaseV4XML.AttrRef;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemAutoType;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemAutoTypeDefaultSeq;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemAutoTypeEnabled;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemAutoTypeItem;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemAutoTypeObfuscation;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemBgColor;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemBinaries;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemBinary;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemCreationTime;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemCustomData;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemCustomIconID;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemCustomIconItem;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemCustomIconItemData;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemCustomIconItemID;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemCustomIcons;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbColor;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbDefaultUser;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbDefaultUserChanged;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbDesc;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbDescChanged;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbKeyChangeForce;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbKeyChangeForceOnce;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbKeyChangeRec;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbKeyChanged;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbMntncHistoryDays;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbName;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDbNameChanged;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDeletedObject;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDeletedObjects;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDeletionTime;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemDocNode;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemEnableAutoType;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemEnableSearching;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemEntry;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemEntryTemplatesGroup;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemEntryTemplatesGroupChanged;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemExpires;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemExpiryTime;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemFgColor;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemGenerator;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemGroup;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemGroupDefaultAutoTypeSeq;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemHeaderHash;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemHistory;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemHistoryMaxItems;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemHistoryMaxSize;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemIcon;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemIsExpanded;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemKey;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemKeystrokeSequence;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemLastAccessTime;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemLastModTime;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemLastSelectedGroup;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemLastTopVisibleEntry;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemLastTopVisibleGroup;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemLocationChanged;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemMemoryProt;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemMeta;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemName;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemNotes;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemOverrideUrl;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemProtAutoHide;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemProtNotes;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemProtPassword;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemProtTitle;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemProtURL;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemProtUserName;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemRecycleBinChanged;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemRecycleBinEnabled;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemRecycleBinUuid;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemRoot;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemSettingsChanged;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemString;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemStringDictExItem;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemTags;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemTimes;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemUsageCount;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemUuid;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemValue;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemWindow;
+import static com.keepassdroid.database.PwDatabaseV4XML.ValTrue;
 
 public class ImporterV4 extends Importer {
 	
@@ -229,6 +314,7 @@ public class ImporterV4 extends Importer {
 
 		byte[] data = new byte[0];
 		if (size > 0) {
+			if (fieldId != PwDbHeaderV4.PwDbInnerHeaderV4Fields.Binary)
 			data = lis.readBytes(size);
 		}
 
@@ -244,19 +330,24 @@ public class ImporterV4 extends Importer {
 			    header.innerRandomStreamKey = data;
 				break;
 			case PwDbHeaderV4.PwDbInnerHeaderV4Fields.Binary:
-			    if (data.length < 1) throw new IOException("Invalid binary format");
-				byte flag = data[0];
-				boolean prot = (flag & PwDbHeaderV4.KdbxBinaryFlags.Protected) !=
+				byte flag = lis.readBytes(1)[0];
+				boolean protectedFlag = (flag & PwDbHeaderV4.KdbxBinaryFlags.Protected) !=
 						PwDbHeaderV4.KdbxBinaryFlags.None;
-
-				byte[] bin = new byte[data.length - 1];
-				System.arraycopy(data, 1, bin, 0, data.length-1);
-				ProtectedBinary pb = new ProtectedBinary(prot, bin);
-				db.binPool.poolAdd(pb);
-
-				if (prot) {
-					Arrays.fill(data, (byte)0);
+				// Read the serialized binary
+				try {
+					lis.readBytes(size - 1, new LEDataInputStream.ActionReadBytes() {
+						@Override
+						public void doAction(byte[] buffer) throws IOException {
+							// TODO action when get serialize object
+							// Here it's only consume
+						}
+					});
+				} catch (Exception e) {
+					Log.e("Importer V4", "Unable to deserialize binary", e);
 				}
+				// TODO store the serialize object
+				ProtectedBinary protectedBinary = new ProtectedBinary(protectedFlag, null);
+				db.binPool.poolAdd(protectedBinary);
 				break;
 			default:
 				assert(false);
