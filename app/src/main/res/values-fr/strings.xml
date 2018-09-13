@@ -128,7 +128,7 @@
     <string name="loading_database">Ouverture de la base de données…</string>
     <string name="lowercase">Minuscule</string>
     <string name="MaskedPassword">*****</string>
-    <string name="maskpass_title">Afficher le mot de passe</string>
+    <string name="maskpass_title">Affichage du mot de passe</string>
     <string name="maskpass_summary">Par défaut, masquer le mot de passe</string>
     <string name="menu_about">À propos</string>
     <string name="menu_change_key">Modifier la clé maître</string>
