@@ -19,8 +19,6 @@
  */
 package com.keepassdroid.database.load;
 
-import android.util.Log;
-
 import com.keepassdroid.UpdateStatus;
 import com.keepassdroid.crypto.CipherFactory;
 import com.keepassdroid.crypto.PwStreamCipherFactory;
@@ -39,6 +37,7 @@ import com.keepassdroid.database.exception.InvalidDBException;
 import com.keepassdroid.database.exception.InvalidPasswordException;
 import com.keepassdroid.database.security.ProtectedBinary;
 import com.keepassdroid.database.security.ProtectedString;
+import com.keepassdroid.stream.ActionReadBytes;
 import com.keepassdroid.stream.BetterCipherInputStream;
 import com.keepassdroid.stream.HashedBlockInputStream;
 import com.keepassdroid.stream.HmacBlockInputStream;
@@ -53,6 +52,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -169,14 +170,15 @@ public class ImporterV4 extends Importer {
 	private long version;
 	private int binNum = 0;
 	Calendar utcCal;
+    private File streamDir;
 
-	public ImporterV4() {
-		utcCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+	public ImporterV4(File streamDir) {
+		this.utcCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        this.streamDir = streamDir;
 	}
 	
 	protected PwDatabaseV4 createDB() {
 		return new PwDatabaseV4();
-
 	}
 
 	@Override
@@ -334,19 +336,20 @@ public class ImporterV4 extends Importer {
 				boolean protectedFlag = (flag & PwDbHeaderV4.KdbxBinaryFlags.Protected) !=
 						PwDbHeaderV4.KdbxBinaryFlags.None;
 				// Read the serialized binary
+				int binaryKey = db.binPool.findUnusedKey();
+				File file = new File(streamDir, String.valueOf(binaryKey));
+                final FileOutputStream outputStream = new FileOutputStream(file);
 				try {
-					lis.readBytes(size - 1, new LEDataInputStream.ActionReadBytes() {
-						@Override
-						public void doAction(byte[] buffer) throws IOException {
-							// TODO action when get serialize object
-							// Here it's only consume
-						}
-					});
-				} catch (Exception e) {
-					Log.e("Importer V4", "Unable to deserialize binary", e);
-				}
-				// TODO store the serialize object
-				ProtectedBinary protectedBinary = new ProtectedBinary(protectedFlag, null);
+					lis.readBytes(size - 1, new ActionReadBytes() {
+                        @Override
+                        public void doAction(byte[] buffer) throws IOException {
+                            outputStream.write(buffer);
+                        }
+                    });
+				} finally {
+				    outputStream.close();
+                }
+                ProtectedBinary protectedBinary = new ProtectedBinary(protectedFlag, file, size -1);
 				db.binPool.poolAdd(protectedBinary);
 				break;
 			default:

@@ -24,7 +24,6 @@ import android.app.Activity;
 import android.app.backup.BackupManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -72,8 +71,6 @@ import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.Interaction;
 import com.keepassdroid.utils.UriUtil;
 import com.keepassdroid.utils.Util;
-
-import org.spongycastle.util.Pack;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -159,14 +156,14 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
             case KeePass.EXIT_NORMAL:
                 setEditText(R.id.password, "");
-                App.getDB().clear();
+                App.getDB().clear(getApplicationContext());
                 break;
 
             case KeePass.EXIT_LOCK:
                 setResult(KeePass.EXIT_LOCK);
                 setEditText(R.id.password, "");
                 finish();
-                App.getDB().clear();
+                App.getDB().clear(getApplicationContext());
                 break;
             case FILE_BROWSE:
                 if (resultCode == RESULT_OK) {
@@ -639,7 +636,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
         // Clear before we load
         Database db = App.getDB();
-        db.clear();
+        db.clear(getApplicationContext());
 
         // Clear the shutdown flag
         App.clearShutdown();

@@ -46,14 +46,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package com.keepassdroid.database;
 
 // Java
+import com.keepassdroid.database.exception.InvalidKeyFileException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
-
-import com.keepassdroid.database.exception.InvalidKeyFileException;
 
 /**
  * @author Naomaru Itoi <nao@phoneid.org>
@@ -357,4 +356,7 @@ public class PwDatabaseV3 extends PwDatabase {
 		initAndAddGroup("Internet", 1, rootGroup);
 		initAndAddGroup("eMail", 19, rootGroup);
 	}
+
+	@Override
+	public void clearCache() {}
 }

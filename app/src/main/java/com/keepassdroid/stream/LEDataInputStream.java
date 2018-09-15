@@ -23,6 +23,7 @@ import com.keepassdroid.utils.Types;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.UUID;
 
 
@@ -127,28 +128,30 @@ public class LEDataInputStream extends InputStream {
 	}
 
 	public void readBytes(int length, ActionReadBytes actionReadBytes) throws IOException {
-		byte[] buffer = new byte[1024];
+		int bufferSize = 256 * 3;
+		byte[] buffer = new byte[bufferSize];
 
 		int offset = 0;
 		int read = 0;
 		while ( offset < length && read != -1) {
 
-			int tempLength = buffer.length;
-			// If buffer not needed
-			if (length - offset < tempLength)
-				tempLength = length - offset;
-			read = read(buffer, 0, tempLength);
-			actionReadBytes.doAction(buffer);
+			// To reduce the buffer for the last bytes reads
+			if (length - offset < bufferSize) {
+				bufferSize = length - offset;
+				buffer = new byte[bufferSize];
+			}
+			read = read(buffer, 0, bufferSize);
+
+			// To get only the bytes read
+			byte[] optimizedBuffer;
+			if (read >= 0 && buffer.length > read) {
+				optimizedBuffer = Arrays.copyOf(buffer, read);
+			} else {
+				optimizedBuffer = buffer;
+			}
+			actionReadBytes.doAction(optimizedBuffer);
 			offset += read;
 		}
-	}
-
-	public interface ActionReadBytes {
-		/**
-		 * Called after each buffer fill
-		 * @param buffer filled
-		 */
-		void doAction(byte[] buffer) throws IOException;
 	}
 
 	public static int readUShort(InputStream is) throws IOException {

@@ -19,47 +19,83 @@
  */
 package com.keepassdroid.database.security;
 
+import android.util.Log;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 public class ProtectedBinary {
-	
+
+	private static final String TAG = ProtectedBinary.class.getName();
 	public final static ProtectedBinary EMPTY = new ProtectedBinary();
 	
 	private byte[] data;
 	private boolean protect;
+	private File dataFile;
+	private int size;
 	
 	public boolean isProtected() {
 		return protect;
 	}
 	
-	public int length() {
-		if (data == null) {
-			return 0;
-		}
-		
-		return data.length;
+	public long length() {
+		if (data != null)
+			return data.length;
+		if (dataFile != null)
+			return size;
+		return 0;
 	}
 	
-	public ProtectedBinary() {
-		this(false, new byte[0]);
-		
-	}
-	
-	public ProtectedBinary(boolean enableProtection, byte[] data) {
-		protect = enableProtection;
-		this.data = data;
-		
-	}
-	
-	
-	// TODO: replace the byte[] with something like ByteBuffer to make the return
-	// value immutable, so we don't have to worry about making deep copies
-	public byte[] getData() {
-		return data;
-	}
-	
-	public boolean equals(ProtectedBinary rhs) {
-		return (protect == rhs.protect) && Arrays.equals(data, rhs.data);
+	private ProtectedBinary() {
+		this.protect = false;
+		this.data = null;
+		this.dataFile = null;
+		this.size = 0;
 	}
 
+	public ProtectedBinary(boolean enableProtection, byte[] data) {
+		this.protect = enableProtection;
+		this.data = data;
+		this.dataFile = null;
+		if (data != null)
+		    this.size = data.length;
+		else
+		    this.size = 0;
+	}
+
+	public ProtectedBinary(boolean enableProtection, File dataFile, int size) {
+		this.protect = enableProtection;
+		this.data = null;
+		this.dataFile = dataFile;
+		this.size = size;
+	}
+
+	public InputStream getData() throws IOException {
+		if (data != null)
+			return new ByteArrayInputStream(data);
+		else if (dataFile != null)
+			return new FileInputStream(dataFile);
+		else
+			return null;
+	}
+
+	public void clear() {
+		data = null;
+		if (dataFile != null && !dataFile.delete())
+			Log.e(TAG, "Unable to delete temp file " + dataFile.getAbsolutePath());
+	}
+	
+	public boolean equals(ProtectedBinary o) {
+        return this == o || o != null
+                && getClass() == o.getClass()
+                && protect == o.protect
+                && size == o.size
+                && Arrays.equals(data, o.data)
+                && dataFile != null
+                && dataFile.equals(o.dataFile);
+    }
 }

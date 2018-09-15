@@ -19,19 +19,6 @@
  */
 package com.keepassdroid;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.SyncFailedException;
-import java.util.HashSet;
-import java.util.Set;
-
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -53,10 +40,26 @@ import com.keepassdroid.icons.DrawableFactory;
 import com.keepassdroid.search.SearchDbHelper;
 import com.keepassdroid.utils.UriUtil;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.SyncFailedException;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author bpellin
  */
 public class Database {
+
+    private static final String TAG = Database.class.getName();
+
     public Set<PwGroup> dirty = new HashSet<PwGroup>();
     public PwDatabase pm;
     public Uri mUri;
@@ -151,7 +154,7 @@ public class Database {
         // We'll end up reading 8 bytes to identify the header. Might as well use two extra.
         bis.mark(10);
 
-        Importer imp = ImporterFactory.createImporter(bis, debug);
+        Importer imp = ImporterFactory.createImporter(bis, ctx.getFilesDir(), debug);
 
         bis.reset();  // Return to the start
 
@@ -223,9 +226,18 @@ public class Database {
         mUri = uri;
     }
 
-    public void clear() {
+    public void clear(Context context) {
         dirty.clear();
         drawFactory.clear();
+        // Delete the cache of the database if present
+        if (pm != null)
+            pm.clearCache();
+        // In all cases, delete all the files in the temp dir
+        try {
+            FileUtils.cleanDirectory(context.getFilesDir());
+        } catch (IOException e) {
+            Log.e(TAG, "Unable to clear the directory cache.", e);
+        }
 
         pm = null;
         mUri = null;

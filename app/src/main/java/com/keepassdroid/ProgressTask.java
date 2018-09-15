@@ -60,7 +60,7 @@ public class ProgressTask implements Runnable {
 	public void run() {
 		// Show process dialog
 		mPd.show();
-		
+
 		// Start Thread to Run task
 		Thread t = new Thread(mTask);
 		t.start();

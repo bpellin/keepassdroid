@@ -19,13 +19,13 @@
  */
 package com.keepassdroid.database;
 
+import com.keepassdroid.database.security.ProtectedBinary;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import com.keepassdroid.database.security.ProtectedBinary;
 
 public class BinaryPool {
 	private HashMap<Integer, ProtectedBinary> pool = new HashMap<Integer, ProtectedBinary>();
@@ -52,6 +52,8 @@ public class BinaryPool {
 	}
 
 	public void clear() {
+        for (Entry<Integer, ProtectedBinary> entry: pool.entrySet())
+            entry.getValue().clear();
 		pool.clear();
 	}
 
@@ -88,6 +90,13 @@ public class BinaryPool {
 		
 		pool.put(pool.size(), pb);
 	}
+
+    public int findUnusedKey() {
+        int unusedKey = pool.size();
+        while(get(unusedKey) != null)
+            unusedKey++;
+        return unusedKey;
+    }
 	
 	public int poolFind(ProtectedBinary pb) {
 		for (Entry<Integer, ProtectedBinary> pair : pool.entrySet()) {
