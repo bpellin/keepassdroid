@@ -155,7 +155,7 @@ public class FingerPrintHelper {
         return hasEnrolledFingerprints() && initOk;
     }
 
-    public void initEncryptData() {
+    public void initEncryptData(final boolean startListening) {
         cryptoInitOk = false;
 
         if (!isFingerprintInitialized()) {
@@ -165,11 +165,11 @@ public class FingerPrintHelper {
             return;
         }
         try {
-            initEncryptKey(false);
+            initEncryptKey(false, startListening);
         } catch (final InvalidKeyException invalidKeyException) {
             try {
                 fingerPrintCallback.onKeyInvalidated();
-                initEncryptKey(true);
+                initEncryptKey(true, startListening);
             } catch (InvalidKeyException e) {
                 fingerPrintCallback.onInvalidKeyException();
             } catch (Exception e) {
@@ -181,7 +181,10 @@ public class FingerPrintHelper {
 
     }
 
-    private void initEncryptKey(boolean deleteExistingKey) throws Exception {
+    private void initEncryptKey(
+            final boolean deleteExistingKey,
+            final boolean startListening) throws Exception {
+
         createNewKeyIfNeeded(deleteExistingKey);
         keyStore.load(null);
         final SecretKey key = (SecretKey) keyStore.getKey(ALIAS_KEY, null);
@@ -189,7 +192,7 @@ public class FingerPrintHelper {
         cryptoInitOk = true;
 
         stopListening();
-        startListening();
+        if( startListening ) startListening();
     }
 
     public void encryptData(final String value) {
@@ -216,7 +219,9 @@ public class FingerPrintHelper {
 
     }
 
-    public void initDecryptData(final String ivSpecValue) {
+    public void initDecryptData(
+            final String ivSpecValue,
+            final boolean startListening) {
 
         cryptoInitOk = false;
         if (!isFingerprintInitialized()) {
@@ -228,13 +233,13 @@ public class FingerPrintHelper {
             return;
         }
         try {
-            initDecryptKey(ivSpecValue,false);
+            initDecryptKey(ivSpecValue,false, startListening);
         } catch (final InvalidKeyException invalidKeyException) {
             // Key was invalidated (maybe all registered fingerprints were changed)
             // Retry with new key
             try {
                 fingerPrintCallback.onKeyInvalidated();
-                initDecryptKey(ivSpecValue, true);
+                initDecryptKey(ivSpecValue, true, startListening);
             } catch (InvalidKeyException e) {
                 fingerPrintCallback.onInvalidKeyException();
             } catch (Exception e) {
@@ -245,8 +250,10 @@ public class FingerPrintHelper {
         }
     }
 
-    private void initDecryptKey(final String ivSpecValue, boolean deleteExistingKey)
-            throws  Exception {
+    private void initDecryptKey(
+            final String ivSpecValue,
+            final boolean deleteExistingKey,
+            final boolean startListening) throws  Exception {
 
         createNewKeyIfNeeded(deleteExistingKey);
         keyStore.load(null);
@@ -259,7 +266,7 @@ public class FingerPrintHelper {
         cryptoInitOk = true;
 
         stopListening();
-        startListening();
+        if( startListening ) startListening();
     }
 
     public void decryptData(final String encryptedValue) {
