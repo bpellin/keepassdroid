@@ -169,6 +169,16 @@
     <string name="warning_read_only">Uw sd-card is mementeel niet beschrijfbaar. U zult wijzigingen in de database niet kunnen opslaan.</string>
     <string name="warning_unmounted">Uw sd-card is momenteel ontkoppeld. U zult geen database kunnen openen of aanmaken.</string>
     <string name="version_label">Versie:</string>
+    <string name="configure_fingerprint">Activeer vingerafdruk eerst in uw systeem instellingen</string>
+    <string name="scanning_fingerprint">Klaar voor vingerafdruk</string>
+    <string name="encrypted_value_stored">Wachtwoord met encryptie bewaard</string>
+    <string name="fingerprint_invalid_key">Probleem met ongeldige sleutel</string>
+    <string name="fingerprint_error">Algemeen vingerafdruk probleem</string>
+    <string name="store_with_fingerprint">Gebruik je vingerafdruk om dit wachtwoord op te slaan</string>
+    <string name="no_password_stored">Nog geen wachtwoord opgeslaan voor dit bestand</string>
+    <string name="fingerprint_notrecognized">Vingerafdruk niet herkend</string>
+    <string name="fingerprint_key_invalidated">Opgeslagen vingerafdruk is niet langer gelding. Voer je wachtwoord opnieuw in</string>
+    <string name="no_external_permissions">Geef de app toestemming tot externe opslag</string>
     
     <string-array name="clipboard_timeout_options">
      <item>30 seconden</item>
