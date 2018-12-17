@@ -208,6 +208,7 @@
     <string name="no_external_permissions">Permission to read and write external storage was denied</string>
     <string name="fingerprint_autoscan">Allow automatically scanning for fingerprints when opening file. Disable this option if fingerprint scanning causes issues.</string>
     <string name="fingerprint_autoscan_title">Enable fingerprint scanning</string>
+    <string name="fingerprint_autoscan_hint">Auto fingerprint scanning not enabled</string>
 
     <string-array name="clipboard_timeout_options">
     	<item>30 seconds</item>

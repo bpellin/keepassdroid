@@ -171,7 +171,7 @@
     <string name="version_label">Versie:</string>
     <string name="fingerprint_autoscan">Activeer automatisch scannen van vingerafdruk bij het openen van een bestand. Deze optie kun je uitschakelen wanneer dit problemen oplevert.</string>
     <string name="fingerprint_autoscan_title">Automatisch scannen van vingerafdruk</string>
-
+    <string name="fingerprint_autoscan_hint">Automatisch scannen vingerafdruk niet actief</string>
 
     <string-array name="clipboard_timeout_options">
      <item>30 seconden</item>

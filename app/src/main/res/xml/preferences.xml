@@ -98,6 +98,6 @@
 			android:summary="@string/fingerprint_autoscan"
 			android:defaultValue="@bool/fingerprint_autoscan"
 			android:title="@string/fingerprint_autoscan_title"
-			android:key="@string/fingerprint_autoscan"/>
+			android:key="@string/fingerprint_autoscan_key"/>
 	</PreferenceScreen>
 </PreferenceScreen>
