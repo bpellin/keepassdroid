@@ -79,9 +79,8 @@ import java.net.URLDecoder;
 
 public class FileSelectActivity extends Activity {
 
-	private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 111;
 	private ListView mList;
-	private ListAdapter mAdapter;
+	private RecentFileAdapter mAdapter;
 
 	private static final int CMENU_CLEAR = Menu.FIRST;
 	
@@ -331,10 +330,10 @@ public class FileSelectActivity extends Activity {
 
 	private void fillData() {
 		// Set the initial value of the filename
-		EditText filename = (EditText) findViewById(R.id.file_filename);
+		EditText filename = findViewById(R.id.file_filename);
 		filename.setText(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_file_path));
 		
-		mAdapter = new ArrayAdapter<String>(this, R.layout.file_row, R.id.file_filename, fileHistory.getDbList());
+		mAdapter = new RecentFileAdapter(this, fileHistory.getDbList());
 		mList.setAdapter(mAdapter);
 	}
 
