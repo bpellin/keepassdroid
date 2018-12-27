@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion = 27
-    buildToolsVersion = '27.0.3'
+    buildToolsVersion = '28.0.3'
 
     defaultConfig {
         applicationId = "com.android.keepass"
@@ -16,8 +16,7 @@ android {
         testInstrumentationRunner = "android.test.InstrumentationTestRunner"
 
         ndk {
-            abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a',
-                    'arm64-v8a', 'mips', 'mips64'
+            abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
         }
     }
 
@@ -57,4 +56,35 @@ dependencies {
     implementation 'com.madgag.spongycastle:prov:1.58.0.0'
     implementation 'joda-time:joda-time:2.9.4'
     implementation 'com.android.support:support-compat:27.1.1'
+}
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.0.14"
+    }
+}
+
+apply plugin: "net.ltgt.errorprone"
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += [
+        '-Xep:ClassCanBeStatic:OFF',
+        '-Xep:DefaultCharset:OFF',
+        '-Xep:EqualsHashCode:OFF',
+        '-Xep:FragmentInjection:OFF',
+        '-Xep:HidingField:OFF',
+        '-Xep:JdkObsolete:OFF',
+        '-Xep:MissingOverride:OFF',
+        '-Xep:NonOverridingEquals:OFF',
+        '-Xep:ShortCircuitBoolean:OFF',
+    ]
+}
+
+configurations.errorprone {
+    resolutionStrategy.force 'com.google.errorprone:error_prone_core:2.3.1'
 }
