@@ -222,6 +222,8 @@ public class PwDbHeaderV4 extends PwDbHeader {
 
 			case PwDbHeaderV4Fields.PublicCustomData:
 				db.publicCustomData =  KdfParameters.deserialize(fieldData);
+				break;
+
 			default:
 				throw new IOException("Invalid header type: " + fieldID);
 			
@@ -295,7 +297,7 @@ public class PwDbHeaderV4 extends PwDbHeader {
 	}
 
 	public static boolean matchesHeader(int sig1, int sig2) {
-		return (sig1 == PWM_DBSIG_1) && ( (sig2 == DBSIG_2) || (sig2 == DBSIG_2) );
+		return (sig1 == PWM_DBSIG_1) && ( (sig2 == DBSIG_PRE2) || (sig2 == DBSIG_2) );
 	}
 
 	public static byte[] computeHeaderHmac(byte[] header, byte[] key) throws IOException{
