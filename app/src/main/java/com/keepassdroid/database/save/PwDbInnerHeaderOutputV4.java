@@ -21,14 +21,14 @@ package com.keepassdroid.database.save;
 
 import com.keepassdroid.database.PwDatabaseV4;
 import com.keepassdroid.database.PwDbHeaderV4;
-import com.keepassdroid.database.PwDbHeaderV4.PwDbInnerHeaderV4Fields;
 import com.keepassdroid.database.PwDbHeaderV4.KdbxBinaryFlags;
+import com.keepassdroid.database.PwDbHeaderV4.PwDbInnerHeaderV4Fields;
 import com.keepassdroid.database.security.ProtectedBinary;
 import com.keepassdroid.stream.LEDataOutputStream;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 public class PwDbInnerHeaderOutputV4 {
     private PwDatabaseV4 db;
@@ -58,13 +58,24 @@ public class PwDbInnerHeaderOutputV4 {
                 flag |= KdbxBinaryFlags.Protected;
             }
 
-            byte[] binData = bin.getData();
             los.write(PwDbInnerHeaderV4Fields.Binary);
-            los.writeInt(bin.length() + 1);
+            los.writeInt((int) bin.length() + 1);
             los.write(flag);
-            los.write(binData);
 
-            Arrays.fill(binData, (byte)0);
+            byte[] buffer = new byte[3 * 256];
+            InputStream fileInputStream = bin.getData();
+            // To create the last buffer who is smaller
+            long numberOfFullBuffer = bin.length() / buffer.length;
+            long sizeOfFullBuffers = numberOfFullBuffer * buffer.length;
+            int read = 0;
+            //if (protectedBinary.length() > 0) {
+            while (read < bin.length()) {
+                // Create the last smaller buffer
+                if (read >= sizeOfFullBuffers)
+                    buffer = new byte[(int) (bin.length() % buffer.length)];
+                read += fileInputStream.read(buffer, 0, buffer.length);
+                los.write(buffer);
+            }
         }
 
         los.write(PwDbInnerHeaderV4Fields.EndOfHeader);
