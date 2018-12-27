@@ -64,7 +64,7 @@ public class PwEntryV4 extends PwEntry implements ITimeLogger {
 	public UUID prevParentGroup = PwDatabaseV4.UUID_ZERO;
 	public boolean qualityCheck = true;
 
-	public class AutoType implements Cloneable {
+	public static class AutoType implements Cloneable {
 		private static final long OBF_OPT_NONE = 0;
 		
 		public boolean enabled = true;

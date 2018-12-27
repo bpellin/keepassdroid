@@ -35,7 +35,7 @@ public class VariantDictionary {
 
     private Map<String, VdType> dict = new HashMap<String, VdType>();
 
-    private class VdType {
+    private static class VdType {
         public static final byte None = 0x00;
         public static final byte UInt32 = 0x04;
         public static final byte UInt64 =0x05;
