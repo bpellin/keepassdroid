@@ -57,3 +57,34 @@ dependencies {
     implementation 'joda-time:joda-time:2.9.4'
     implementation 'com.android.support:support-compat:27.1.1'
 }
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.0.14"
+    }
+}
+
+apply plugin: "net.ltgt.errorprone"
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += [
+        '-Xep:ClassCanBeStatic:OFF',
+        '-Xep:DefaultCharset:OFF',
+        '-Xep:EqualsHashCode:OFF',
+        '-Xep:FragmentInjection:OFF',
+        '-Xep:HidingField:OFF',
+        '-Xep:JdkObsolete:OFF',
+        '-Xep:MissingOverride:OFF',
+        '-Xep:NonOverridingEquals:OFF',
+        '-Xep:ShortCircuitBoolean:OFF',
+    ]
+}
+
+configurations.errorprone {
+    resolutionStrategy.force 'com.google.errorprone:error_prone_core:2.3.1'
+}

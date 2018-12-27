@@ -131,7 +131,7 @@ public abstract class PwGroup {
 			
 			boolean negate = false;
 			if (sp.searchString.startsWith("-")) {
-				sp.searchString.substring(1);
+				sp.searchString = sp.searchString.substring(1);
 				negate = sp.searchString.length() > 0;
 			}
 			
