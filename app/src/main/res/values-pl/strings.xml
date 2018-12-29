@@ -25,6 +25,7 @@ along with KeePassDroid. If not, see <http://www.gnu.org/licenses/>.
     <string name="add_entry">Dodaj wpis</string>
     <string name="add_group">Dodaj grupę</string>
     <string name="add_group_title">Dodaj grupę</string>
+    <string name="add_string">Dodaj ciąg</string>
     <string name="algorithm">Algorytm</string>
     <string name="algorithm_colon">Algorytm:</string>
     <string name="app_name">KeePassDroid</string>
@@ -32,11 +33,16 @@ along with KeePassDroid. If not, see <http://www.gnu.org/licenses/>.
     <string name="app_timeout_summary">Czas do zablokowania bazy danych przy bezczynności aplikacji.</string>
     <string name="application">Aplikacja</string>
     <string name="application_settings">Ustawienia aplikacji</string>
+    <string name="beta_dontask">Nie pokazuj ponownie</string>
+    <string name="beta_warning">Obsługa zapisywania zmian w plikach kdbx jest w trybie EKSPERYMENTALNYM. Utwórz kopie zapasowe bazy danych przed zapisaniem zmian.</string>
     <string name="brackets">Nawiasy</string>
     <string name="browser_intall_text">Przeglądanie plików wymaga programu Open Intents File Manager, kliknij poniżej by go zainstalować. Ze względu na pewne, dziwne zachowania menadżera plików przeglądanie może nie działać poprawnie przy pierwszym użyciu.</string>
     <string name="building_search_idx">Tworzenie indeksu wyszukiwania&#8230;</string>
     <string name="cancel">Anuluj</string>
     <string name="ClearClipboard">Schowek wyczyszczony.</string>
+    <string name="clipboard_error_title">Błąd schowka</string>
+    <string name="clipboard_error">Niektóre telefony Samsung z Androidem mają błąd w implementacji schowka, który powoduje, że kopiowanie z aplikacji kończy się niepowodzeniem. Aby uzyskać więcej informacji, przejdź do details go to:</string>
+    <string name="clipboard_error_clear">Czyszczenie schowka nie powiodło się</string>
     <string name="clipboard_timeout">Czas wygaśnięcia schowka</string>
     <string name="clipboard_timeout_summary">Czas do wyczyszczenia zawartości schowka po kopiowaniu nazwy użytkownika i hasła</string>
     <string name="copy_username">Kopiuj nazwę użytkownika do schowka</string>
@@ -49,6 +55,7 @@ along with KeePassDroid. If not, see <http://www.gnu.org/licenses/>.
     <string name="decrypting_entry">Deszyfracja wpisu</string>
     <string name="default_checkbox">Używaj tej bazy danych jako domyślnej</string>
     <string name="digits">Cyfry</string>
+    <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 Brian Pellin comes with ABSOLUTELY NO WARRANTY; This is free software, and you are welcome to redistribute it under the conditions of the GPL version 2 or later.</string>
     <string name="ellipsis">\u2026</string>
     <string name="enter_filename">Wprowadź nazwę pliku bazy danych:</string>
     <string name="entry_accessed">Dostęp do pliku: </string>
@@ -60,6 +67,7 @@ along with KeePassDroid. If not, see <http://www.gnu.org/licenses/>.
     <string name="entry_expires">Wygasa: </string>
     <string name="entry_keyfile">Plik klucza (opcjonalnie)</string>
     <string name="entry_modified">Zmodyfikowano: </string>
+    <string name="entry_not_found">Nie znaleziono danych wejściowych.</string>
     <string name="entry_password">Hasło</string>
     <string name="entry_save">Zapisz</string>
     <string name="entry_title">Tytuł: </string>
@@ -83,9 +91,13 @@ along with KeePassDroid. If not, see <http://www.gnu.org/licenses/>.
     <string name="error_pass_match">Hasła nie pasują do siebie.</string>
     <string name="error_rounds_not_number">Wartość musi być liczbą.</string>
     <string name="error_rounds_too_large">Wartość za duża. Ustaw 2147483648.</string>
+    <string name="error_string_key">Nazwa każdego pola jest wymagana.</string>
     <string name="error_title_required">Wymagany tytuł.</string>
     <string name="error_wrong_length">Wprowadź dodatnią liczbę całkowitą.</string>
+    <string name="field_name">Nazwa pola</string>
+    <string name="field_value">Wartość pola</string>
     <string name="FileNotFound">Plik nie istnieje.</string>
+    <string name="file_not_found_content">Nie znaleziono pliku. Spróbuj ponownie otworzyć od dostawcy treści.</string>
     <string name="file_browser">Przeglądarka plików</string>
     <string name="generate_password">Generuj hasło</string>
     <string name="group">Grupa</string>
@@ -104,6 +116,8 @@ along with KeePassDroid. If not, see <http://www.gnu.org/licenses/>.
     <string name="install_from_website">Zainstaluj z WWW</string>
     <string name="InvalidPassword">Nieprawidłowe hasło lub plik klucza.</string>
     <string name="invalid_db_sig">Format bazy danych nierozpoznany.</string>
+    <string name="keyfile_does_not_exist">Plik klucza nie istnieje.</string>
+    <string name="keyfile_is_empty">Plik klucza jest pusty.</string>
     <string name="length">Długość</string>
     <string name="list_size_title">Wielkość listy grup</string>
     <string name="list_size_summary">Wielkość tekstu w liście grup</string>
@@ -142,6 +156,10 @@ along with KeePassDroid. If not, see <http://www.gnu.org/licenses/>.
     <string name="password_title">Wprowadź hasło bazy danych</string>
     <string name="progress_create">Tworzenie nowej bazy danych&#8230;</string>
     <string name="progress_title">Pracuję&#8230;</string>
+    <string name="protection">Zabezpieczenie</string>
+    <string name="read_only">Tylko odczyt</string>
+    <string name="read_only_warning">KeePassDroid nie ma uprawnień do zapisu w lokalizacji bazy danych, więc twoja baza danych zostanie otwarta tylko do odczytu.</string>
+    <string name="read_only_kitkat_warning">Począwszy od Androida KitKat niektóre urządzenia nie zezwalają aplikacjom na zapisywanie danych na sdcard.</string>
     <string name="recentfile_title">Najnowsza historia plików</string>
     <string name="recentfile_summary">Zapamiętaj ostatnio uzywane nazwy plików</string>
     <string name="remember_keyfile_summary">Zapamiętaj lokację plików kluczy</string>
@@ -162,14 +180,28 @@ along with KeePassDroid. If not, see <http://www.gnu.org/licenses/>.
     <string name="sort_db">Sortuj wg daty</string>
     <string name="special">Znaki specjalne</string>
     <string name="search_hint">Tytuł/opis wpisu</string>
+    <string name="search_results">Wyniki wyszukiwania</string>
     <string name="twofish">Twofish</string>
     <string name="underline">Podkreślenie</string>
     <string name="unsupported_db_version">Nieobsługiwana wersja bazy danych.</string>
     <string name="uppercase">Wielkie litery</string>
     <string name="use_saf_summary">Użyj przeglądarki Android Storage Access Framework do przeglądania plików (KitKat i nowsze)</string>
     <string name="use_saf_title">Storage Access Framework</string>
+    <string name="warning">Ostrzeżenie</string>
+    <string name="warning_password_encoding">Format .kdb obsługuje tylko zestaw znaków Latin1. Twoje hasło może zawierać znaki spoza tego zestawu znaków. Wszystkie znaki inne niż Latin1 są konwertowane na tę samą postać, co zmniejsza bezpieczeństwo hasła. Zalecane jest zmienienie hasła.</string>
     <string name="warning_read_only">Karta SD jest obecnie w trybie tylko do odczytu. Możesz nie być w stanie zapisać zmian w bazie danych.</string>
     <string name="warning_unmounted">Karta SD nie jest obecnie zamontowana w urządzeniu. Możesz nie być w stanie wczytać lub utworzyć bazy danych.</string>
+    <string name="version_label">Wersja:</string>
+    <string name="configure_fingerprint">Czytnik linii papilarnych jest obsługiwany, ale nie skonfigurowany dla urządzenia</string>
+    <string name="scanning_fingerprint">Czytanie odcisków palców</string>
+    <string name="encrypted_value_stored">Zaszyfrowane hasło przechowywane</string>
+    <string name="fingerprint_invalid_key">Problem nieprawidłowego klucza</string>
+    <string name="fingerprint_error">Problem odcisku palca</string>
+    <string name="store_with_fingerprint">Użyj odcisku palca, aby zapisać to hasło</string>
+    <string name="no_password_stored">Nie zapisano jeszcze hasła dla tej bazy danych</string>
+    <string name="fingerprint_notrecognized">Odcisk palca nie został rozpoznany</string>
+    <string name="fingerprint_key_invalidated">Zapamiętane hasło nie jest już ważne. Wprowadź ponownie hasło</string>
+    <string name="no_external_permissions">Zezwolono na odczytywanie i zapisywanie pamięci zewnętrznej</string>
     
     <string-array name="clipboard_timeout_options">
      <item>30 sekund</item>
