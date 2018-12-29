@@ -82,13 +82,40 @@ public class Util {
 			te.setText(str);
 		}
 	}
-	
+
+	private static final int MAX_BUF_SIZE = 1024;
 	public static void copyStream(InputStream in, OutputStream out) throws IOException {
-		byte[] buf = new byte[1024];
+		byte[] buf = new byte[MAX_BUF_SIZE];
 		int read;
 		while ((read = in.read(buf)) != -1) {
 			out.write(buf, 0, read);
 		}
+	}
+
+	public static int copyStream(InputStream in, OutputStream out, int maxBytes) throws IOException {
+	    if (maxBytes <= 0) return 0;
+
+		int bufSize = Math.min(maxBytes, MAX_BUF_SIZE);
+		byte[] buf = new byte[bufSize];
+		int origMax = maxBytes;
+
+		int read;
+		do {
+			assert(maxBytes > 0);
+			if (maxBytes >= buf.length) {
+				read = in.read(buf);
+			} else {
+				read = in.read(buf, 0, maxBytes);
+			}
+			if (read == -1) { break; }
+
+			out.write(buf, 0 , read);
+			maxBytes -= read;
+
+		} while (maxBytes > 0);
+
+		// return total amonut read
+		return origMax - maxBytes;
 	}
 
 	

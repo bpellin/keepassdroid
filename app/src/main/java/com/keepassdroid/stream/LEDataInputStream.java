@@ -127,33 +127,6 @@ public class LEDataInputStream extends InputStream {
 		return buf;
 	}
 
-	public void readBytes(int length, ActionReadBytes actionReadBytes) throws IOException {
-		int bufferSize = 256 * 3;
-		byte[] buffer = new byte[bufferSize];
-
-		int offset = 0;
-		int read = 0;
-		while ( offset < length && read != -1) {
-
-			// To reduce the buffer for the last bytes reads
-			if (length - offset < bufferSize) {
-				bufferSize = length - offset;
-				buffer = new byte[bufferSize];
-			}
-			read = read(buffer, 0, bufferSize);
-
-			// To get only the bytes read
-			byte[] optimizedBuffer;
-			if (read >= 0 && buffer.length > read) {
-				optimizedBuffer = Arrays.copyOf(buffer, read);
-			} else {
-				optimizedBuffer = buffer;
-			}
-			actionReadBytes.doAction(optimizedBuffer);
-			offset += read;
-		}
-	}
-
 	public static int readUShort(InputStream is) throws IOException {
 		  byte[] buf = new byte[2];
 		  

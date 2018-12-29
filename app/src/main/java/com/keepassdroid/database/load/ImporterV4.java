@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2017 Brian Pellin.
+ * Copyright 2009-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -37,7 +37,6 @@ import com.keepassdroid.database.exception.InvalidDBException;
 import com.keepassdroid.database.exception.InvalidPasswordException;
 import com.keepassdroid.database.security.ProtectedBinary;
 import com.keepassdroid.database.security.ProtectedString;
-import com.keepassdroid.stream.ActionReadBytes;
 import com.keepassdroid.stream.BetterCipherInputStream;
 import com.keepassdroid.stream.HashedBlockInputStream;
 import com.keepassdroid.stream.HmacBlockInputStream;
@@ -46,6 +45,7 @@ import com.keepassdroid.utils.DateUtil;
 import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.MemUtil;
 import com.keepassdroid.utils.Types;
+import com.keepassdroid.utils.Util;
 
 import org.spongycastle.crypto.StreamCipher;
 import org.xmlpull.v1.XmlPullParser;
@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -338,18 +339,11 @@ public class ImporterV4 extends Importer {
 				// Read the serialized binary
 				int binaryKey = db.binPool.findUnusedKey();
 				File file = new File(streamDir, String.valueOf(binaryKey));
-                final FileOutputStream outputStream = new FileOutputStream(file);
-				try {
-					lis.readBytes(size - 1, new ActionReadBytes() {
-                        @Override
-                        public void doAction(byte[] buffer) throws IOException {
-                            outputStream.write(buffer);
-                        }
-                    });
-				} finally {
-				    outputStream.close();
-                }
-                ProtectedBinary protectedBinary = new ProtectedBinary(protectedFlag, file, size -1);
+				ProtectedBinary protectedBinary = new ProtectedBinary(protectedFlag, file, size -1);
+				final OutputStream outputStream = protectedBinary.getOutputStream();
+				Util.copyStream(lis, outputStream, size -1);
+                outputStream.close();
+
 				db.binPool.poolAdd(protectedBinary);
 				break;
 			default:
