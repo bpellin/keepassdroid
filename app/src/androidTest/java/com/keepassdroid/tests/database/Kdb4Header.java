@@ -37,7 +37,7 @@ public class Kdb4Header extends AndroidTestCase {
 		AssetManager am = ctx.getAssets();
 		InputStream is = am.open("test.kdbx", AssetManager.ACCESS_STREAMING);
 		
-		ImporterV4 importer = new ImporterV4();
+		ImporterV4 importer = new ImporterV4(ctx.getFilesDir());
 
 		PwDatabaseV4 db = importer.openDatabase(is, "12345", null);
 		

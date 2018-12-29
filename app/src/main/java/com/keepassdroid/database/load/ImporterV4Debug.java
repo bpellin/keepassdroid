@@ -19,14 +19,19 @@
  */
 package com.keepassdroid.database.load;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.keepassdroid.UpdateStatus;
 import com.keepassdroid.database.PwDatabaseV4Debug;
 import com.keepassdroid.database.exception.InvalidDBException;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class ImporterV4Debug extends ImporterV4 {
+
+	public ImporterV4Debug(File streamDir) {
+		super(streamDir);
+	}
 
 	@Override
 	protected PwDatabaseV4Debug createDB() {

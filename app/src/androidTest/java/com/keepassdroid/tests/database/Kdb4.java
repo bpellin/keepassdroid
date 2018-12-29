@@ -49,7 +49,7 @@ public class Kdb4 extends AndroidTestCase {
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("test.kdbx", AssetManager.ACCESS_STREAMING);
 
-        Importer importer = ImporterFactory.createImporter(is);
+        Importer importer = ImporterFactory.createImporter(is, ctx.getFilesDir());
 
         assertTrue(importer instanceof ImporterV4);
         is.close();
@@ -60,7 +60,7 @@ public class Kdb4 extends AndroidTestCase {
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("test.kdbx", AssetManager.ACCESS_STREAMING);
 
-        ImporterV4 importer = new ImporterV4();
+        ImporterV4 importer = new ImporterV4(ctx.getFilesDir());
         importer.openDatabase(is, "12345", null);
 
         is.close();
@@ -82,7 +82,7 @@ public class Kdb4 extends AndroidTestCase {
         AssetManager am = ctx.getAssets();
         InputStream is = am.open(inputFile, AssetManager.ACCESS_STREAMING);
 
-        ImporterV4 importer = new ImporterV4();
+        ImporterV4 importer = new ImporterV4(ctx.getFilesDir());
         PwDatabaseV4 db = importer.openDatabase(is, password, null);
         is.close();
 
@@ -97,7 +97,7 @@ public class Kdb4 extends AndroidTestCase {
 
         InputStream bis = new ByteArrayInputStream(data);
         bis = new CopyInputStream(bis, fos);
-        importer = new ImporterV4();
+        importer = new ImporterV4(ctx.getFilesDir());
         db = importer.openDatabase(bis, password, null);
         bis.close();
 
@@ -119,7 +119,7 @@ public class Kdb4 extends AndroidTestCase {
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("keyfile.kdbx", AssetManager.ACCESS_STREAMING);
 
-        ImporterV4 importer = new ImporterV4();
+        ImporterV4 importer = new ImporterV4(ctx.getFilesDir());
         importer.openDatabase(is, "12345", TestUtil.getKeyFileInputStream(ctx, TestUtil.getAppPath(ctx, "key")));
 
         is.close();
@@ -130,7 +130,7 @@ public class Kdb4 extends AndroidTestCase {
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("keyfile-binary.kdbx", AssetManager.ACCESS_STREAMING);
 
-        ImporterV4 importer = new ImporterV4();
+        ImporterV4 importer = new ImporterV4(ctx.getFilesDir());
         importer.openDatabase(is, "12345", TestUtil.getKeyFileInputStream(ctx,TestUtil.getAppPath(ctx,"key-binary")));
 
         is.close();
@@ -141,7 +141,7 @@ public class Kdb4 extends AndroidTestCase {
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("key-only.kdbx", AssetManager.ACCESS_STREAMING);
 
-        ImporterV4 importer = new ImporterV4();
+        ImporterV4 importer = new ImporterV4(ctx.getFilesDir());
         importer.openDatabase(is, "", TestUtil.getKeyFileInputStream(ctx, TestUtil.getAppPath(ctx, "key")));
 
         is.close();
@@ -155,7 +155,7 @@ public class Kdb4 extends AndroidTestCase {
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("no-encrypt.kdbx", AssetManager.ACCESS_STREAMING);
 
-        ImporterV4 importer = new ImporterV4();
+        ImporterV4 importer = new ImporterV4(ctx.getFilesDir());
         importer.openDatabase(is, "12345", null);
 
         is.close();

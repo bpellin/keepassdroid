@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2017 Brian Pellin.
+ * Copyright 2009-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,38 +19,10 @@
  */
 package com.keepassdroid.database.load;
 
-import static com.keepassdroid.database.PwDatabaseV4XML.*;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Stack;
-import java.util.TimeZone;
-import java.util.UUID;
-import java.util.zip.GZIPInputStream;
-
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-
-import org.spongycastle.crypto.StreamCipher;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import biz.source_code.base64Coder.Base64Coder;
-
 import com.keepassdroid.UpdateStatus;
 import com.keepassdroid.crypto.CipherFactory;
 import com.keepassdroid.crypto.PwStreamCipherFactory;
 import com.keepassdroid.crypto.engine.CipherEngine;
-import com.keepassdroid.database.BinaryPool;
 import com.keepassdroid.database.ITimeLogger;
 import com.keepassdroid.database.PwCompressionAlgorithm;
 import com.keepassdroid.database.PwDatabaseV4;
@@ -73,6 +45,37 @@ import com.keepassdroid.utils.DateUtil;
 import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.MemUtil;
 import com.keepassdroid.utils.Types;
+import com.keepassdroid.utils.Util;
+
+import org.spongycastle.crypto.StreamCipher;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Stack;
+import java.util.TimeZone;
+import java.util.UUID;
+import java.util.zip.GZIPInputStream;
+
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+
+import biz.source_code.base64Coder.Base64Coder;
+
+import static com.keepassdroid.database.PwDatabaseV4XML.*;
 
 public class ImporterV4 extends Importer {
 	
@@ -84,14 +87,15 @@ public class ImporterV4 extends Importer {
 	private long version;
 	private int binNum = 0;
 	Calendar utcCal;
+    private File streamDir;
 
-	public ImporterV4() {
-		utcCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+	public ImporterV4(File streamDir) {
+		this.utcCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        this.streamDir = streamDir;
 	}
 	
 	protected PwDatabaseV4 createDB() {
 		return new PwDatabaseV4();
-
 	}
 
 	@Override
@@ -229,6 +233,7 @@ public class ImporterV4 extends Importer {
 
 		byte[] data = new byte[0];
 		if (size > 0) {
+			if (fieldId != PwDbHeaderV4.PwDbInnerHeaderV4Fields.Binary)
 			data = lis.readBytes(size);
 		}
 
@@ -244,19 +249,18 @@ public class ImporterV4 extends Importer {
 			    header.innerRandomStreamKey = data;
 				break;
 			case PwDbHeaderV4.PwDbInnerHeaderV4Fields.Binary:
-			    if (data.length < 1) throw new IOException("Invalid binary format");
-				byte flag = data[0];
-				boolean prot = (flag & PwDbHeaderV4.KdbxBinaryFlags.Protected) !=
+				byte flag = lis.readBytes(1)[0];
+				boolean protectedFlag = (flag & PwDbHeaderV4.KdbxBinaryFlags.Protected) !=
 						PwDbHeaderV4.KdbxBinaryFlags.None;
+				// Read the serialized binary
+				int binaryKey = db.binPool.findUnusedKey();
+				File file = new File(streamDir, String.valueOf(binaryKey));
+				ProtectedBinary protectedBinary = new ProtectedBinary(protectedFlag, file, size -1);
+				final OutputStream outputStream = protectedBinary.getOutputStream();
+				Util.copyStream(lis, outputStream, size -1);
+                outputStream.close();
 
-				byte[] bin = new byte[data.length - 1];
-				System.arraycopy(data, 1, bin, 0, data.length-1);
-				ProtectedBinary pb = new ProtectedBinary(prot, bin);
-				db.binPool.poolAdd(pb);
-
-				if (prot) {
-					Arrays.fill(data, (byte)0);
-				}
+				db.binPool.poolAdd(protectedBinary);
 				break;
 			default:
 				assert(false);
