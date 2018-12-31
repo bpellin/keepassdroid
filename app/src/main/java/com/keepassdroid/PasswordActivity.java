@@ -69,6 +69,7 @@ import com.keepassdroid.intents.Intents;
 import com.keepassdroid.settings.AppSettingsActivity;
 import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.Interaction;
+import com.keepassdroid.utils.PermissionUtil;
 import com.keepassdroid.utils.UriUtil;
 import com.keepassdroid.utils.Util;
 
@@ -262,13 +263,6 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         String key = (mKeyUri == null) ? "" : mKeyUri.toString();
         setEditText(R.id.pass_keyfile, key);
     }
-
-    /*
-    private void errorMessage(CharSequence text)
-    {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-    }
-    */
 
     private void errorMessage(int resId) {
         Toast.makeText(this, resId, Toast.LENGTH_LONG).show();
@@ -580,21 +574,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
         if (!hasFileUri) return true;
 
-
-        boolean hasRead = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        boolean hasWrite = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-
-        if (!hasRead || !hasWrite) {
-            ActivityCompat.requestPermissions(this, READ_WRITE_PERMISSIONS,
-                    PERMISSION_REQUEST_ID);
-
-            return false;
-        }
-
-        return true;
-
+        return PermissionUtil.checkAndRequest(this, PERMISSION_REQUEST_ID);
     }
 
     public void onRequestPermissionsResult (int requestCode,

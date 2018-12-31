@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2016 Brian Pellin.
+ * Copyright 2009-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -28,12 +28,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -68,6 +65,7 @@ import com.keepassdroid.intents.Intents;
 import com.keepassdroid.settings.AppSettingsActivity;
 import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.Interaction;
+import com.keepassdroid.utils.PermissionUtil;
 import com.keepassdroid.utils.UriUtil;
 import com.keepassdroid.utils.Util;
 import com.keepassdroid.view.FileNameView;
@@ -79,7 +77,6 @@ import java.net.URLDecoder;
 
 public class FileSelectActivity extends Activity {
 
-    private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 111;
     private ListView mList;
     private ListAdapter mAdapter;
 
@@ -88,11 +85,67 @@ public class FileSelectActivity extends Activity {
     public static final int FILE_BROWSE = 1;
     public static final int GET_CONTENT = 2;
     public static final int OPEN_DOC = 3;
-    private static final int PERMISSION_REQUEST_ID = 1;
+    private static final int PERMISSION_REQUEST_ID = 4;
 
     private RecentFileHistory fileHistory;
 
     private boolean recentMode = false;
+
+
+    private void createFile(String filename) {
+        // Try to create the file
+        File file = new File(filename);
+        try {
+            if (file.exists()) {
+                Toast.makeText(FileSelectActivity.this,
+                        R.string.error_database_exists,
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+            File parent = file.getParentFile();
+
+            if ( parent == null || (parent.exists() && ! parent.isDirectory()) ) {
+                Toast.makeText(FileSelectActivity.this,
+                        R.string.error_invalid_path,
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if ( ! parent.exists() ) {
+                // Create parent dircetory
+                if ( ! parent.mkdirs() ) {
+                    Toast.makeText(FileSelectActivity.this,
+                            R.string.error_could_not_create_parent,
+                            Toast.LENGTH_LONG).show();
+                    return;
+
+                }
+            }
+
+            file.createNewFile();
+        } catch (IOException e) {
+            Toast.makeText(
+                    FileSelectActivity.this,
+                    getText(R.string.error_file_not_create) + " "
+                            + e.getLocalizedMessage(),
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Prep an object to collect a password once the database has
+        // been created
+        CollectPassword password = new CollectPassword(
+                new LaunchGroupActivity(filename));
+
+        // Create the new database
+        CreateDB create = new CreateDB(FileSelectActivity.this, filename, password, true);
+        ProgressTask createTask = new ProgressTask(
+                FileSelectActivity.this, create,
+                R.string.progress_create);
+        createTask.run();
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,57 +211,9 @@ public class FileSelectActivity extends Activity {
                     return;
                 }
 
-                // Try to create the file
-                File file = new File(filename);
-                try {
-                    if (file.exists()) {
-                        Toast.makeText(FileSelectActivity.this,
-                                R.string.error_database_exists,
-                                Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    File parent = file.getParentFile();
-                    
-                    if ( parent == null || (parent.exists() && ! parent.isDirectory()) ) {
-                        Toast.makeText(FileSelectActivity.this,
-                                R.string.error_invalid_path,
-                                Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    
-                    if ( ! parent.exists() ) {
-                        // Create parent dircetory
-                        if ( ! parent.mkdirs() ) {
-                            Toast.makeText(FileSelectActivity.this,
-                                    R.string.error_could_not_create_parent,
-                                    Toast.LENGTH_LONG).show();
-                            return;
-                            
-                        }
-                    }
-                    
-                    file.createNewFile();
-                } catch (IOException e) {
-                    Toast.makeText(
-                            FileSelectActivity.this,
-                            getText(R.string.error_file_not_create) + " "
-                                    + e.getLocalizedMessage(),
-                            Toast.LENGTH_LONG).show();
-                    return;
+                if (PermissionUtil.checkAndRequest(FileSelectActivity.this, PERMISSION_REQUEST_ID)) {
+                    createFile(filename);
                 }
-
-                // Prep an object to collect a password once the database has
-                // been created
-                CollectPassword password = new CollectPassword(
-                        new LaunchGroupActivity(filename));
-
-                // Create the new database
-                CreateDB create = new CreateDB(FileSelectActivity.this, filename, password, true);
-                ProgressTask createTask = new ProgressTask(
-                        FileSelectActivity.this, create,
-                        R.string.progress_create);
-                createTask.run();
-
             }
 
         });
@@ -293,6 +298,22 @@ public class FileSelectActivity extends Activity {
                     // Ignore exception
                 }
             }
+        }
+    }
+
+    public void onRequestPermissionsResult (int requestCode,
+                                            String[] permissions,
+                                            int[] grantResults) {
+
+        if (requestCode == PERMISSION_REQUEST_ID &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                grantResults[1] == PackageManager.PERMISSION_GRANTED){
+
+            String filename = Util.getEditText(FileSelectActivity.this,
+                    R.id.file_filename);
+            createFile(filename);
+        } else {
+            Toast.makeText(this, R.string.no_external_permissions, Toast.LENGTH_LONG).show();
         }
     }
 
