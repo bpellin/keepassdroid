@@ -169,6 +169,9 @@
     <string name="warning_read_only">Uw sd-card is mementeel niet beschrijfbaar. U zult wijzigingen in de database niet kunnen opslaan.</string>
     <string name="warning_unmounted">Uw sd-card is momenteel ontkoppeld. U zult geen database kunnen openen of aanmaken.</string>
     <string name="version_label">Versie:</string>
+    <string name="fingerprint_autoscan">Activeer automatisch scannen van vingerafdruk bij het openen van een bestand. Deze optie kun je uitschakelen wanneer dit problemen oplevert.</string>
+    <string name="fingerprint_autoscan_title">Automatisch scannen van vingerafdruk</string>
+    <string name="fingerprint_autoscan_hint">Automatisch scannen vingerafdruk niet actief</string>
     <string name="configure_fingerprint">Activeer vingerafdruk eerst in uw systeem instellingen</string>
     <string name="scanning_fingerprint">Klaar voor vingerafdruk</string>
     <string name="encrypted_value_stored">Wachtwoord met encryptie bewaard</string>
