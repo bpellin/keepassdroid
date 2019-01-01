@@ -1,6 +1,6 @@
 /*
  * Copyright 2009-2018 Brian Pellin.
- *     
+ *
  * This file is part of KeePassDroid.
  *
  *  KeePassDroid is free software: you can redistribute it and/or modify
@@ -235,8 +235,8 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         // Clear the shutdown flag
         App.clearShutdown();
 
-        // checks if fingerprint is available, will also start listening for fingerprints when available
-        checkAvailability();
+        // checks if fingerprint is available, only starts listening for fingerprints when available & auto start configured
+        checkFingerprintAvailability(false);
     }
 
     private void retrieveSettings() {
@@ -270,6 +270,13 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
     // fingerprint related code here
     private void initForFingerprint() {
+        // when fingerprint is enabled but auto scanning is not you can start scanning by clicking the fingerprint view
+        fingerprintView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkFingerprintAvailability(true);
+            }
+        });
         fingerPrintHelper = new FingerPrintHelper(this, this);
         if (fingerPrintHelper.hasEnrolledFingerprints()) {
 
@@ -308,7 +315,8 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
                         messageId = R.string.scanning_fingerprint;
                     }
                     confirmationView.setText(messageId);
-                    mode = validInput ? toggleMode(Cipher.ENCRYPT_MODE) : toggleMode(Cipher.DECRYPT_MODE);
+                    boolean autoStartScanning = prefs.getBoolean(getString(R.string.fingerprint_autoscan_key), true);
+                    mode = validInput ? toggleMode(Cipher.ENCRYPT_MODE, autoStartScanning) : toggleMode(Cipher.DECRYPT_MODE, autoStartScanning);
 
                 }
             });
@@ -370,24 +378,24 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         return PREF_KEY_IV_PREFIX + (mDbUri != null ? mDbUri.getPath() : "");
     }
 
-    private int toggleMode(final int newMode) {
+    private int toggleMode(final int newMode, final boolean startListening) {
         if (mode != newMode) {
             mode = newMode;
             switch (mode) {
                 case Cipher.ENCRYPT_MODE:
-                    fingerPrintHelper.initEncryptData();
+                    fingerPrintHelper.initEncryptData(startListening);
                     break;
                 case Cipher.DECRYPT_MODE:
                     final String ivSpecValue = prefsNoBackup.getString(getPreferenceKeyIvSpec(), null);
                     if (ivSpecValue != null) {
-                        fingerPrintHelper.initDecryptData(ivSpecValue);
+                        fingerPrintHelper.initDecryptData(ivSpecValue, startListening);
                     }
                     break;
             }
         }
         else {
             fingerPrintHelper.stopListening();
-            fingerPrintHelper.startListening();
+            if( startListening ) fingerPrintHelper.startListening();
         }
 
         return mode;
@@ -420,7 +428,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         confirmationView.setVisibility(vis);
     }
 
-    private void checkAvailability() {
+    private void checkFingerprintAvailability(final boolean forceAutoStart) {
         // fingerprint not supported (by API level or hardware) so keep option hidden
         if (!fingerPrintHelper.isHardwareDetected()) {
             setFingerPrintVisibilty(View.GONE);
@@ -448,11 +456,16 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
                 confirmationView.setText(R.string.no_password_stored);
             }
             // all is set here so we can confirm to user and start listening for fingerprints
-            else {
+            if( forceAutoStart || prefs.getBoolean(getString(R.string.fingerprint_autoscan_key), true) ){
 
                 confirmationView.setText(R.string.scanning_fingerprint);
                 // listen for decryption by default
-                toggleMode(Cipher.DECRYPT_MODE);
+                toggleMode(Cipher.DECRYPT_MODE, true);
+            }
+            // config OK but no auto scanning enabled
+            else {
+
+                confirmationView.setText(R.string.fingerprint_autoscan_title);
             }
         }
     }

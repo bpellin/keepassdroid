@@ -59,6 +59,8 @@
     <bool name="omitbackup_default">true</bool>
     <bool name="recentfile_default">true</bool>
     <bool name="saf_default">false</bool>
+    <bool name="fingerprint_autoscan">true</bool>
+    <string name="fingerprint_autoscan_key">fingerprint_autoscan_key</string>
     
     <string name="clipboard_timeout_default">300000</string>
     <string-array name="clipboard_timeout_values">
