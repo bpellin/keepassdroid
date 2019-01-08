@@ -33,7 +33,7 @@
     <string name="app_timeout">Блокировка базы</string>
     <string name="app_timeout_summary">Задержка блокировки при бездействии</string>
     <string name="application">Программа</string>
-    <string name="application_settings">Настройки KeePassDroid</string>
+    <string name="application_settings">Настройки приложения</string>
     <string name="beta_dontask">Не показывать снова</string>
     <string name="beta_warning">Поддержка сохранения баз kdbx ЭКСПЕРИМЕНТАЛЬНАЯ. Сделайте резервную копию базы перед сохранением.</string>
     <string name="brackets">{[(Скобки)]}</string>
@@ -56,7 +56,7 @@
     <string name="decrypting_entry">Расшифровка записи…</string>
     <string name="default_checkbox">По умолчанию</string>
     <string name="digits">Цифры 0…9</string>
-    <string name="disclaimer_formal">"KeePassDroid © 2009–2018
+    <string name="disclaimer_formal">"KeePassDroid © 2009–2019
 Разработчик Brian Pellin
 
 Программа предоставляется БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ. Распространяется свободно по лицензии GPL v2 или новее."</string>
@@ -71,7 +71,7 @@
     <string name="entry_expires">Истекает:</string>
     <string name="entry_keyfile">файл-ключ (необязательно)</string>
     <string name="entry_modified">Изменено:</string>
-    <string name="entry_not_found">Данные записи не найдены.</string>
+    <string name="entry_not_found">Данные записи не найдены</string>
     <string name="entry_password">Пароль:</string>
     <string name="entry_save">Сохранить</string>
     <string name="entry_title">Название:</string>
@@ -101,7 +101,7 @@
     <string name="field_name">Имя поля</string>
     <string name="field_value">Значение поля</string>
     <string name="FileNotFound">Файл не найден</string>
-    <string name="file_not_found_content">Файл не найден. Попробуйте повторно открыть через встроенный поставщик содержимого.</string>
+    <string name="file_not_found_content">Файл не найден, попробуйте повторно его открыть через встроенный поставщик содержимого</string>
     <string name="file_browser">Обзор файлов</string>
     <string name="generate_password">Создать пароль</string>
     <string name="group">Группа</string>
@@ -156,11 +156,11 @@
     <string name="no_url_handler">Не удалось открыть ссылку</string>
     <string name="open_recent">Недавно открытые:</string>
     <string name="omitbackup_title">Искать в актуальных</string>
-    <string name="omitbackup_summary">Не искать в Резервировании (.kdb)</string>
+    <string name="omitbackup_summary">Не искать в \'Резервировании\' (.kdb)</string>
     <string name="pass_filename">База KeePass:</string>
     <string name="password_title">Изменение пароля базы</string>
     <string name="progress_create">Создание базы…</string>
-    <string name="progress_title">Обработка</string>
+    <string name="progress_title">Выполнение…</string>
     <string name="protection">Защита</string>
     <string name="read_only">Только чтение</string>
     <string name="read_only_warning">KeePassDroid не имеет разрешений на запись по указанному пути. База будет открыта только для чтения.</string>
@@ -206,7 +206,11 @@
     <string name="no_password_stored">Для этой базы пароль ещё не сохранён</string>
     <string name="fingerprint_notrecognized">Отпечаток пальца не распознан</string>
     <string name="fingerprint_key_invalidated">Сохранённый пароль больше не действителен, введите его заново</string>
- 
+    <string name="no_external_permissions">В разрешении на чтение и запись на внешнее хранилище было отказано</string>
+    <string name="fingerprint_autoscan">Разрешить автоматическое сканирование отпечатков пальцев при открытии файла. Отключите данную функцию, если сканирование вызывает проблемы.</string>
+    <string name="fingerprint_autoscan_title">Сканирование отпечатков пальцев</string>
+    <string name="fingerprint_autoscan_hint">Автоматическое сканирование отпечатков пальцев не включено</string>
+
     <string-array name="clipboard_timeout_options">
        <item>30 секунд</item>
        <item>1 минута</item>
