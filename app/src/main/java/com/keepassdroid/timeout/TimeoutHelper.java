@@ -20,6 +20,7 @@
 package com.keepassdroid.timeout;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -47,7 +48,20 @@ public class TimeoutHelper {
 		}
 
 	}
-	
+
+	public static long getTimeoutLength(Context ctx) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		String sTimeout = prefs.getString(ctx.getString(R.string.app_timeout_key), ctx.getString(R.string.clipboard_timeout_default));
+		long timeout;
+		try {
+			timeout = Long.parseLong(sTimeout);
+		} catch (NumberFormatException e) {
+			timeout = DEFAULT_TIMEOUT;
+		}
+
+		return timeout;
+	}
+
 	public static void resume(Activity act) {
 		if ( App.getDB().Loaded() ) {
 	        Timeout.cancel(act);
@@ -65,14 +79,7 @@ public class TimeoutHelper {
 		}
 		
 		
-		String sTimeout = prefs.getString(act.getString(R.string.app_timeout_key), act.getString(R.string.clipboard_timeout_default));
-		long timeout;
-		try {
-			timeout = Long.parseLong(sTimeout);
-		} catch (NumberFormatException e) {
-			timeout = DEFAULT_TIMEOUT;
-		}
-		
+		long timeout = getTimeoutLength(act);
 		// We are set to never timeout
 		if (timeout == -1) {
 			return;

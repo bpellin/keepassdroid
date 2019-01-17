@@ -63,6 +63,7 @@ import com.keepassdroid.database.PwEntry;
 import com.keepassdroid.database.PwEntryV4;
 import com.keepassdroid.database.exception.SamsungClipboardException;
 import com.keepassdroid.intents.Intents;
+import com.keepassdroid.timeout.TimeoutHelper;
 import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.NotificationUtil;
 import com.keepassdroid.utils.Types;
@@ -234,11 +235,17 @@ public class EntryActivity extends LockCloseHideActivity {
 		Intent intent = new Intent(intentText);
 		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-		// no longer supported for api level >22
-		// notify.setLatestEventInfo(this, getString(R.string.app_name), desc, pending);
-		// so instead using compat builder and create new notification
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
 				NotificationUtil.COPY_CHANNEL_ID);
+
+		// Set a timout on the notifcation of twice the app timeout, in case the TimeoutService is
+		// stopped prematurely.
+		long timeoutDuration = TimeoutHelper.getTimeoutLength(this);
+		if (timeoutDuration != -1) {
+			timeoutDuration = timeoutDuration * 2;
+			builder = builder.setTimeoutAfter(timeoutDuration);
+		}
+
 		Notification notify = builder.setContentIntent(pending).setContentText(desc).setContentTitle(getString(R.string.app_name))
 				.setSmallIcon(R.drawable.notify).setTicker(desc).setWhen(System.currentTimeMillis()).build();
 
