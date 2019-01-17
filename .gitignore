@@ -1,7 +1,7 @@
 .DS_Store
-/build
-/app/build
-/projectFilesBackup
+build
+app/build
+projectFilesBackup
 
 # Built application files
 *.apk
@@ -39,7 +39,7 @@ captures/
 
 # Intellij
 *.iml
-.idea/*
+.idea/
 
 # Keystore files
 *.jks
