@@ -237,15 +237,6 @@ public class EntryActivity extends LockCloseHideActivity {
 
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
 				NotificationUtil.COPY_CHANNEL_ID);
-
-		// Set a timout on the notifcation of twice the app timeout, in case the TimeoutService is
-		// stopped prematurely.
-		long timeoutDuration = TimeoutHelper.getTimeoutLength(this);
-		if (timeoutDuration != -1) {
-			timeoutDuration = timeoutDuration * 2;
-			builder = builder.setTimeoutAfter(timeoutDuration);
-		}
-
 		Notification notify = builder.setContentIntent(pending).setContentText(desc).setContentTitle(getString(R.string.app_name))
 				.setSmallIcon(R.drawable.notify).setTicker(desc).setWhen(System.currentTimeMillis()).build();
 

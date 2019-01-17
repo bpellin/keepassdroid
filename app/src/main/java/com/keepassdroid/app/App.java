@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Brian Pellin.
+ * Copyright 2009-2019 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -20,10 +20,17 @@
 package com.keepassdroid.app;
 
 import android.app.Application;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.util.Log;
 
 import com.keepassdroid.Database;
 import com.keepassdroid.compat.PRNGFixes;
 import com.keepassdroid.fileselect.RecentFileHistory;
+import com.keepassdroid.intents.Intents;
 
 import java.util.Calendar;
 
@@ -32,7 +39,10 @@ public class App extends Application {
 	private static boolean shutdown = false;
 	private static Calendar calendar = null;
 	private static RecentFileHistory fileHistory = null;
-	
+	private static final String TAG = "KeePassDroid Timer";
+
+	private BroadcastReceiver mIntentReceiver;
+
 	public static Database getDB() {
 		if ( db == null ) {
 			db = new Database();
@@ -76,6 +86,29 @@ public class App extends Application {
 		fileHistory = new RecentFileHistory(this);
 		
 		PRNGFixes.apply();
+
+		mIntentReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				String action = intent.getAction();
+
+				if ( action.equals(Intents.TIMEOUT) ) {
+					timeout(context);
+				}
+			}
+		};
+
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Intents.TIMEOUT);
+		registerReceiver(mIntentReceiver, filter);
+	}
+
+	private void timeout(Context context) {
+		Log.d(TAG, "Timeout");
+		App.setShutdown();
+
+		NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		nm.cancelAll();
 	}
 
 	@Override
@@ -83,7 +116,8 @@ public class App extends Application {
 		if ( db != null ) {
 			db.clear(getApplicationContext());
 		}
-		
+
+		unregisterReceiver(mIntentReceiver);
 		super.onTerminate();
 	}
 }
