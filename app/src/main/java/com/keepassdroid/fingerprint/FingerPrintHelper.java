@@ -22,18 +22,15 @@ package com.keepassdroid.fingerprint;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.os.CancellationSignal;
+import androidx.core.os.CancellationSignal;
 import android.security.keystore.KeyProperties;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 
 import com.keepassdroid.compat.KeyGenParameterSpecCompat;
 import com.keepassdroid.compat.KeyguardManagerCompat;
 
-import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
-import java.security.UnrecoverableEntryException;
-import java.security.UnrecoverableKeyException;
 import java.security.spec.AlgorithmParameterSpec;
 
 import javax.crypto.BadPaddingException;
