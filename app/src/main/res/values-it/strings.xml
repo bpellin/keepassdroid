@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009-2017 Brian Pellin.
+ Copyright 2009-2018 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -20,7 +20,7 @@
   Italian translation by Diego Pierotto. Updated by anthologist on April 2018.
 
 -->
-<resources>
+<resources
   xmlns:tools="http://schemas.android.com/tools"
   tools:ignore="MissingTranslation">
     <string name="about_feedback">Commenti:</string>
@@ -55,7 +55,7 @@
     <string name="copy_password">Copia password negli appunti</string>
     <string name="creating_db_key">Creazione file chiave database&#8230;</string>
     <string name="current_group">Gruppo attuale: </string>
-    <string name="current_group_root">Gruppo attuale: Root</string>
+    <string name="current_group_root">Gruppo attuale: Principale</string>
     <string name="database">Database</string>
     <string name="decrypting_db">Decodifica contenuto database&#8230;</string>
     <string name="decrypting_entry">Decodifica valore</string>
@@ -173,7 +173,7 @@
     <string name="remember_keyfile_title">Salva il file chiave</string>
     <string name="remove_from_filelist">Elimina</string>
     <string name="rijndael">Rijndael (AES)</string>
-    <string name="root">Root</string>
+    <string name="root">Principale</string>
     <string name="rounds">Livello cifratura</string>
     <string name="rounds_explaination">Un livello di cifratura elevato fornisce una protezione maggiore contro attacchi di tipo "forza brutta", ma può veramente rallentare il caricamento e il salvataggio.</string>
     <string name="rounds_fix">Livello di cifratura prima della malformazione</string>
@@ -203,11 +203,17 @@
     <string name="scanning_fingerprint">In attesa di impronte</string>
     <string name="encrypted_value_stored">Password criptata salvata</string>
     <string name="fingerprint_invalid_key">Problema chiave non valida</string>
-    <string name="fingerprint_error">Problema impronta</string>
-    <string name="store_with_fingerprint">Usa l\'impronta per salvare questa password</string>
+    <string name="fingerprint_error">Problema impronta digitale</string>
+    <string name="store_with_fingerprint">Usa l\'impronta digitale per salvare questa password</string>
     <string name="no_password_stored">Nessuna password salvata per questo database</string>
-    
-    <string-array name="clipboard_timeout_options">
+    <string name="fingerprint_notrecognized">Impronta digitale non riconosciuta</string>
+    <string name="fingerprint_key_invalidated">Password salvata non più valida. Reinserisci password</string>
+    <string name="no_external_permissions">Permesso per leggere e scrivere sull\'unità esterna negato </string>
+    <string name="fingerprint_autoscan">Permetti la scansione automatica delle impronte digitali durante l\'apertura del file. Disabilita questa opzione se la scansione dell\'impronta digitale causa problemi.</string>
+    <string name="fingerprint_autoscan_title">Abilita scansione impronta digitale</string>
+    <string name="fingerprint_autoscan_hint">Scansione impronta digitale automatica non abilitata</string>   
+ 
+   <string-array name="clipboard_timeout_options">
     	<item>30 secondi</item>
     	<item>1 minuto</item>
     	<item>5 minuti</item>
