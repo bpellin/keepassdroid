@@ -5,6 +5,7 @@ import com.keepassdroid.tests.database.*;
 import com.keepassdroid.tests.output.*;
 import com.keepassdroid.tests.search.*;
 import com.keepassdroid.tests.stream.*;
+import com.keepassdroid.tests.utils.*;
 import com.keepassdroid.tests.*;
 
 
@@ -28,6 +29,7 @@ import org.junit.runners.Suite;
         PwManagerOutputTest.class,
         SearchTest.class,
         HashedBlock.class,
+        StrUtilTest.class,
         AccentTest.class,
         PwDateTest.class,
         PwEntryTestV3.class,
