@@ -19,11 +19,16 @@
  */
 package com.keepassdroid.tests.database;
 
+import android.content.Context;
+
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import static org.junit.Assert.assertArrayEquals;
-import android.test.AndroidTestCase;
 
 import com.keepassdroid.database.security.ProtectedBinary;
 import com.keepassdroid.utils.Util;
+
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,13 +37,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
-public class ProtectedBinaryTest extends AndroidTestCase {
+public class ProtectedBinaryTest {
+    @Test
     public void testEncryption() throws Exception {
         byte[] input = new byte[4096];
         Random random = new Random();
         random.nextBytes(input);
 
-        File dir = getContext().getFilesDir();
+        Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        File dir = ctx.getFilesDir();
         File temp = new File(dir, "1");
 
         ProtectedBinary pb = new ProtectedBinary(true, temp, input.length);

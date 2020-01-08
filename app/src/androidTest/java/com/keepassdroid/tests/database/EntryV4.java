@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Brian Pellin.
+ * Copyright 2013-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,13 +19,16 @@
  */
 package com.keepassdroid.tests.database;
 
-import junit.framework.TestCase;
-
 import com.keepassdroid.database.PwDatabaseV4;
 import com.keepassdroid.database.PwEntryV4;
 
-public class EntryV4 extends TestCase {
+import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
+public class EntryV4 {
+
+    @Test
 	public void testBackup() {
 		PwDatabaseV4 db = new PwDatabaseV4();
 		

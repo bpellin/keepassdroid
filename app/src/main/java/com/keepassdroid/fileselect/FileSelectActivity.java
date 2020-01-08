@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2018 Brian Pellin.
+ * Copyright 2009-2019 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -460,19 +460,26 @@ public class FileSelectActivity extends Activity {
         return true;
     }
 
+    private boolean launchUrl(int resId) {
+        try {
+            Util.gotoUrl(this, resId);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, R.string.error_failed_to_launch_link, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+        case R.id.menu_patreon:
+            return launchUrl(R.string.patreon_url);
+
         case R.id.menu_donate:
-            try {
-                Util.gotoUrl(this, R.string.donate_url);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(this, R.string.error_failed_to_launch_link, Toast.LENGTH_LONG).show();
-                return false;
-            }
-            
-            return true;
-            
+            return launchUrl(R.string.donate_url);
+
         case R.id.menu_about:
             AboutDialog dialog = new AboutDialog(this);
             dialog.show();

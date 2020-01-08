@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2018 Brian Pellin.
+ * Copyright 2010-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -21,21 +21,22 @@ package com.keepassdroid.tests.database;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.net.Uri;
 import android.os.Environment;
-import android.test.AndroidTestCase;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.keepassdroid.database.load.ImporterV3;
 import com.keepassdroid.tests.TestUtil;
-import com.keepassdroid.utils.UriUtil;
 
-import java.io.InputStream;
+import org.junit.Test;
+
 import java.io.File;
+import java.io.InputStream;
 
-public class Kdb3 extends AndroidTestCase {
-	
+public class Kdb3 {
+
 	private void testKeyfile(String dbAsset, String keyAsset, String password) throws Exception {
-		Context ctx = getContext();
+		Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
 		File sdcard = Environment.getExternalStorageDirectory();
 		String keyPath = ctx.getFilesDir().getAbsolutePath() + "/key";
@@ -50,11 +51,13 @@ public class Kdb3 extends AndroidTestCase {
 		
 		is.close();
 	}
-	
+
+	@Test
 	public void testXMLKeyFile() throws Exception {
 		testKeyfile("kdb_with_xml_keyfile.kdb", "keyfile.key", "12345");
 	}
-	
+
+	@Test
 	public void testBinary64KeyFile() throws Exception {
 		testKeyfile("binary-key.kdb", "binary.key", "12345");
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2018 Brian Pellin.
+ * Copyright 2010-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -27,7 +27,8 @@ import java.io.InputStream;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.test.AndroidTestCase;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.keepassdroid.database.PwDatabaseV4;
 import com.keepassdroid.database.exception.InvalidDBException;
@@ -40,11 +41,17 @@ import com.keepassdroid.database.save.PwDbV4Output;
 import com.keepassdroid.stream.CopyInputStream;
 import com.keepassdroid.tests.TestUtil;
 
-public class Kdb4 extends AndroidTestCase {
+import org.junit.Before;
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertTrue;
+
+public class Kdb4 {
     Context ctx;
 
+    @Test
     public void testDetection() throws IOException, InvalidDBException {
-        Context ctx = getContext();
+        Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("test.kdbx", AssetManager.ACCESS_STREAMING);
@@ -56,6 +63,7 @@ public class Kdb4 extends AndroidTestCase {
 
     }
 
+    @Test
     public void testParsing() throws IOException, InvalidDBException {
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("test.kdbx", AssetManager.ACCESS_STREAMING);
@@ -68,16 +76,18 @@ public class Kdb4 extends AndroidTestCase {
 
     }
 
+    @Test
     public void testSavingKDBXV3() throws IOException, InvalidDBException, PwDbOutputException {
        testSaving("test.kdbx", "12345", "test-out.kdbx");
     }
 
+    @Test
     public void testSavingKDBXV4() throws IOException, InvalidDBException, PwDbOutputException {
         testSaving("test-kdbxv4.kdbx", "1", "test-kdbxv4-out.kdbx");
     }
 
     private void testSaving(String inputFile, String password, String outputFile) throws IOException, InvalidDBException, PwDbOutputException {
-        Context ctx = getContext();
+        Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         AssetManager am = ctx.getAssets();
         InputStream is = am.open(inputFile, AssetManager.ACCESS_STREAMING);
@@ -105,16 +115,16 @@ public class Kdb4 extends AndroidTestCase {
 
     }
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
+        ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        ctx = getContext();
-        TestUtil.extractKey(getContext(), "keyfile.key", TestUtil.getAppPath(ctx,"key"));
-        TestUtil.extractKey(getContext(), "binary.key", TestUtil.getAppPath(ctx,"key-binary"));
+        TestUtil.extractKey(ctx, "keyfile.key", TestUtil.getAppPath(ctx,"key"));
+        TestUtil.extractKey(ctx, "binary.key", TestUtil.getAppPath(ctx,"key-binary"));
 
     }
 
+    @Test
     public void testComposite() throws IOException, InvalidDBException {
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("keyfile.kdbx", AssetManager.ACCESS_STREAMING);
@@ -126,6 +136,7 @@ public class Kdb4 extends AndroidTestCase {
 
     }
 
+    @Test
     public void testCompositeBinary() throws IOException, InvalidDBException {
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("keyfile-binary.kdbx", AssetManager.ACCESS_STREAMING);
@@ -137,6 +148,7 @@ public class Kdb4 extends AndroidTestCase {
 
     }
 
+    @Test
     public void testKeyfile() throws IOException, InvalidDBException {
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("key-only.kdbx", AssetManager.ACCESS_STREAMING);
@@ -149,8 +161,9 @@ public class Kdb4 extends AndroidTestCase {
 
     }
 
+    @Test
     public void testNoGzip() throws IOException, InvalidDBException {
-        Context ctx = getContext();
+        Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         AssetManager am = ctx.getAssets();
         InputStream is = am.open("no-encrypt.kdbx", AssetManager.ACCESS_STREAMING);

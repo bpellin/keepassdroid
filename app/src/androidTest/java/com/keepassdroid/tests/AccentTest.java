@@ -1,5 +1,5 @@
 /*
-* Copyright 2009 Brian Pellin.
+* Copyright 2009-2019 Brian Pellin.
 *
 * This file is part of KeePassDroid.
 *
@@ -19,23 +19,34 @@
 */
 package com.keepassdroid.tests;
 
-import android.test.AndroidTestCase;
+import android.content.Context;
 
+import androidx.test.filters.SmallTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 import com.keepassdroid.tests.database.TestData;
 
-public class AccentTest extends AndroidTestCase {
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
+
+
+@SmallTest
+public class AccentTest {
 	
 	private static final String KEYFILE = "";
 	private static final String PASSWORD = "é";
 	private static final String ASSET = "accent.kdb";
 	private static final String FILENAME = "/sdcard/accent.kdb";
-	
+
+	@Test
 	public void testOpen() {
 
 		try {
-			TestData.GetDb(getContext(), ASSET, PASSWORD, KEYFILE, FILENAME);
+			Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+			TestData.GetDb(ctx, ASSET, PASSWORD, KEYFILE, FILENAME);
 		} catch (Exception e) {
 			assertTrue("Failed to open database", false);
+
 		}
 	}
 

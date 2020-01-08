@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 Brian Pellin.
+ * Copyright 2014-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -24,7 +24,9 @@ import java.util.UUID;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.test.AndroidTestCase;
+
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import biz.source_code.base64Coder.Base64Coder;
 
 import com.keepassdroid.database.PwDatabaseV4;
@@ -33,16 +35,19 @@ import com.keepassdroid.database.load.ImporterV4;
 import com.keepassdroid.utils.SprEngine;
 import com.keepassdroid.utils.Types;
 
-public class SprEngineTest extends AndroidTestCase {
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+public class SprEngineTest {
 	private PwDatabaseV4 db;
 	private SprEngine spr;
 	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		
-		Context ctx = getContext();
-		
+	@Before
+	public void setUp() throws Exception {
+		Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
 		AssetManager am = ctx.getAssets();
 		InputStream is = am.open("test.kdbx", AssetManager.ACCESS_STREAMING);
 		
@@ -57,6 +62,7 @@ public class SprEngineTest extends AndroidTestCase {
 	private final String REF = "{REF:P@I:2B1D56590D961F48A8CE8C392CE6CD35}";
 	private final String ENCODE_UUID = "IN7RkON49Ui1UZ2ddqmLcw==";
 	private final String RESULT = "Password";
+	@Test
 	public void testRefReplace() {
 		UUID entryUUID = decodeUUID(ENCODE_UUID);
 		

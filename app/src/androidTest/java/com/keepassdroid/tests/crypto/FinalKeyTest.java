@@ -1,5 +1,5 @@
 /*
-* Copyright 2009 Brian Pellin.
+* Copyright 2009-2020 Brian Pellin.
 *
 * This file is part of KeePassDroid.
 *
@@ -19,26 +19,26 @@
 */
 package com.keepassdroid.tests.crypto;
 
-import static org.junit.Assert.assertArrayEquals;
+import com.keepassdroid.crypto.finalkey.AndroidFinalKey;
+import com.keepassdroid.crypto.finalkey.NativeFinalKey;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Random;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertArrayEquals;
 
-import com.keepassdroid.crypto.finalkey.AndroidFinalKey;
-import com.keepassdroid.crypto.finalkey.NativeFinalKey;
-
-public class FinalKeyTest extends TestCase {
+public class FinalKeyTest {
 	private Random mRand;
-	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		
+
+	@Before
+	public void setUp() throws Exception {
 		mRand = new Random();
 	}
-	
+
+	@Test
 	public void testNativeAndroid() throws IOException {
 		// Test both an old and an even number to test my flip variable
 		testNativeFinalKey(5);

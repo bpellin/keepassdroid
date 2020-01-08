@@ -23,37 +23,47 @@ package com.keepassdroid.tests.search;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.test.AndroidTestCase;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.android.keepass.R;
 import com.keepassdroid.Database;
 import com.keepassdroid.database.PwGroup;
 import com.keepassdroid.tests.database.TestData;
 
-public class SearchTest extends AndroidTestCase {
+import org.junit.Before;
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
+
+public class SearchTest {
 	
 	private Database mDb;
-	
-	@Override
-	protected void setUp() throws Exception {
-	    super.setUp();
-	    
-	    mDb = TestData.GetDb1(getContext(), true);
+
+	@Before
+	public void setUp() throws Exception {
+		Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+		mDb = TestData.GetDb1(ctx, true);
 	}
-	
+
+	@Test
 	public void testSearch() {
 		PwGroup results = mDb.Search("Amazon");
 		assertTrue("Search result not found.", results.childEntries.size() > 0);
 		
 	}
-	
+
+	@Test
 	public void testBackupIncluded() {
 		updateOmitSetting(false);
 		PwGroup results = mDb.Search("BackupOnly");
 		
 		assertTrue("Search result not found.", results.childEntries.size() > 0);
 	}
-	
+
+	@Test
 	public void testBackupExcluded() {
 		updateOmitSetting(true);
 		PwGroup results = mDb.Search("BackupOnly");
@@ -62,7 +72,7 @@ public class SearchTest extends AndroidTestCase {
 	}
 	
 	private void updateOmitSetting(boolean setting) {
-		Context ctx = getContext();
+		Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 		SharedPreferences.Editor editor = prefs.edit();
 		

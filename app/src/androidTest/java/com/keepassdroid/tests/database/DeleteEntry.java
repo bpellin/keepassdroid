@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,10 +19,9 @@
  */
 package com.keepassdroid.tests.database;
 
-import java.util.List;
-
 import android.content.Context;
-import android.test.AndroidTestCase;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.keepassdroid.Database;
 import com.keepassdroid.database.PwDatabase;
@@ -32,7 +31,16 @@ import com.keepassdroid.database.PwGroup;
 import com.keepassdroid.database.edit.DeleteGroup;
 import com.keepassdroid.search.SearchDbHelper;
 
-public class DeleteEntry extends AndroidTestCase {
+import org.junit.Test;
+
+import java.util.List;
+
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+public class DeleteEntry {
 	private static final String GROUP1_NAME = "Group1";
 	private static final String ENTRY1_NAME = "Test1";
 	private static final String ENTRY2_NAME = "Test2";
@@ -40,13 +48,14 @@ public class DeleteEntry extends AndroidTestCase {
 	private static final String PASSWORD = "12345";
 	private static final String ASSET = "delete.kdb";
 	private static final String FILENAME = "/sdcard/delete.kdb";
-	
+
+	@Test
 	public void testDelete() {
 		
 		Database db;
-		
-		Context ctx = getContext();
-		
+
+		Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
 		try {
 			db = TestData.GetDb(ctx, ASSET, PASSWORD, KEYFILE, FILENAME);
 		} catch (Exception e) {
