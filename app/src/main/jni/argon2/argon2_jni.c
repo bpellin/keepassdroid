@@ -130,7 +130,7 @@ void throwExceptionF(JNIEnv *env, jclass exception, const char *format, ...) {
 
 JNIEXPORT jbyteArray
 JNICALL Java_com_keepassdroid_crypto_keyDerivation_Argon2Native_nTransformMasterKey(JNIEnv *env,
-   jobject this, jbyteArray password, jbyteArray salt, jint parallelism, jlong memory,
+   jclass this, jbyteArray password, jbyteArray salt, jint parallelism, jlong memory,
    jlong iterations, jbyteArray secretKey, jbyteArray associatedData, jlong version) {
 
     argon2_context context;

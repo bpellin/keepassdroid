@@ -19,6 +19,8 @@
  */
 package com.keepassdroid.crypto.finalkey;
 
+import android.annotation.SuppressLint;
+
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -31,6 +33,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class AndroidFinalKey extends FinalKey {
 
+	@SuppressLint("GetInstance")
 	@Override
 	public byte[] transformMasterKey(byte[] pKeySeed, byte[] pKey, long rounds) throws IOException {
 		Cipher cipher;

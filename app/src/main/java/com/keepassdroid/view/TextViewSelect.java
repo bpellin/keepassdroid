@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Brian Pellin.
+ * Copyright 2011-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -23,9 +23,10 @@ import android.content.Context;
 import android.text.method.ArrowKeyMovementMethod;
 import android.text.method.MovementMethod;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
-public class TextViewSelect extends TextView {
+import androidx.appcompat.widget.AppCompatEditText;
+
+public class TextViewSelect extends AppCompatEditText {
 
 	public TextViewSelect(Context context) {
 		this(context, null);

@@ -168,12 +168,12 @@ public class ProtectedBinary {
 	}
 	
 	public boolean equals(ProtectedBinary o) {
-        return this == o || o != null
-                && getClass() == o.getClass()
-                && protect == o.protect
-                && size == o.size
-                && Arrays.equals(data, o.data)
-                && dataFile != null
-                && dataFile.equals(o.dataFile);
+        return (this == o) || (o != null)
+                && (getClass() == o.getClass())
+                && (protect == o.protect)
+                && (size == o.size)
+                && (Arrays.equals(data, o.data))
+                && (dataFile != null)
+                && (dataFile.equals(o.dataFile));
     }
 }

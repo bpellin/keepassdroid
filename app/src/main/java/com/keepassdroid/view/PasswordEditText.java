@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Brian Pellin.
+ * Copyright 2015-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -22,11 +22,12 @@ package com.keepassdroid.view;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.EditText;
+
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.keepassdroid.assets.TypefaceFactory;
 
-public class PasswordEditText extends EditText {
+public class PasswordEditText extends AppCompatEditText {
 
 	public PasswordEditText(Context context, AttributeSet attrs,
 			int defStyleAttr) {
