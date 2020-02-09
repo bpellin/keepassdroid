@@ -17,25 +17,24 @@
   You should have received a copy of the GNU General Public License
   along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_lock"
         android:icon="@android:drawable/ic_lock_lock"
         android:title="@string/menu_lock"
-        app:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/menu_toggle_pass"
         android:title="@string/menu_showpass"
-        app:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/menu_donate"
         android:title="@string/menu_donate"
-        app:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/menu_goto_url"
         android:title="@string/menu_url"
-        app:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/menu_copy_user"
         android:title="@string/menu_copy_user"
-        app:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/menu_copy_pass"
         android:title="@string/menu_copy_pass"
-        app:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom" />
 </menu>
