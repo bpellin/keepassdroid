@@ -177,7 +177,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     }
 
     @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         Context context = getContext();
         switch (item.getItemId()) {
             case R.id.menu_about:
