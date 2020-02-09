@@ -43,6 +43,8 @@
     <string name="biometric_auth_error">Authentication error</string>
     <string name="biometric_auth_to_open">Authenticate to open database</string>
     <string name="biometric_auth_to_store">Authenticate to store password</string>
+    <string name="biometric_error">Biometric error</string>
+    <string name="biometric_invalidated">Biometric invalidated</string>
     <string name="biometric_open_db">Open Database</string>
     <string name="biometric_save_password">Save Password</string>
     <string name="brackets">Brackets</string>

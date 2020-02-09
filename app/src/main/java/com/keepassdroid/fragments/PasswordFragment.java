@@ -69,7 +69,7 @@ import com.keepassdroid.database.edit.LoadDB;
 import com.keepassdroid.database.edit.OnFinish;
 import com.keepassdroid.dialog.PasswordEncodingDialogHelper;
 import com.keepassdroid.fileselect.BrowserDialog;
-import com.keepassdroid.fingerprint.FingerPrintHelper;
+import com.keepassdroid.biometric.BiometricHelper;
 import com.keepassdroid.intents.Intents;
 import com.keepassdroid.settings.AppSettingsActivity;
 import com.keepassdroid.utils.EmptyUtils;
@@ -83,7 +83,7 @@ import java.util.concurrent.Executor;
 
 import javax.crypto.Cipher;
 
-public class PasswordFragment extends Fragment implements FingerPrintHelper.FingerPrintCallback {
+public class PasswordFragment extends Fragment implements BiometricHelper.BiometricCallback {
     private static final int FILE_BROWSE = 256;
     public static final int GET_CONTENT = 257;
     private static final int OPEN_DOC = 258;
@@ -117,7 +117,7 @@ public class PasswordFragment extends Fragment implements FingerPrintHelper.Fing
     private BiometricPrompt biometricOpenPrompt;
     private BiometricPrompt.PromptInfo savePrompt;
     private BiometricPrompt.PromptInfo loadPrompt;
-    private FingerPrintHelper fingerprintHelper;
+    private BiometricHelper biometricHelper;
 
 
     @Override
@@ -153,7 +153,7 @@ public class PasswordFragment extends Fragment implements FingerPrintHelper.Fing
             @Override
             public void onClick(View v) {
                 initDecryptData();
-                Cipher cipher = fingerprintHelper.getCipher();
+                Cipher cipher = biometricHelper.getCipher();
                 // if cipher == null
                 biometricOpenPrompt.authenticate(loadPrompt, new BiometricPrompt.CryptoObject(cipher));
             }
@@ -237,7 +237,7 @@ public class PasswordFragment extends Fragment implements FingerPrintHelper.Fing
         final Context context = getContext();
         biometricsAvailable = true;
 
-        fingerprintHelper = new FingerPrintHelper(context, this);
+        biometricHelper = new BiometricHelper(context, this);
 
         Executor executor = ContextCompat.getMainExecutor(context);
 
@@ -256,7 +256,7 @@ public class PasswordFragment extends Fragment implements FingerPrintHelper.Fing
 
                         // newly store the entered password in encrypted way
                         final String password = passwordView.getText().toString();
-                        fingerprintHelper.encryptData(password);
+                        biometricHelper.encryptData(password);
                         GroupActivity.Launch(getActivity());
 
                     }
@@ -286,7 +286,7 @@ public class PasswordFragment extends Fragment implements FingerPrintHelper.Fing
                         // retrieve the encrypted value from preferences
                         final String encryptedValue = prefsNoBackup.getString(getPreferenceKeyValue(), null);
                         if (encryptedValue != null) {
-                            fingerprintHelper.decryptData(encryptedValue);
+                            biometricHelper.decryptData(encryptedValue);
                         }
                     }
 
@@ -335,7 +335,7 @@ public class PasswordFragment extends Fragment implements FingerPrintHelper.Fing
     private void initDecryptData() {
         final String ivSpecValue = prefsNoBackup.getString(getPreferenceKeyIvSpec(), null);
 
-        fingerprintHelper.initDecryptData(ivSpecValue);
+        biometricHelper.initDecryptData(ivSpecValue);
     }
 
 
@@ -747,8 +747,8 @@ public class PasswordFragment extends Fragment implements FingerPrintHelper.Fing
                 });
             } else if (mSuccess) {
                 if (biometricCheck.isChecked()) {
-                    fingerprintHelper.initEncryptData();
-                    Cipher cipher = fingerprintHelper.getCipher();
+                    biometricHelper.initEncryptData();
+                    Cipher cipher = biometricHelper.getCipher();
 
                     biometricSavePrompt.authenticate(savePrompt, new BiometricPrompt.CryptoObject(cipher));
 
@@ -828,7 +828,7 @@ public class PasswordFragment extends Fragment implements FingerPrintHelper.Fing
     @Override
     public void onException(boolean showWarningMessage) {
         if (showWarningMessage) {
-            onException(R.string.fingerprint_error);
+            onException(R.string.biometric_error);
         }
     }
 
@@ -845,7 +845,7 @@ public class PasswordFragment extends Fragment implements FingerPrintHelper.Fing
     @Override
     public void onKeyInvalidated() {
         clearStoredCredentials();
-        Toast.makeText(getContext(), R.string.fingerprint_key_invalidated, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), R.string.biometric_invalidated, Toast.LENGTH_LONG).show();
     }
 
     private boolean checkFilePermissions(Uri db, Uri keyfile) {

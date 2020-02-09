@@ -17,7 +17,7 @@
  *  along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.keepassdroid.fingerprint;
+package com.keepassdroid.biometric;
 
 import android.app.KeyguardManager;
 import android.content.Context;
@@ -43,7 +43,7 @@ import javax.crypto.spec.IvParameterSpec;
 
 import biz.source_code.base64Coder.Base64Coder;
 
-public class FingerPrintHelper {
+public class BiometricHelper {
 
     private static final String ALIAS_KEY = "example-key";
 
@@ -56,10 +56,10 @@ public class FingerPrintHelper {
 
     private boolean initOk = false;
     private boolean cryptoInitOk = false;
-    private FingerPrintCallback fingerPrintCallback;
+    private BiometricCallback biometricCallback;
     private CancellationSignal cancellationSignal;
 
-    public interface FingerPrintCallback {
+    public interface BiometricCallback {
 
         void handleEncryptedResult(String value, String ivSpec);
 
@@ -78,9 +78,9 @@ public class FingerPrintHelper {
         void onKeyInvalidated();
     }
 
-    public FingerPrintHelper(
+    public BiometricHelper(
             final Context context,
-            final FingerPrintCallback fingerPrintCallback) {
+            final BiometricCallback biometricCallback) {
 
         this.biometricManager = BiometricManager.from(context);
         this.keyguardManager = (KeyguardManager)context.getSystemService(Context.KEYGUARD_SERVICE);
@@ -90,7 +90,7 @@ public class FingerPrintHelper {
             setInitOk(false);
             return;
         }
-        this.fingerPrintCallback = fingerPrintCallback;
+        this.biometricCallback = biometricCallback;
 
         try {
             this.keyStore = KeyStore.getInstance("AndroidKeyStore");
@@ -105,7 +105,7 @@ public class FingerPrintHelper {
             setInitOk(true);
         } catch (final Exception e) {
             setInitOk(false);
-            fingerPrintCallback.onException();
+            biometricCallback.onException();
         }
     }
 
@@ -123,8 +123,8 @@ public class FingerPrintHelper {
         cryptoInitOk = false;
 
         if (!isFingerprintInitialized()) {
-            if (fingerPrintCallback != null) {
-                fingerPrintCallback.onException();
+            if (biometricCallback != null) {
+                biometricCallback.onException();
             }
             return;
         }
@@ -132,15 +132,15 @@ public class FingerPrintHelper {
             initEncryptKey(false);
         } catch (final InvalidKeyException invalidKeyException) {
             try {
-                fingerPrintCallback.onKeyInvalidated();
+                biometricCallback.onKeyInvalidated();
                 initEncryptKey(true);
             } catch (InvalidKeyException e) {
-                fingerPrintCallback.onInvalidKeyException();
+                biometricCallback.onInvalidKeyException();
             } catch (Exception e) {
-                fingerPrintCallback.onException();;
+                biometricCallback.onException();;
             }
         } catch (final Exception e) {
-            fingerPrintCallback.onException();
+            biometricCallback.onException();
         }
 
     }
@@ -159,8 +159,8 @@ public class FingerPrintHelper {
     public void encryptData(final String value) {
 
         if (!isFingerprintInitialized()) {
-            if (fingerPrintCallback != null) {
-                fingerPrintCallback.onException();
+            if (biometricCallback != null) {
+                biometricCallback.onException();
             }
             return;
         }
@@ -172,10 +172,10 @@ public class FingerPrintHelper {
             // passes updated iv spec on to callback so this can be stored for decryption
             final IvParameterSpec spec = cipher.getParameters().getParameterSpec(IvParameterSpec.class);
             final String ivSpecValue = new String(Base64Coder.encode(spec.getIV()));
-            fingerPrintCallback.handleEncryptedResult(encryptedValue, ivSpecValue);
+            biometricCallback.handleEncryptedResult(encryptedValue, ivSpecValue);
 
         } catch (final Exception e) {
-            fingerPrintCallback.onException();
+            biometricCallback.onException();
         }
 
     }
@@ -194,15 +194,15 @@ public class FingerPrintHelper {
             // Key was invalidated (maybe all registered fingerprints were changed)
             // Retry with new key
             try {
-                fingerPrintCallback.onKeyInvalidated();
+                biometricCallback.onKeyInvalidated();
                 initDecryptKey(ivSpecValue, true);
             } catch (InvalidKeyException e) {
-                fingerPrintCallback.onInvalidKeyException();
+                biometricCallback.onInvalidKeyException();
             } catch (Exception e) {
-                fingerPrintCallback.onException();
+                biometricCallback.onException();
             }
         } catch (final Exception e) {
-            fingerPrintCallback.onException();
+            biometricCallback.onException();
         }
     }
 
@@ -225,8 +225,8 @@ public class FingerPrintHelper {
     public void decryptData(final String encryptedValue) {
 
         if (!isFingerprintInitialized()) {
-            if (fingerPrintCallback != null) {
-                fingerPrintCallback.onException();
+            if (biometricCallback != null) {
+                biometricCallback.onException();
             }
             return;
         }
@@ -237,12 +237,12 @@ public class FingerPrintHelper {
             final String decryptedString = new String(decrypted);
 
             //final String encryptedString = Base64.encodeToString(encrypted, 0 /* flags */);
-            fingerPrintCallback.handleDecryptedResult(decryptedString);
+            biometricCallback.handleDecryptedResult(decryptedString);
 
         } catch (BadPaddingException | IllegalBlockSizeException e) {
-            fingerPrintCallback.onKeyInvalidated();
+            biometricCallback.onKeyInvalidated();
         } catch (final Exception e) {
-            fingerPrintCallback.onException();
+            biometricCallback.onException();
         }
     }
 
@@ -269,7 +269,7 @@ public class FingerPrintHelper {
                 keyGenerator.generateKey();
             }
         } catch (final Exception e) {
-            fingerPrintCallback.onException();
+            biometricCallback.onException();
         }
     }
 
