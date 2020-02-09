@@ -438,7 +438,7 @@ void *generate_key_material(void *arg) {
   return (void *)flip;
 }
 
-JNIEXPORT jbyteArray JNICALL Java_com_keepassdroid_crypto_finalkey_NativeFinalKey_nTransformMasterKey(JNIEnv *env, jobject this, jbyteArray seed, jbyteArray key, jlong rounds) {
+JNIEXPORT jbyteArray JNICALL Java_com_keepassdroid_crypto_finalkey_NativeFinalKey_nTransformMasterKey(JNIEnv *env, jclass this, jbyteArray seed, jbyteArray key, jlong rounds) {
   master_key mk;
   uint32_t flip;
   pthread_t t1, t2;
