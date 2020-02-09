@@ -206,6 +206,9 @@
     <string name="fingerprint_error">Probleme mit dem Fingerabdruck</string>
     <string name="store_with_fingerprint">Fingerabdruck für dieses Passwort verwenden</string>
     <string name="no_password_stored">Bisher kein Passwort gespeichert</string>
+    <string name="fingerprint_notrecognized">Fingerabdruck wurde nicht erkannt</string>
+    <string name="fingerprint_key_invalidated">Gespeichertes Passwort ist nicht mehr gültig. Bitte erneut eingeben</string>
+    <string name="no_external_permissions">Berechtigung um externen Speicher zu lesen und schreiben wurde verweigert</string>
 
     <string-array name="clipboard_timeout_options">
       <item>30 Sekunden</item>

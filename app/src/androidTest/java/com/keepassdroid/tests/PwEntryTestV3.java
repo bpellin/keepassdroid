@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,39 +19,48 @@
  */
 package com.keepassdroid.tests;
 
-import static org.junit.Assert.assertArrayEquals;
+import android.content.Context;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
-
-
-import android.test.AndroidTestCase;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.keepassdroid.database.PwEntryV3;
 import com.keepassdroid.tests.database.TestData;
 
-public class PwEntryTestV3 extends AndroidTestCase {
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
+public class PwEntryTestV3 {
 	PwEntryV3 mPE;
-	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		
-		mPE = (PwEntryV3) TestData.GetTest1(getContext()).entries.get(0);
+
+	@Before
+	public void setUp() throws Exception {
+		Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+		mPE = (PwEntryV3) TestData.GetTest1(ctx).entries.get(0);
 		
 	}
-	
+
+	@Test
 	public void testName() {
 		assertTrue("Name was " + mPE.title, mPE.title.equals("Amazon"));
 	}
-	
+
+	@Test
 	public void testPassword() throws UnsupportedEncodingException {
 		String sPass = "12345";
 		byte[] password = sPass.getBytes("UTF-8");
 		
 		assertArrayEquals(password, mPE.getPasswordBytes());
 	}
-	
+
+	@Test
 	public void testCreation() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(mPE.tCreation.getJDate());

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 Brian Pellin.
+ * Copyright 2010-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,10 +19,6 @@
  */
 package com.keepassdroid.tests;
 
-import java.util.UUID;
-
-import junit.framework.TestCase;
-
 import com.keepassdroid.database.PwEntryV4;
 import com.keepassdroid.database.PwGroupV4;
 import com.keepassdroid.database.PwIconCustom;
@@ -30,7 +26,12 @@ import com.keepassdroid.database.PwIconStandard;
 import com.keepassdroid.database.security.ProtectedBinary;
 import com.keepassdroid.database.security.ProtectedString;
 
-public class PwEntryTestV4 extends TestCase {
+import org.junit.Test;
+
+import java.util.UUID;
+
+public class PwEntryTestV4 {
+	@Test
 	public void testAssign() {
 		PwEntryV4 entry = new PwEntryV4();
 		
@@ -56,10 +57,6 @@ public class PwEntryTestV4 extends TestCase {
 
 		PwEntryV4 target = new PwEntryV4();
 		target.assign(entry);
-		
-		/* This test is not so useful now that I am not implementing value equality for Entries
-		assertTrue("Entries do not match.", entry.equals(target));
-		*/
 		
 	}
 

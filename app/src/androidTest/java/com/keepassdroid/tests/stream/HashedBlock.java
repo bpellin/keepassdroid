@@ -1,5 +1,5 @@
 /*
-* Copyright 2010-2013 Brian Pellin.
+* Copyright 2010-2020 Brian Pellin.
 *
 * This file is part of KeePassDroid.
 *
@@ -33,14 +33,18 @@ import junit.framework.TestCase;
 import com.keepassdroid.stream.HashedBlockInputStream;
 import com.keepassdroid.stream.HashedBlockOutputStream;
 
-public class HashedBlock extends TestCase {
+import org.junit.Test;
+
+public class HashedBlock {
 	
 	private static Random rand = new Random();
 
+	@Test
 	public void testBlockAligned() throws IOException {
 		testSize(1024, 1024);
 	}
-	
+
+	@Test
 	public void testOffset() throws IOException {
 		testSize(1500, 1024);
 	}
@@ -76,7 +80,8 @@ public class HashedBlock extends TestCase {
 		assertArrayEquals(orig, out);
 		
 	}
-	
+
+	@Test
 	public void testGZIPStream() throws IOException {
 		final int testLength = 32000;
 		

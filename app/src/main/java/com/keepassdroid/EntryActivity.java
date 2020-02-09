@@ -1,6 +1,6 @@
 /*
  * 
- * Copyright 2009-2015 Brian Pellin.
+ * Copyright 2009-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -41,7 +41,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -58,13 +58,13 @@ import android.widget.Toast;
 import com.android.keepass.KeePass;
 import com.android.keepass.R;
 import com.keepassdroid.app.App;
-import com.keepassdroid.compat.ActivityCompat;
 import com.keepassdroid.database.PwDatabase;
 import com.keepassdroid.database.PwEntry;
 import com.keepassdroid.database.PwEntryV4;
 import com.keepassdroid.database.exception.SamsungClipboardException;
 import com.keepassdroid.intents.Intents;
 import com.keepassdroid.utils.EmptyUtils;
+import com.keepassdroid.utils.NotificationUtil;
 import com.keepassdroid.utils.Types;
 import com.keepassdroid.utils.Util;
 
@@ -158,8 +158,8 @@ public class EntryActivity extends LockCloseHideActivity {
 		}
 		
 		// Refresh Menu contents in case onCreateMenuOptions was called before mEntry was set
-		ActivityCompat.invalidateOptionsMenu(this);
-		
+        this.invalidateOptionsMenu();
+
 		// Update last access time.
 		mEntry.touch(false, false);
 		
@@ -168,6 +168,7 @@ public class EntryActivity extends LockCloseHideActivity {
 		setupEditButtons();
 		
 		// Notification Manager
+        NotificationUtil.createChannels(getApplicationContext());
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		
 		if ( mEntry.getPassword().length() > 0 ) {
@@ -233,10 +234,8 @@ public class EntryActivity extends LockCloseHideActivity {
 		Intent intent = new Intent(intentText);
 		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-		// no longer supported for api level >22
-		// notify.setLatestEventInfo(this, getString(R.string.app_name), desc, pending);
-		// so instead using compat builder and create new notification
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
+				NotificationUtil.COPY_CHANNEL_ID);
 		Notification notify = builder.setContentIntent(pending).setContentText(desc).setContentTitle(getString(R.string.app_name))
 				.setSmallIcon(R.drawable.notify).setTicker(desc).setWhen(System.currentTimeMillis()).build();
 

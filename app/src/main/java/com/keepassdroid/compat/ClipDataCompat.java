@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Brian Pellin.
+ * Copyright 2016-2018 Brian Pellin.
  *
  * This file is part of KeePassDroid.
  *
@@ -19,6 +19,8 @@
  */
 package com.keepassdroid.compat;
 
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -39,7 +41,8 @@ public class ClipDataCompat {
 
     static {
         try {
-            clipData = Class.forName("android.content.ClipData");
+            /*
+            clipData = ClipData.class;
             getDescription = clipData.getMethod("getDescription", (Class[])null);
             getItemCount = clipData.getMethod("getItemCount", (Class[])null);
             getItemAt = clipData.getMethod("getItemAt", new Class[]{int.class});
@@ -48,6 +51,7 @@ public class ClipDataCompat {
 
             clipDataItem = Class.forName("android.content.ClipData$Item");
             getUri = clipDataItem.getMethod("getUri", (Class[])null);
+            */
 
             getClipDataFromIntent = Intent.class.getMethod("getClipData", (Class[])null);
 
@@ -61,17 +65,17 @@ public class ClipDataCompat {
         boolean clipDataSucceeded = false;
         if (initSucceded) {
             try {
-                Object clip = getClipDataFromIntent.invoke(i, null);
+                ClipData clip = (ClipData) getClipDataFromIntent.invoke(i, null);
 
                 if (clip != null) {
-                    Object clipDescription = getDescription.invoke(clip, null);
-                    CharSequence label = (CharSequence)getLabel.invoke(clipDescription, null);
+                    ClipDescription clipDescription = clip.getDescription();
+                    CharSequence label = clipDescription.getLabel();
                     if (label.equals(key)) {
-                        int itemCount = (int) getItemCount.invoke(clip, null);
+                        int itemCount = clip.getItemCount();
                         if (itemCount == 1) {
-                            Object clipItem = getItemAt.invoke(clip,0);
+                            ClipData.Item clipItem = clip.getItemAt(0);
                             if (clipItem != null) {
-                                return (Uri)getUri.invoke(clipItem, null);
+                                return clipItem.getUri();
                             }
                         }
                     }

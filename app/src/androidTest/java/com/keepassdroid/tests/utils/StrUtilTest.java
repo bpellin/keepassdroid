@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Brian Pellin.
+ * Copyright 2014-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,25 +19,30 @@
  */
 package com.keepassdroid.tests.utils;
 
-import java.util.Locale;
-
 import com.keepassdroid.utils.StrUtil;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class StrUtilTest extends TestCase {
+import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
+
+public class StrUtilTest {
     private final String text = "AbCdEfGhIj";
     private final String search = "BcDe";
     private final String badSearch = "Ed";
 
+    @Test
 	public void testIndexOfIgnoreCase1() {
 		assertEquals(1, StrUtil.indexOfIgnoreCase(text, search, Locale.ENGLISH));
 	}
 
+	@Test
 	public void testIndexOfIgnoreCase2() {
 		assertEquals(-1, StrUtil.indexOfIgnoreCase(text, search, Locale.ENGLISH), 2);
 	}
 
+	@Test
 	public void testIndexOfIgnoreCase3() {
 		assertEquals(-1, StrUtil.indexOfIgnoreCase(text, badSearch, Locale.ENGLISH));
 	}
@@ -47,10 +52,13 @@ public class StrUtilTest extends TestCase {
 	private final String repSearchBad = "CCCCCC";
 	private final String repNew = "12345";
 	private final String repResult = "12345testing12345";
+
+	@Test
 	public void testReplaceAllIgnoresCase1() {
 		assertEquals(repResult, StrUtil.replaceAllIgnoresCase(repText, repSearch, repNew, Locale.ENGLISH));
 	}
 
+	@Test
 	public void testReplaceAllIgnoresCase2() {
 		assertEquals(repText, StrUtil.replaceAllIgnoresCase(repText, repSearchBad, repNew, Locale.ENGLISH));
 	}

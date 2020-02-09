@@ -26,6 +26,7 @@
     <string name="issues">bit.ly/kpd_issues2</string>
     <string name="oi_filemanager_market">market://details?id=org.openintents.filemanager</string>
     <string name="oi_filemanager_web">https://openintents.googlecode.com/files/FileManager-2.0.2.apk</string>
+    <string name="patreon_url"><![CDATA[https://www.patreon.com/keepassdroid]]></string>
     <string name="twitter">twitter.com/bpellin</string>
     
     <!--  Password generator -->
@@ -59,6 +60,8 @@
     <bool name="omitbackup_default">true</bool>
     <bool name="recentfile_default">true</bool>
     <bool name="saf_default">false</bool>
+    <bool name="fingerprint_autoscan">true</bool>
+    <string name="fingerprint_autoscan_key">fingerprint_autoscan_key</string>
     
     <string name="clipboard_timeout_default">300000</string>
     <string-array name="clipboard_timeout_values">

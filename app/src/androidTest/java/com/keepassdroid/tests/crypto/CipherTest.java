@@ -1,5 +1,5 @@
 /*
-* Copyright 2013-2017 Brian Pellin.
+* Copyright 2013-2020 Brian Pellin.
 *
 * This file is part of KeePassDroid.
 *
@@ -19,7 +19,13 @@
 */
 package com.keepassdroid.tests.crypto;
 
-import static org.junit.Assert.assertArrayEquals;
+import com.keepassdroid.crypto.CipherFactory;
+import com.keepassdroid.crypto.engine.AesEngine;
+import com.keepassdroid.crypto.engine.CipherEngine;
+import com.keepassdroid.stream.BetterCipherInputStream;
+import com.keepassdroid.stream.LEDataInputStream;
+
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,17 +41,12 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertArrayEquals;
 
-import com.keepassdroid.crypto.CipherFactory;
-import com.keepassdroid.crypto.engine.AesEngine;
-import com.keepassdroid.crypto.engine.CipherEngine;
-import com.keepassdroid.stream.BetterCipherInputStream;
-import com.keepassdroid.stream.LEDataInputStream;
-
-public class CipherTest extends TestCase {
+public class CipherTest {
 	private Random rand = new Random();
-	
+
+	@Test
 	public void testCipherFactory() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		byte[] key = new byte[32];
 		byte[] iv = new byte[16];
@@ -66,6 +67,7 @@ public class CipherTest extends TestCase {
 		assertArrayEquals("Encryption and decryption failed", plaintext, decrypttext);
 	}
 
+	@Test
 	public void testCipherStreams() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException {
 		final int MESSAGE_LENGTH = 1024;
 		

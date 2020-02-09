@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2016 Brian Pellin.
+ * Copyright 2010-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,20 +19,26 @@
  */
 package com.keepassdroid.tests.database;
 
-import java.io.InputStream;
-
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.test.AndroidTestCase;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.keepassdroid.database.PwDatabaseV3;
 import com.keepassdroid.database.PwEncryptionAlgorithm;
 import com.keepassdroid.database.load.ImporterV3;
 
-public class Kdb3Twofish extends AndroidTestCase {
+import org.junit.Test;
+
+import java.io.InputStream;
+
+import static junit.framework.TestCase.assertTrue;
+
+public class Kdb3Twofish {
+    @Test
 	public void testReadTwofish() throws Exception {
-		Context ctx = getContext();
-		
+		Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
 		AssetManager am = ctx.getAssets();
 		InputStream is = am.open("twofish.kdb", AssetManager.ACCESS_STREAMING);
 		

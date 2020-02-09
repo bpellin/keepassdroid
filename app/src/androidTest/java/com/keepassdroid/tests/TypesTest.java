@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,34 +19,39 @@
  */
 package com.keepassdroid.tests;
 
-import static org.junit.Assert.assertArrayEquals;
+import com.keepassdroid.database.PwDate;
+import com.keepassdroid.stream.LEDataInputStream;
+import com.keepassdroid.stream.LEDataOutputStream;
+import com.keepassdroid.utils.Types;
+
+import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.UUID;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
-import com.keepassdroid.database.PwDate;
-import com.keepassdroid.stream.LEDataInputStream;
-import com.keepassdroid.stream.LEDataOutputStream;
-import com.keepassdroid.utils.Types;
+public class TypesTest {
 
-public class TypesTest extends TestCase {
-
+    @Test
 	public void testReadWriteLongZero() {
 		testReadWriteLong((byte) 0);
 	}
-	
+
+	@Test
 	public void testReadWriteLongMax() {
 		testReadWriteLong(Byte.MAX_VALUE);
 	}
-	
+
+	@Test
 	public void testReadWriteLongMin() {
 		testReadWriteLong(Byte.MIN_VALUE);
 	}
-	
+
+	@Test
 	public void testReadWriteLongRnd() {
 		Random rnd = new Random();
 		byte[] buf = new byte[1];
@@ -67,15 +72,18 @@ public class TypesTest extends TestCase {
 		assertArrayEquals(orig, dest);
 
 	}
-	
+
+	@Test
 	public void testReadWriteIntZero() {
 		testReadWriteInt((byte) 0);
 	}
-	
+
+	@Test
 	public void testReadWriteIntMin() {
 		testReadWriteInt(Byte.MIN_VALUE);
 	}
-	
+
+	@Test
 	public void testReadWriteIntMax() {
 		testReadWriteInt(Byte.MAX_VALUE);
 	}
@@ -103,7 +111,8 @@ public class TypesTest extends TestCase {
 			buf[i] = value;
 		}
 	}
-	
+
+	@Test
 	public void testReadWriteShortOne() {
 		byte[] orig = new byte[2];
 		byte[] dest = new byte[2];
@@ -117,11 +126,13 @@ public class TypesTest extends TestCase {
 		assertArrayEquals(orig, dest);
 		
 	}
-	
+
+	@Test
 	public void testReadWriteShortMin() {
 		testReadWriteShort(Byte.MIN_VALUE);
 	}
-	
+
+	@Test
 	public void testReadWriteShortMax() {
 		testReadWriteShort(Byte.MAX_VALUE);
 	}
@@ -139,14 +150,17 @@ public class TypesTest extends TestCase {
 
 	}
 
+	@Test
 	public void testReadWriteByteZero() {
 		testReadWriteByte((byte) 0);
 	}
-	
+
+	@Test
 	public void testReadWriteByteMin() {
 		testReadWriteByte(Byte.MIN_VALUE);
 	}
-	
+
+	@Test
 	public void testReadWriteByteMax() {
 		testReadWriteShort(Byte.MAX_VALUE);
 	}
@@ -163,7 +177,8 @@ public class TypesTest extends TestCase {
 		assertArrayEquals(orig, dest);
 		
 	}
-	
+
+	@Test
 	public void testDate() {
 		Calendar cal = Calendar.getInstance();
 		
@@ -181,7 +196,8 @@ public class TypesTest extends TestCase {
 		assertEquals("Minute mismatch: ", 4, actual.get(Calendar.MINUTE));
 		assertEquals("Second mismatch: ", 5, actual.get(Calendar.SECOND));
 	}
-	
+
+	@Test
 	public void testUUID() {
 		Random rnd = new Random();
 		byte[] bUUID = new byte[16];
@@ -193,6 +209,7 @@ public class TypesTest extends TestCase {
 		assertArrayEquals("UUID match failed", bUUID, eUUID);
 	}
 
+	@Test
 	public void testULongMax() throws Exception {
 		byte[] ulongBytes = new byte[8];
 		for (int i = 0; i < ulongBytes.length; i++) {

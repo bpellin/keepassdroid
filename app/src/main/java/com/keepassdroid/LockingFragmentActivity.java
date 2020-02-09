@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -17,18 +17,25 @@
  *  along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.keepassdroid.tests;
+package com.keepassdroid;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import androidx.fragment.app.FragmentActivity;
 
-import android.test.suitebuilder.TestSuiteBuilder;
+import com.keepassdroid.timeout.TimeoutHelper;
 
-public class AllTests extends TestSuite {
+public abstract class LockingFragmentActivity extends FragmentActivity {
 
-    public static Test suite() {
-        return new TestSuiteBuilder(AllTests.class)
-                .includeAllPackagesUnderHere()
-                .build();
-    }
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		TimeoutHelper.pause(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		TimeoutHelper.resume(this);
+	}
 }

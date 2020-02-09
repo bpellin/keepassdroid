@@ -19,12 +19,15 @@
  */
 package com.keepassdroid.database;
 
-import java.io.BufferedInputStream;
+import com.keepassdroid.crypto.finalkey.FinalKey;
+import com.keepassdroid.crypto.finalkey.FinalKeyFactory;
+import com.keepassdroid.database.exception.InvalidKeyFileException;
+import com.keepassdroid.database.exception.KeyFileEmptyException;
+import com.keepassdroid.stream.NullOutputStream;
+import com.keepassdroid.utils.Util;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -35,15 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import android.os.DropBoxManager.Entry;
-
-import com.keepassdroid.crypto.finalkey.FinalKey;
-import com.keepassdroid.crypto.finalkey.FinalKeyFactory;
-import com.keepassdroid.database.exception.InvalidKeyFileException;
-import com.keepassdroid.database.exception.KeyFileEmptyException;
-import com.keepassdroid.stream.NullOutputStream;
-import com.keepassdroid.utils.Util;
 
 public abstract class PwDatabase {
 
@@ -377,5 +371,7 @@ public abstract class PwDatabase {
      * Initialize a newly created database
      */
     public abstract void initNew(String dbPath);
+
+    public abstract void clearCache();
 
 }

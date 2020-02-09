@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -20,23 +20,31 @@
 package com.keepassdroid.tests;
 
 
-import android.test.AndroidTestCase;
+import android.content.Context;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.keepassdroid.database.PwGroupV3;
 import com.keepassdroid.tests.database.TestData;
 
-public class PwGroupTest extends AndroidTestCase {
+import org.junit.Before;
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertTrue;
+
+public class PwGroupTest {
 
 	PwGroupV3 mPG;
-	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		
-		mPG = (PwGroupV3) TestData.GetTest1(getContext()).getGroups().get(0);
+
+	@Before
+	public void setUp() throws Exception {
+
+		Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+		mPG = (PwGroupV3) TestData.GetTest1(ctx).getGroups().get(0);
 		
 	}
-	
+
+	@Test
 	public void testGroupName() {
 		 assertTrue("Name was " + mPG.name, mPG.name.equals("Internet"));
 	}

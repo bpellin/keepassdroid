@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Brian Pellin.
+ * Copyright 2010-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,11 +19,14 @@
  */
 package com.keepassdroid.tests;
 
-import junit.framework.TestCase;
-
 import com.keepassdroid.database.PwDate;
 
-public class PwDateTest extends TestCase {
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertTrue;
+
+public class PwDateTest {
+    @Test
 	public void testDate() {
 		PwDate jDate = new PwDate(System.currentTimeMillis());
 		

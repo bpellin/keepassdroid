@@ -1,5 +1,5 @@
 /*
-* Copyright 2009 Brian Pellin.
+* Copyright 2009-2020 Brian Pellin.
 *
 * This file is part of KeePassDroid.
 *
@@ -19,7 +19,9 @@
 */
 package com.keepassdroid.tests.crypto;
 
-import static org.junit.Assert.assertArrayEquals;
+import com.keepassdroid.crypto.CipherFactory;
+
+import org.junit.Test;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -33,14 +35,13 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertArrayEquals;
 
-import com.keepassdroid.crypto.CipherFactory;
-
-public class AESTest extends TestCase {
+public class AESTest {
 	
 	private Random mRand = new Random();
-	
+
+	@Test
 	public void testEncrypt() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
 		// Test above below and at the blocksize
 		testFinal(15);

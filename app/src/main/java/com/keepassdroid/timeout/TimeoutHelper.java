@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Brian Pellin.
+ * Copyright 2012-2018 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -20,13 +20,13 @@
 package com.keepassdroid.timeout;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.android.keepass.KeePass;
 import com.android.keepass.R;
 import com.keepassdroid.app.App;
-import com.keepassdroid.compat.EditorCompat;
 import com.keepassdroid.timers.Timeout;
 
 public class TimeoutHelper {
@@ -40,15 +40,28 @@ public class TimeoutHelper {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(act);
 		SharedPreferences.Editor edit = prefs.edit();
 		edit.putLong(act.getString(R.string.timeout_key), time);
-		
-		EditorCompat.apply(edit);
-		
+
+		edit.apply();
+
 		if ( App.getDB().Loaded() ) {
 	        Timeout.start(act);
 		}
 
 	}
-	
+
+	public static long getTimeoutLength(Context ctx) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		String sTimeout = prefs.getString(ctx.getString(R.string.app_timeout_key), ctx.getString(R.string.clipboard_timeout_default));
+		long timeout;
+		try {
+			timeout = Long.parseLong(sTimeout);
+		} catch (NumberFormatException e) {
+			timeout = DEFAULT_TIMEOUT;
+		}
+
+		return timeout;
+	}
+
 	public static void resume(Activity act) {
 		if ( App.getDB().Loaded() ) {
 	        Timeout.cancel(act);
@@ -66,14 +79,7 @@ public class TimeoutHelper {
 		}
 		
 		
-		String sTimeout = prefs.getString(act.getString(R.string.app_timeout_key), act.getString(R.string.clipboard_timeout_default));
-		long timeout;
-		try {
-			timeout = Long.parseLong(sTimeout);
-		} catch (NumberFormatException e) {
-			timeout = DEFAULT_TIMEOUT;
-		}
-		
+		long timeout = getTimeoutLength(act);
 		// We are set to never timeout
 		if (timeout == -1) {
 			return;

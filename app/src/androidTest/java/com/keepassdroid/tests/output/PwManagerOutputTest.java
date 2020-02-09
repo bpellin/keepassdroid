@@ -1,5 +1,5 @@
 /*
-* Copyright 2009-2014 Brian Pellin.
+* Copyright 2009-2019 Brian Pellin.
 *
 * This file is part of KeePassDroid.
 *
@@ -19,6 +19,8 @@
 */
 package com.keepassdroid.tests.output;
  
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
 
 import java.io.ByteArrayOutputStream;
@@ -29,8 +31,10 @@ import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import android.content.Context;
 import android.content.res.AssetManager;
-import android.test.AndroidTestCase;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.keepassdroid.database.PwDatabaseV3Debug;
 import com.keepassdroid.database.PwDbHeader;
@@ -42,17 +46,20 @@ import com.keepassdroid.database.save.PwDbV3OutputDebug;
 import com.keepassdroid.stream.NullOutputStream;
 import com.keepassdroid.tests.TestUtil;
 import com.keepassdroid.tests.database.TestData;
- 
-public class PwManagerOutputTest extends AndroidTestCase {
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class PwManagerOutputTest  {
   PwDatabaseV3Debug mPM;
-  
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    
-    mPM = TestData.GetTest1(getContext());
+
+  @Before
+  public void setUp() throws Exception {
+    Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    mPM = TestData.GetTest1(ctx);
   }
-  
+
+  @Test
   public void testPlainContent() throws IOException, PwDbOutputException {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
  
@@ -63,7 +70,8 @@ public class PwManagerOutputTest extends AndroidTestCase {
     assertArrayEquals("Group and entry output doesn't match.", mPM.postHeader, bos.toByteArray());
  
   }
- 
+
+  @Test
   public void testChecksum() throws NoSuchAlgorithmException, IOException, PwDbOutputException {
     //FileOutputStream fos = new FileOutputStream("/dev/null");
 	NullOutputStream nos = new NullOutputStream();
@@ -79,7 +87,7 @@ public class PwManagerOutputTest extends AndroidTestCase {
     assertTrue("No output", digest.length > 0);
     assertArrayEquals("Hash of groups and entries failed.", mPM.dbHeader.contentsHash, digest);
   }
- 
+
   private void assertHeadersEquals(PwDbHeaderV3 expected, PwDbHeaderV3 actual) {
 	  assertEquals("Flags unequal", expected.flags, actual.flags);
 	  assertEquals("Entries unequal", expected.numEntries, actual.numEntries);
@@ -93,7 +101,8 @@ public class PwManagerOutputTest extends AndroidTestCase {
 	  assertArrayEquals("Seed unequal", expected.masterSeed, actual.masterSeed);
 	  assertArrayEquals("Seed2 unequal", expected.transformSeed, actual.transformSeed);
   }
-  
+
+  @Test
   public void testHeader() throws PwDbOutputException, IOException {
 	ByteArrayOutputStream bActual = new ByteArrayOutputStream();
     PwDbV3Output pActual = new PwDbV3OutputDebug(mPM, bActual, true);
@@ -107,7 +116,8 @@ public class PwManagerOutputTest extends AndroidTestCase {
     assertTrue("No output", bActual.toByteArray().length > 0);
     assertArrayEquals("Header does not match.", bExpected.toByteArray(), bActual.toByteArray()); 
   }
-  
+
+  @Test
   public void testFinalKey() throws PwDbOutputException {
 	ByteArrayOutputStream bActual = new ByteArrayOutputStream();
     PwDbV3Output pActual = new PwDbV3OutputDebug(mPM, bActual, true);
@@ -115,11 +125,13 @@ public class PwManagerOutputTest extends AndroidTestCase {
     byte[] finalKey = pActual.getFinalKey(hActual);
     
     assertArrayEquals("Keys mismatched", mPM.finalKey, finalKey);
-	  
+
   }
-  
+
+  @Test
   public void testFullWrite() throws IOException, PwDbOutputException  {
-	AssetManager am = getContext().getAssets();
+    Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+	AssetManager am = ctx.getAssets();
 	InputStream is = am.open("test1.kdb");
 
 	// Pull file into byte array (for streaming fun)
@@ -131,13 +143,13 @@ public class PwManagerOutputTest extends AndroidTestCase {
 		}
 		bExpected.write(data);
 	}
-	
+
 	ByteArrayOutputStream bActual = new ByteArrayOutputStream();
 	PwDbV3Output pActual = new PwDbV3OutputDebug(mPM, bActual, true);
 	pActual.output();
 	//pActual.close();
 
-	FileOutputStream fos = new FileOutputStream(TestUtil.getSdPath("test1_out.kdb"));
+	FileOutputStream fos = new FileOutputStream(TestUtil.getAppPath(ctx,"test1_out.kdb"));
 	fos.write(bActual.toByteArray());
 	fos.close();
 	assertArrayEquals("Databases do not match.", bExpected.toByteArray(), bActual.toByteArray());

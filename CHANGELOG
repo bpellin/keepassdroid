@@ -1,3 +1,44 @@
+KeePassDroid (2.5.0)
+ * Switch from fingerprint to biometric API
+
+KeePassDroid (2.4.2)
+ * Bump android sdk version
+ * Update Italian translations
+
+KeePassDroid (2.4.1)
+ * Fix notification timeout
+ * Updated Russian translatons
+
+KeePassDroid (2.4)
+ * New fingerprint setting
+ * Better handling for large attachments
+ * Bug fixes
+ * Updated Dutch translations
+ * Updated German translations
+ * Updated French translations
+ * Updated Russian translations
+ * Updated Polish translations
+
+KeePassDroid (2.3.4)
+ * Fix crash
+
+KeePassDroid (2.3.3)
+ * Merge 2.3 branch
+
+KeePassDroid (2.3.2)
+ * Bug fixes
+
+KeePassDroid (2.3.1)
+ * Fix notifications
+ * Add adaptive icon
+
+KeePassDroid (2.3)
+ * Drop support for pre-Ice Cream Sandwhich devices
+ * Implement runtime permissions Marshamllow and later
+
+KeePassDroid (2.2.2.5)
+ * Remove donate link from Play Store version
+
 KeePassDroid (2.2.2.4)
  * Handle fingerprint key invalidation
 
