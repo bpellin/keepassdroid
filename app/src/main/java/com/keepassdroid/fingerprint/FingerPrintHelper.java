@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Hans Cappelle
+ * Copyright 2017-2020 Hans Cappelle, Brian Pellin
  *
  * This file is part of KeePassDroid.
  *
@@ -21,10 +21,11 @@ package com.keepassdroid.fingerprint;
 
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.os.Build;
+
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
 import androidx.core.os.CancellationSignal;
 import android.security.keystore.KeyProperties;
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 
 import com.keepassdroid.compat.KeyGenParameterSpecCompat;
 import com.keepassdroid.compat.KeyguardManagerCompat;
@@ -46,56 +47,17 @@ public class FingerPrintHelper {
 
     private static final String ALIAS_KEY = "example-key";
 
-    private FingerprintManagerCompat fingerprintManager;
+    private BiometricManager biometricManager;
     private KeyStore keyStore = null;
     private KeyGenerator keyGenerator = null;
     private Cipher cipher = null;
     private KeyguardManager keyguardManager = null;
-    private FingerprintManagerCompat.CryptoObject cryptoObject = null;
+    private BiometricPrompt.CryptoObject cryptoObject = null;
 
     private boolean initOk = false;
     private boolean cryptoInitOk = false;
     private FingerPrintCallback fingerPrintCallback;
     private CancellationSignal cancellationSignal;
-    private FingerprintManagerCompat.AuthenticationCallback authenticationCallback;
-
-    public void setAuthenticationCallback(final FingerprintManagerCompat.AuthenticationCallback authenticationCallback) {
-        this.authenticationCallback = authenticationCallback;
-    }
-
-    public void startListening() {
-        // no need to start listening when not initialised
-        if (!isFingerprintInitialized()) {
-            if (fingerPrintCallback != null) {
-                fingerPrintCallback.onException();
-            }
-            return;
-        }
-
-        if (!cryptoInitOk) {
-            // Crypto key didn't initialize correctly, don't start listening
-            return;
-        }
-
-        // starts listening for fingerprints with the initialised crypto object
-        cancellationSignal = new CancellationSignal();
-        fingerprintManager.authenticate(
-                cryptoObject,
-                0 /* flags */,
-                cancellationSignal,
-                authenticationCallback,
-                null);
-    }
-
-    public void stopListening() {
-        if (!isFingerprintInitialized()) {
-            return;
-        }
-        if (cancellationSignal != null) {
-            cancellationSignal.cancel();
-            cancellationSignal = null;
-        }
-    }
 
     public interface FingerPrintCallback {
 
@@ -120,53 +82,58 @@ public class FingerPrintHelper {
             final Context context,
             final FingerPrintCallback fingerPrintCallback) {
 
-        if (!isFingerprintSupported()) {
+        this.biometricManager = BiometricManager.from(context);
+        this.keyguardManager = (KeyguardManager)context.getSystemService(Context.KEYGUARD_SERVICE);
+
+        if (!isBiometricSupported()) {
             // really not much to do when no fingerprint support found
             setInitOk(false);
             return;
         }
-        this.fingerprintManager = FingerprintManagerCompat.from(context);
-        this.keyguardManager = (KeyguardManager)context.getSystemService(Context.KEYGUARD_SERVICE);
         this.fingerPrintCallback = fingerPrintCallback;
 
-        if (hasEnrolledFingerprints()) {
-            try {
-                this.keyStore = KeyStore.getInstance("AndroidKeyStore");
-                this.keyGenerator = KeyGenerator.getInstance(
-                        KeyProperties.KEY_ALGORITHM_AES,
-                        "AndroidKeyStore");
-                this.cipher = Cipher.getInstance(
-                        KeyProperties.KEY_ALGORITHM_AES + "/"
-                                + KeyProperties.BLOCK_MODE_CBC + "/"
-                                + KeyProperties.ENCRYPTION_PADDING_PKCS7);
-                this.cryptoObject = new FingerprintManagerCompat.CryptoObject(cipher);
-                setInitOk(true);
-            } catch (final Exception e) {
-                setInitOk(false);
-                fingerPrintCallback.onException();
-            }
+        try {
+            this.keyStore = KeyStore.getInstance("AndroidKeyStore");
+            this.keyGenerator = KeyGenerator.getInstance(
+                    KeyProperties.KEY_ALGORITHM_AES,
+                    "AndroidKeyStore");
+            this.cipher = Cipher.getInstance(
+                    KeyProperties.KEY_ALGORITHM_AES + "/"
+                            + KeyProperties.BLOCK_MODE_CBC + "/"
+                            + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+            this.cryptoObject = new BiometricPrompt.CryptoObject(cipher);
+            setInitOk(true);
+        } catch (final Exception e) {
+            setInitOk(false);
+            fingerPrintCallback.onException();
         }
     }
 
-    public boolean isFingerprintInitialized() {
-        return hasEnrolledFingerprints() && initOk;
+    private boolean isBiometricSupported() {
+        int auth = biometricManager.canAuthenticate();
+        return (auth == BiometricManager.BIOMETRIC_SUCCESS || auth == BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED)
+                && KeyguardManagerCompat.isKeyguardSecure(keyguardManager);
     }
 
-    public void initEncryptData(final boolean startListening) {
+    public boolean isFingerprintInitialized() {
+        return initOk;
+    }
+
+    public void initEncryptData() {
         cryptoInitOk = false;
 
         if (!isFingerprintInitialized()) {
-            if (fingerPrintCallback != null && hasEnrolledFingerprints()) {
+            if (fingerPrintCallback != null) {
                 fingerPrintCallback.onException();
             }
             return;
         }
         try {
-            initEncryptKey(false, startListening);
+            initEncryptKey(false);
         } catch (final InvalidKeyException invalidKeyException) {
             try {
                 fingerPrintCallback.onKeyInvalidated();
-                initEncryptKey(true, startListening);
+                initEncryptKey(true);
             } catch (InvalidKeyException e) {
                 fingerPrintCallback.onInvalidKeyException();
             } catch (Exception e) {
@@ -179,8 +146,7 @@ public class FingerPrintHelper {
     }
 
     private void initEncryptKey(
-            final boolean deleteExistingKey,
-            final boolean startListening) throws Exception {
+            final boolean deleteExistingKey) throws Exception {
 
         createNewKeyIfNeeded(deleteExistingKey);
         keyStore.load(null);
@@ -188,14 +154,12 @@ public class FingerPrintHelper {
         cipher.init(Cipher.ENCRYPT_MODE, key);
         cryptoInitOk = true;
 
-        stopListening();
-        if( startListening ) startListening();
     }
 
     public void encryptData(final String value) {
 
         if (!isFingerprintInitialized()) {
-            if (fingerPrintCallback != null && hasEnrolledFingerprints()) {
+            if (fingerPrintCallback != null) {
                 fingerPrintCallback.onException();
             }
             return;
@@ -216,27 +180,22 @@ public class FingerPrintHelper {
 
     }
 
+    public Cipher getCipher() {
+        return cipher;
+    }
+
     public void initDecryptData(
-            final String ivSpecValue,
-            final boolean startListening) {
+            final String ivSpecValue) {
 
         cryptoInitOk = false;
-        if (!isFingerprintInitialized()) {
-            if (fingerPrintCallback != null) {
-                fingerPrintCallback.onException(false);
-            }
-            return;
-        } else if (!hasEnrolledFingerprints()) {
-            return;
-        }
         try {
-            initDecryptKey(ivSpecValue,false, startListening);
+            initDecryptKey(ivSpecValue,false);
         } catch (final InvalidKeyException invalidKeyException) {
             // Key was invalidated (maybe all registered fingerprints were changed)
             // Retry with new key
             try {
                 fingerPrintCallback.onKeyInvalidated();
-                initDecryptKey(ivSpecValue, true, startListening);
+                initDecryptKey(ivSpecValue, true);
             } catch (InvalidKeyException e) {
                 fingerPrintCallback.onInvalidKeyException();
             } catch (Exception e) {
@@ -249,8 +208,7 @@ public class FingerPrintHelper {
 
     private void initDecryptKey(
             final String ivSpecValue,
-            final boolean deleteExistingKey,
-            final boolean startListening) throws  Exception {
+            final boolean deleteExistingKey) throws  Exception {
 
         createNewKeyIfNeeded(deleteExistingKey);
         keyStore.load(null);
@@ -262,8 +220,6 @@ public class FingerPrintHelper {
         cipher.init(Cipher.DECRYPT_MODE, key, spec);
         cryptoInitOk = true;
 
-        stopListening();
-        if( startListening ) startListening();
     }
 
     public void decryptData(final String encryptedValue) {
@@ -291,9 +247,6 @@ public class FingerPrintHelper {
     }
 
     private void createNewKeyIfNeeded(final boolean allowDeleteExisting) {
-        if (!isFingerprintInitialized()) {
-            return;
-        }
         try {
             keyStore.load(null);
             if (allowDeleteExisting
@@ -320,28 +273,8 @@ public class FingerPrintHelper {
         }
     }
 
-    public boolean isHardwareDetected() {
-        return isFingerprintSupported()
-                && fingerprintManager != null
-                && fingerprintManager.isHardwareDetected();
-    }
-
-    public boolean hasEnrolledFingerprints() {
-        // fingerprint hardware supported and api level OK
-        return isHardwareDetected()
-                // fingerprints enrolled
-                && fingerprintManager != null
-                && fingerprintManager.hasEnrolledFingerprints()
-                // and lockscreen configured
-                && KeyguardManagerCompat.isKeyguardSecure(keyguardManager);
-    }
-
     void setInitOk(final boolean initOk) {
         this.initOk = initOk;
-    }
-
-    public boolean isFingerprintSupported() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
 }

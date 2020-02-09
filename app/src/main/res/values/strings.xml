@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009-2019 Brian Pellin.
+ Copyright 2009-2020 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -38,6 +38,13 @@
     <string name="application_settings">Application settings</string>
     <string name="beta_dontask">Don\'t show again</string>
     <string name="beta_warning">Support for saving changes to kdbx files is EXPERIMENTAL. Make backups of your database before saving changes.</string>
+    <string name="biometric_auth_failed">Failed to authenticate biometric</string>
+    <string name="biometric_auth_failed_store">Failed to authenticate, password was not stored</string>
+    <string name="biometric_auth_error">Authentication error</string>
+    <string name="biometric_auth_to_open">Authenticate to open database</string>
+    <string name="biometric_auth_to_store">Authenticate to store password</string>
+    <string name="biometric_open_db">Open Database</string>
+    <string name="biometric_save_password">Save Password</string>
     <string name="brackets">Brackets</string>
     <string name="browser_intall_text">File browsing requires the Open Intents File Manager, click below to install it. Due to some quirks in the file manager, browsing may not work correctly, the first time you browse.</string>
     <string name="building_search_idx">Building search index&#8230;</string>
