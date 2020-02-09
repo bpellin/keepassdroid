@@ -23,15 +23,12 @@
         android:title="@string/menu_patreon"
         app:showAsAction="ifRoom" />
     <item android:id="@+id/menu_donate"
-        android:icon="@android:drawable/ic_menu_share"
         android:title="@string/menu_donate"
-    />
-    <item android:id="@+id/menu_app_settings"
-        android:icon="@android:drawable/ic_menu_preferences"
-        android:title="@string/menu_app_settings"
-    />
+        app:showAsAction="ifRoom" />
     <item android:id="@+id/menu_about"
-        android:icon="@android:drawable/ic_menu_help"
         android:title="@string/menu_about"
-    />
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/menu_app_settings"
+        android:title="@string/menu_app_settings"
+        app:showAsAction="ifRoom" />
 </menu>

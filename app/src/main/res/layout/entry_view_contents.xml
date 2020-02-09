@@ -29,9 +29,10 @@
 	  android:text="@string/entry_user_name"
 	  style="@style/WhiteOnDarkSmall"
 	/>
-	<com.keepassdroid.view.TextViewSelect android:id="@+id/entry_user_name" 
+	<TextView android:id="@+id/entry_user_name" 
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
+	  android:textIsSelectable="true"
 	  style="@style/EntryItem"
 	/>
 	<View style="@style/Divider" />
@@ -42,10 +43,11 @@
 	  android:text="@string/entry_url" 
 	  style="@style/WhiteOnDarkSmall"
 	/>
-	<com.keepassdroid.view.TextViewSelect android:id="@+id/entry_url" 
+	<TextView android:id="@+id/entry_url" 
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
 	  android:autoLink="all"
+	  android:textIsSelectable="true"
 	  style="@style/EntryItem"
 	/>
 	<View style="@style/Divider" />
@@ -60,6 +62,7 @@
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
 	  android:inputType="textPassword"
+	  android:textIsSelectable="true"
 	  android:typeface="monospace"
 	  style="@style/EntryItem"
 	/>
@@ -69,12 +72,12 @@
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content" 
 	  android:text="@string/entry_comment"
-	  android:autoLink="all"
 	  style="@style/WhiteOnDarkSmall"
 	/>
-	<com.keepassdroid.view.TextViewSelect android:id="@+id/entry_comment" 
+	<TextView android:id="@+id/entry_comment" 
       android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
+	  android:textIsSelectable="true"
 	  style="@style/EntryItem"
 	/>
 	<View style="@style/Divider" />
