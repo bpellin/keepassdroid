@@ -1,3 +1,6 @@
+KeePassDroid (2.5.0)
+ * Switch from fingerprint to biometric API
+
 KeePassDroid (2.4.2)
  * Bump android sdk version
  * Update Italian translations
