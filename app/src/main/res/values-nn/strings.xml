@@ -27,7 +27,6 @@
     <string name="add_group">Legg til gruppe</string>
     <string name="add_group_title">Legg til gruppe</string>
     <string name="algorithm">Algoritme</string>
-    <string name="algorithm_colon">Algoritme:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Programtidsavbrot</string>
     <string name="app_timeout_summary">Tid før databasen blir låst når programmet ikkje er i bruk.</string>
@@ -35,7 +34,6 @@
     <string name="application_settings">Programinnstillingar</string>
     <string name="brackets">Parentesar</string>
     <string name="browser_intall_text">Du må ha Open Intents filbehandlar for å kunna bla i filer. Klikk nedanfor for å installera han. Grunna nokre småfeil i programmet kan det vera at det ikkje fungerer heilt den første gongen du bruker det.</string>
-    <string name="building_search_idx">Byggjer søkjeindeksen …</string>
     <string name="cancel">Avbryt</string>
     <string name="ClearClipboard">Utklippstavla er tømt.</string>
     <string name="clipboard_timeout">Tidsavbrot på utklippstavla</string>
@@ -43,11 +41,8 @@
     <string name="copy_username">Kopier brukarnamnet til utklippstavla</string>
     <string name="copy_password">Kopier passordet til utklippstavla</string>
     <string name="creating_db_key">Lagar databasenøkkelen …</string>
-    <string name="current_group">Gjeldande gruppe: </string>
-    <string name="current_group_root">Gjeldande gruppe: Rot</string>
     <string name="database">Database</string>
     <string name="decrypting_db">Dekrypterer databasen …</string>
-    <string name="decrypting_entry">Dekrypterer oppføringa</string>
     <string name="default_checkbox">Standarddatabasen</string>
     <string name="digits">Tal</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 Brian Pellin kjem med INGEN SOM HELST GARANTI. Dette er eit fritt program. Du er velkomen til å redistribuera det i samsvar med vilkåra til GPL utgåve 2 eller nyare.</string>
@@ -69,10 +64,8 @@
     <string name="entry_user_name">Brukaramn: </string>
     <string name="error_arc4">Kan ikkje bruka ArcFour dataflytkryptering.</string>
     <string name="error_can_not_handle_uri">KeePassDroid kan ikkje bruka denne ressursen.</string>
-    <string name="error_could_not_create_group">Klarte ikkje å laga gruppa.</string>
     <string name="error_could_not_create_parent">Klarte ikkje å laga foreldrekatalogen.</string>
     <string name="error_database_exists">Denne fila finst allereie.</string>
-    <string name="error_database_settings">Klarte ikkje å bestemma databaseinnstillingane.</string>
     <string name="error_failed_to_launch_link">Klarte ikkje å lasta lenkja.</string>
     <string name="error_filename_required">Treng eit filnamn.</string>
     <string name="error_file_not_create">Klarte ikkje å laga fila:</string>
@@ -111,7 +104,6 @@
     <string name="list_size_summary">Tekststorleik i gruppelista</string>
     <string name="loading_database">Lastar databasen …</string>
     <string name="lowercase">Små bokstavar</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Masker passord</string>
     <string name="maskpass_summary">Gøym passorda (standardval)</string>
     <string name="menu_about">Om</string>
@@ -125,7 +117,6 @@
     <string name="menu_donate">Doner</string>
     <string name="menu_edit">Endra</string>
     <string name="menu_hide_password">Gøym passordet</string>
-    <string name="menu_homepage">Gå til heimesida</string>
     <string name="menu_lock">Lås databasen</string>
     <string name="menu_open">Opna</string>
     <string name="menu_rename">Gje nytt namn</string>
@@ -134,7 +125,6 @@
     <string name="menu_url">Gå til adressa</string>
     <string name="minus">Minus</string>
     <string name="never">Aldri</string>
-    <string name="no_keys">Ingen oppføringar i databasen eller gruppa.</string>
     <string name="no_results">Ingen søkjeresultat</string>
     <string name="no_url_handler">Ingen behandlar for denne adressa.</string>
     <string name="open_recent">Opna nyleg brukt database (klikk for å opna):</string>

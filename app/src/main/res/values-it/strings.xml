@@ -33,17 +33,14 @@
     <string name="add_group_title">Aggiungi gruppo</string>
     <string name="add_string">Aggiungi stringa</string>
     <string name="algorithm">Algoritmo</string>
-    <string name="algorithm_colon">Algoritmo:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Scadenza applicazione</string>
     <string name="app_timeout_summary">Tempo prima che venga bloccato il database quando l\'applicazione è inattiva.</string>
     <string name="application">Applicazione</string>
     <string name="application_settings">Impostazioni applicazione</string>
     <string name="beta_dontask">Non mostrare più</string>
-    <string name="beta_warning">Il supporto per il salvataggio in file kdbx è SPERIMENTALE. Fai un backup del tuo database prima di salvare.</string>
     <string name="brackets">Parentesi</string>
     <string name="browser_intall_text">Sfogliare i file richiede l\'applicazione Gestore File di Open Intents, clicca sotto per installarlo. A causa di alcune stranezze nel gestore file, la prima volta la navigazione potrebbe non funzionare correttamente.</string>
-    <string name="building_search_idx">Creazione indice di ricerca&#8230;</string>
     <string name="cancel">Annulla</string>
     <string name="ClearClipboard">Appunti eliminati.</string>
     <string name="clipboard_error_title">Errore negli appunti</string>
@@ -54,11 +51,8 @@
     <string name="copy_username">Copia nome utente negli appunti</string>
     <string name="copy_password">Copia password negli appunti</string>
     <string name="creating_db_key">Creazione file chiave database&#8230;</string>
-    <string name="current_group">Gruppo attuale: </string>
-    <string name="current_group_root">Gruppo attuale: Principale</string>
     <string name="database">Database</string>
     <string name="decrypting_db">Decodifica contenuto database&#8230;</string>
-    <string name="decrypting_entry">Decodifica valore</string>
     <string name="default_checkbox">Usa come database predefinito</string>
     <string name="digits">Cifre</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 di Brian Pellin viene distribuito ASSOLUTAMENTE con NESSUNA GARANZIA; Si tratta di software libero e sei invitato a distribuirlo sotto le condizioni della licenza GPL versione 2 o superiore.</string>
@@ -81,10 +75,8 @@
     <string name="entry_user_name">Nome utente: </string>
     <string name="error_arc4">La codifica ArcFour non è supportata.</string>
     <string name="error_can_not_handle_uri">KeePassDroid non può gestire questo URL.</string>
-    <string name="error_could_not_create_group">Errore creazione gruppo.</string>
     <string name="error_could_not_create_parent">Impossibile creare la directory principale.</string>
     <string name="error_database_exists">File già esistente.</string>
-    <string name="error_database_settings">Impossibile determinare le impostazioni database.</string>
     <string name="error_failed_to_launch_link">Impossibile aprire il collegamento.</string>
     <string name="error_filename_required">È necessario un nome file.</string>
     <string name="error_file_not_create">Impossibile creare il file:</string>
@@ -130,7 +122,6 @@
     <string name="list_size_summary">Dimensione del testo nell\'elenco del gruppo</string>
     <string name="loading_database">Caricamento database&#8230;</string>
     <string name="lowercase">Minuscolo</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Maschera password</string>
     <string name="maskpass_summary">Nascondi le password in modo predefinito</string>
     <string name="menu_about">Info</string>
@@ -144,7 +135,6 @@
     <string name="menu_donate">Dona</string>
     <string name="menu_edit">Modifica</string>
     <string name="menu_hide_password">Nascondi password</string>
-    <string name="menu_homepage">Vai alla pagina web</string>
     <string name="menu_lock">Blocca database</string>
     <string name="menu_open">Apri</string>
     <string name="menu_rename">Rinomina</string>
@@ -153,7 +143,6 @@
     <string name="menu_url">Vai all\'URL</string>
     <string name="minus">Meno</string>
     <string name="never">Mai</string>
-    <string name="no_keys">Nessuna voce nel database o nel gruppo.</string>
     <string name="no_results">Nessun risultato di ricerca</string>
     <string name="no_url_handler">Nessun gestore per questo URL.</string>
     <string name="open_recent">Apri un database recente (clicca per aprire):</string>
@@ -199,21 +188,11 @@
     <string name="warning_read_only">Attualmente la scheda SD è in sola lettura. Non sei in grado di salvare le modifiche nel database.</string>
     <string name="warning_unmounted">Attualmente la scheda SD non è montata nel dispositivo. Non sarai in grado di caricare o creare un nuovo database.</string>
     <string name="version_label">Versione:</string>
-    <string name="configure_fingerprint">Impronte supportate ma non configurate nel dispositivo</string>
-    <string name="scanning_fingerprint">In attesa di impronte</string>
     <string name="encrypted_value_stored">Password criptata salvata</string>
     <string name="fingerprint_invalid_key">Problema chiave non valida</string>
-    <string name="fingerprint_error">Problema impronta digitale</string>
-    <string name="store_with_fingerprint">Usa l\'impronta digitale per salvare questa password</string>
-    <string name="no_password_stored">Nessuna password salvata per questo database</string>
-    <string name="fingerprint_notrecognized">Impronta digitale non riconosciuta</string>
-    <string name="fingerprint_key_invalidated">Password salvata non più valida. Reinserisci password</string>
     <string name="no_external_permissions">Permesso per leggere e scrivere sull\'unità esterna negato </string>
-    <string name="fingerprint_autoscan">Permetti la scansione automatica delle impronte digitali durante l\'apertura del file. Disabilita questa opzione se la scansione dell\'impronta digitale causa problemi.</string>
-    <string name="fingerprint_autoscan_title">Abilita scansione impronta digitale</string>
-    <string name="fingerprint_autoscan_hint">Scansione impronta digitale automatica non abilitata</string>   
- 
-   <string-array name="clipboard_timeout_options">
+
+    <string-array name="clipboard_timeout_options">
     	<item>30 secondi</item>
     	<item>1 minuto</item>
     	<item>5 minuti</item>

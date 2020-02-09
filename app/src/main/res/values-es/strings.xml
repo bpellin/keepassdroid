@@ -29,7 +29,6 @@ Spanish translation by José I. Paños. Updated by David García-Abad (23-09-201
     <string name="add_group">Añadir grupo</string>
     <string name="add_group_title">Añadir grupo</string>
     <string name="algorithm">Algoritmo</string>
-    <string name="algorithm_colon">Algoritmo:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Tiempo de espera de aplicación</string>
     <string name="app_timeout_summary">Tiempo hasta bloquear la base de datos cuando la aplicación está inacttiva.</string>
@@ -37,7 +36,6 @@ Spanish translation by José I. Paños. Updated by David García-Abad (23-09-201
     <string name="application_settings">Configuración de la aplicación</string>
     <string name="brackets">Paréntesis</string>
     <string name="browser_intall_text">La exploración de archivos necesita Open Intents File Manager, haz clic a continuación para instalarlo. Debido a algunas peculiaridades en el gestor de archivos, puede que la exploración no funcione correctamente la primera vez que la realices.</string>
-    <string name="building_search_idx">Construcción de índice de búsqueda&#8230;</string>
     <string name="cancel">Cancelar</string>
     <string name="ClearClipboard">Portapapeles vaciado.</string>
     <string name="clipboard_timeout">Portapapeles caducado</string>
@@ -45,11 +43,8 @@ Spanish translation by José I. Paños. Updated by David García-Abad (23-09-201
     <string name="copy_username">Seleccionar para copiar el usuario al portapapeles</string>
     <string name="copy_password">Seleccionar para copiar la contraseña al portapapeles</string>
     <string name="creating_db_key">Creando clave de la base de datos&#8230;</string>
-    <string name="current_group">Grupo actual: </string>
-    <string name="current_group_root">Grupo actual: Raíz</string>
     <string name="database">Base de datos</string>
     <string name="decrypting_db">Descifrando el contenido de la base de datos&#8230;</string>
-    <string name="decrypting_entry">Descrifrando la entrada</string>
     <string name="default_checkbox">Utilice esto como base de datos por defecto</string>
     <string name="digits">Dígitos</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 Brian Pellin NO TIENE TOTAL GARANTÍA; Este es software libre, y puedes redristribuirlo bajo las condiciones de la licencia GPL version 2 o posterior.</string>
@@ -71,10 +66,8 @@ Spanish translation by José I. Paños. Updated by David García-Abad (23-09-201
     <string name="entry_user_name">Nombre de usuario: </string>
     <string name="error_arc4">Secuencia de cifrado ArcFour no soportada.</string>
     <string name="error_can_not_handle_uri">KeePassDroid no puede manejar este uri.</string>
-    <string name="error_could_not_create_group">Error creando grupo.</string>
     <string name="error_could_not_create_parent">No pudo crearse el directorio padre.</string>
     <string name="error_database_exists">Este archivo ya existe.</string>
-    <string name="error_database_settings">Fallo al determinar la configuración de la base de datos.</string>
     <string name="error_failed_to_launch_link">Fallo al abrir el enlace.</string>
     <string name="error_filename_required">Se necesita un nombre de archivo.</string>
     <string name="error_file_not_create">No se pudo crear el archivo:</string>
@@ -113,7 +106,6 @@ Spanish translation by José I. Paños. Updated by David García-Abad (23-09-201
     <string name="list_size_summary">Tamaño del texto de la lista de grupo</string>
     <string name="loading_database">Cargando base de datos&#8230;</string>
     <string name="lowercase">Minúsculas</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Ocultar contraseña</string>
     <string name="maskpass_summary">Ocultar contraseñas por defecto</string>
     <string name="menu_about">Acerca de</string>
@@ -127,7 +119,6 @@ Spanish translation by José I. Paños. Updated by David García-Abad (23-09-201
     <string name="menu_donate">Donar</string>
     <string name="menu_edit">Editar</string>
     <string name="menu_hide_password">Ocultar Contraseña</string>
-    <string name="menu_homepage">Ir a Inicio</string>
     <string name="menu_lock">Bloquear Base de datos</string>
     <string name="menu_open">Abrir</string>
     <string name="menu_rename">Renombar</string>
@@ -136,7 +127,6 @@ Spanish translation by José I. Paños. Updated by David García-Abad (23-09-201
     <string name="menu_url">Ir a URL</string>
     <string name="minus">Menos</string>
     <string name="never">Nunca</string>
-    <string name="no_keys">Sin entradas en la base de datos o grupo.</string>
     <string name="no_results">Sin resultado de búsqueda</string>
     <string name="no_url_handler">Sin manejador para esta url.</string>
     <string name="recentfile_title">Historial de archivos recientes</string>

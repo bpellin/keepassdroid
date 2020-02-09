@@ -24,17 +24,14 @@
     <string name="add_group">Csoport hozzáadása</string>
     <string name="add_group_title">Csoport hozzáadása</string>
     <string name="algorithm">Algoritmus</string>
-    <string name="algorithm_colon">Algoritmus:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Alkalmazás időkorlátja</string>
     <string name="app_timeout_summary">Beállíthatja, mennyi idő után kerüljön lezárásra az adatbázis</string>
     <string name="application">Alkalmazás</string>
     <string name="application_settings">Alkalmazás beállítások</string>
     <string name="beta_dontask">"Ne mutassa többet"</string>
-    <string name="beta_warning">A kdbx fájlok írása jelenleg tesztüzemben működik! A változtatások elmentése előtt mindig készítsen biztonsági mentést az adatbázisáról.</string>
     <string name="brackets">Zárójelek</string>
     <string name="browser_intall_text">A fájl kiválasztásához önnek egy nyílt forrású fájlkezelő programra lesz szüksége, kattintson a lenti telepítés linkre. Előfordulhat, hogy első használatakor nem fog megfelelően működni a fájlkezelő program.</string>
-    <string name="building_search_idx">Keresési index létrehozása…</string>
     <string name="cancel">Mégsem</string>
     <string name="ClearClipboard">Vágólap törölve.</string>
     <string name="clipboard_error_title">Vágólap hiba</string>
@@ -45,11 +42,8 @@
     <string name="copy_username">Felhasználónév másolása a vágólapra</string>
     <string name="copy_password">Jelszó másolása a vágólapra</string>
     <string name="creating_db_key">Adatbázis létrehozása…</string>
-    <string name="current_group">Jelenlegi csoport:</string>
-    <string name="current_group_root">Jelenlegi csoport: Gyökérkönyvtár</string>
     <string name="database">Adatbázis</string>
     <string name="decrypting_db">Adatbázis tartalmának dekódolása…</string>
-    <string name="decrypting_entry">Bejegyzés dekódolása</string>
     <string name="default_checkbox">Adatbázis beállítása alapértelmezettként</string>
     <string name="digits">Számok</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009–2012 Brian Pellin. Ehhez a programhoz SEMMILYEN GARANCIA NEM JÁR; Ez egy szabad szoftver, GNU General Public License v2 vagy későbbi verziójának feltételei mellett terjeszthető, illetve módosítható. Fordította: Eversmann</string>
@@ -71,10 +65,8 @@
     <string name="entry_user_name">Felhasználónév:</string>
     <string name="error_arc4">Az ArcFour folyamrejtjel nem támogatott.</string>
     <string name="error_can_not_handle_uri">Nem található kezelő ehhez az uri-hoz.</string>
-    <string name="error_could_not_create_group">Hiba a csoport létrehozásakor.</string>
     <string name="error_could_not_create_parent">Nem sikerült létrehozni szülő könyvtárat.</string>
     <string name="error_database_exists">A fájl már létezik.</string>
-    <string name="error_database_settings">Nem sikerült meghatározni az adatbázis beállításokat.</string>
     <string name="error_failed_to_launch_link">Hiba a cím megnyitásakor.</string>
     <string name="error_filename_required">Fájlnév szükséges.</string>
     <string name="error_file_not_create">Nem sikerült létrehozni a fájlt:</string>
@@ -120,7 +112,6 @@
     <string name="list_size_summary">Beállítja a csoportok betűméretét</string>
     <string name="loading_database">Adatbázis betöltése…</string>
     <string name="lowercase">Kisbetűk</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Jelszó elrejtése</string>
     <string name="maskpass_summary">Jelszavak elrejtése alapértelmezésben</string>
     <string name="menu_about">Névjegy</string>
@@ -134,7 +125,6 @@
     <string name="menu_donate">Támogatás</string>
     <string name="menu_edit">Szerkesztés</string>
     <string name="menu_hide_password">Jelszó elrejtése</string>
-    <string name="menu_homepage">Weboldal megtekintése</string>
     <string name="menu_lock">Adatbázis lezárása</string>
     <string name="menu_open">Megnyitás</string>
     <string name="menu_rename">Átnevezés</string>
@@ -143,7 +133,6 @@
     <string name="menu_url">Ugrás az URL-re</string>
     <string name="minus">Mínusz</string>
     <string name="never">Soha</string>
-    <string name="no_keys">Nincs bejegyzés az adatbázisban vagy csoportban.</string>
     <string name="no_results">Nincs találat</string>
     <string name="no_url_handler">Nem található kezelő ehhez az url-hez.</string>
     <string name="open_recent">Korábbi adatbázis megnyitása (kattintson rá a megnyitáshoz):</string>
@@ -187,13 +176,8 @@
     <string name="warning_read_only">A memóriakártya jelenleg csak olvasható. Lehet, hogy nem tudja menteni a módosításokat az adatbázisban.</string>
     <string name="warning_unmounted">A memóriakártya jelenleg el van távolítva. Nem fogja tudni az adatbázist betölteni vagy módosítani.</string>
     <string name="version_label">Verzió:</string>
-    <string name="configure_fingerprint">Az ujjlenyomat használat nincs még beállítva az eszközön</string>
-    <string name="scanning_fingerprint">Várakozás az ujjelnyomat megadására</string>
     <string name="encrypted_value_stored">Titkosított jelszó elmentve</string>
     <string name="fingerprint_invalid_key">Érvénytelen kulcs</string>
-    <string name="fingerprint_error">Érvénytelen ujjlenyomat</string>
-    <string name="store_with_fingerprint">Használjon ujjlenyomatot a jelszó elmentéséhez</string>
-    <string name="no_password_stored">Nincs még jelszó beállítva ehhez az adatbázishoz</string>
 
     <string-array name="clipboard_timeout_options">
         <item>30 másodperc</item>

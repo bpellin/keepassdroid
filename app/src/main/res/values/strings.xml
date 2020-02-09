@@ -30,14 +30,12 @@
     <string name="add_group_title">Add Group</string>
     <string name="add_string">Add string</string>
     <string name="algorithm">Algorithm</string>
-    <string name="algorithm_colon">Algorithm:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Application timeout</string>
     <string name="app_timeout_summary">Time before locking database when the application is inactive.</string>
     <string name="application">Application</string>
     <string name="application_settings">Application settings</string>
     <string name="beta_dontask">Don\'t show again</string>
-    <string name="beta_warning">Support for saving changes to kdbx files is EXPERIMENTAL. Make backups of your database before saving changes.</string>
     <string name="biometric_auth_failed">Failed to authenticate biometric</string>
     <string name="biometric_auth_failed_store">Failed to authenticate, password was not stored</string>
     <string name="biometric_auth_error">Authentication error</string>
@@ -49,7 +47,6 @@
     <string name="biometric_save_password">Save Password</string>
     <string name="brackets">Brackets</string>
     <string name="browser_intall_text">File browsing requires the Open Intents File Manager, click below to install it. Due to some quirks in the file manager, browsing may not work correctly, the first time you browse.</string>
-    <string name="building_search_idx">Building search index&#8230;</string>
     <string name="cancel">Cancel</string>
     <string name="ClearClipboard">Clipboard cleared.</string>
     <string name="clipboard_error_title">Clipboard error</string>
@@ -60,11 +57,8 @@
     <string name="copy_username">Select to copy username to clipboard</string>
     <string name="copy_password">Select to copy password to clipboard</string>
     <string name="creating_db_key">Creating database key&#8230;</string>
-    <string name="current_group">Current Group: </string>
-    <string name="current_group_root">Current Group: Root</string>
     <string name="database">Database</string>
     <string name="decrypting_db">Decrypting database contents&#8230;</string>
-    <string name="decrypting_entry">Decrypting entry</string>
     <string name="default_checkbox">Use this as my default database</string>
     <string name="digits">Digits</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 Brian Pellin comes with ABSOLUTELY NO WARRANTY; This is free software, and you are welcome to redistribute it under the conditions of the GPL version 2 or later.</string>
@@ -87,10 +81,8 @@
     <string name="entry_user_name">User Name: </string>
     <string name="error_arc4">The ArcFour stream cipher is not supported.</string>
     <string name="error_can_not_handle_uri">KeePassDroid cannot handle this uri.</string>
-    <string name="error_could_not_create_group">Error creating group.</string>
     <string name="error_could_not_create_parent">Could not create parent directory.</string>
     <string name="error_database_exists">This file already exists.</string>
-    <string name="error_database_settings">Failed to determine database settings.</string>
     <string name="error_failed_to_launch_link">Failed to launch link.</string>
     <string name="error_filename_required">A filename is required.</string>
     <string name="error_file_not_create">Could not create file:</string>
@@ -136,7 +128,6 @@
     <string name="list_size_summary">Text size in the group list</string>
     <string name="loading_database">Loading database&#8230;</string>
     <string name="lowercase">Lower-case</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Mask password</string>
     <string name="maskpass_summary">Hide passwords by default</string>
     <string name="menu_about">About</string>
@@ -150,7 +141,6 @@
     <string name="menu_donate">Donate</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_hide_password">Hide Pass</string>
-    <string name="menu_homepage">Go to Homepage</string>
     <string name="menu_lock">Lock Database</string>
     <string name="menu_open">Open</string>
     <string name="menu_patreon">Patreon</string>
@@ -160,7 +150,6 @@
     <string name="menu_url">Go to URL</string>
     <string name="minus">Minus</string>
     <string name="never">Never</string>
-    <string name="no_keys">No entries in the database or group.</string>
     <string name="no_results">No search results</string>
     <string name="no_url_handler">No handler for this url.</string>
     <string name="open_recent">Open recent database (click to open):</string>
@@ -206,19 +195,9 @@
     <string name="warning_read_only">Your sd card is currently read-only. You may not be able to save changes to your database.</string>
     <string name="warning_unmounted">Your sd card is not currently mounted on your device. You will not be able to load or create your database.</string>
     <string name="version_label">Version:</string>
-    <string name="configure_fingerprint">Fingerprint supported but not configured for device</string>
-    <string name="scanning_fingerprint">Listening for fingerprints</string>
     <string name="encrypted_value_stored">Encrypted password stored</string>
     <string name="fingerprint_invalid_key">Invalid Key problem</string>
-    <string name="fingerprint_error">Fingerprint problem</string>
-    <string name="store_with_fingerprint">Use fingerprint to store this password</string>
-    <string name="no_password_stored">No password stored yet for this database</string>
-    <string name="fingerprint_notrecognized">Fingerprint not recognized</string>
-    <string name="fingerprint_key_invalidated">Stored password no longer valid. Re-enter password</string>
     <string name="no_external_permissions">Permission to read and write external storage was denied</string>
-    <string name="fingerprint_autoscan">Allow automatically scanning for fingerprints when opening file. Disable this option if fingerprint scanning causes issues.</string>
-    <string name="fingerprint_autoscan_title">Enable fingerprint scanning</string>
-    <string name="fingerprint_autoscan_hint">Auto fingerprint scanning not enabled</string>
 
     <string-array name="clipboard_timeout_options">
     	<item>30 seconds</item>

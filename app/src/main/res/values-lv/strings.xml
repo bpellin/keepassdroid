@@ -9,17 +9,14 @@
     <string name="add_group">Jauna grupa</string>
     <string name="add_group_title">Jauns gr. nosaukums</string>
     <string name="algorithm">Algoritms</string>
-    <string name="algorithm_colon">Algoritms:</string>
     <string name="app_name">Paroles</string>
     <string name="app_timeout">Pielikuma taimauts</string>
     <string name="app_timeout_summary">Bloķēšanas taimauts, kad programma nav aktīva.</string>
     <string name="application">Programma</string>
     <string name="application_settings">Programmas iestatījumi</string>
     <string name="beta_dontask">Turpmāk nerādīt</string>
-    <string name="beta_warning">Atbalsts kdbx failiem ir eksperimentāls. Dublējiet datu bāzi pirms izmaiņu saglabāšanas.</string>
     <string name="brackets">Iekavās</string>
     <string name="browser_intall_text">Failu pārlūkošanai nepieciešams pārlūks.</string>
-    <string name="building_search_idx">Indeksēšana…</string>
     <string name="cancel">Atcelt</string>
     <string name="ClearClipboard">Starpliktuve notīrīta.</string>
     <string name="clipboard_error_title">Starpliktuves kļūda</string>
@@ -30,11 +27,8 @@
     <string name="copy_username">Lietotājvārds uz starpliktuvi</string>
     <string name="copy_password">Parole uz starpliktuvi</string>
     <string name="creating_db_key">Izveidot datu bāzes atslēgu…</string>
-    <string name="current_group">Pašreizējā grupa:</string>
-    <string name="current_group_root">Pašreizējā grupa: Root</string>
     <string name="database">Datu bāze</string>
     <string name="decrypting_db">Datu bāzes atšifrēšana…</string>
-    <string name="decrypting_entry">Ieraksta atšifrēšana</string>
     <string name="default_checkbox">Izmantot šo kā manu noklusējuma datu bāzi</string>
     <string name="digits">Cipari</string>
     <string name="disclaimer_formal">Paroles Aurortiesības 2009–2012 Brian Pellin.</string>
@@ -56,10 +50,8 @@
     <string name="entry_user_name">Lietotāja vārds:</string>
     <string name="error_arc4">ArcFour plūsmas šifrs netiek atbalstīts.</string>
     <string name="error_can_not_handle_uri">Neizdevās pātiet uz norādīto adresi.</string>
-    <string name="error_could_not_create_group">Neizdevās izveidot grupu.</string>
     <string name="error_could_not_create_parent">Neizdevās izveidot mātes direktoriju.</string>
     <string name="error_database_exists">Šāds fails jau pastāv.</string>
-    <string name="error_database_settings">Nepareizi datu bāzes iestatījumi.</string>
     <string name="error_failed_to_launch_link">Neizdevās atvērt saiti.</string>
     <string name="error_filename_required">Nepieciešams faila nosaukums.</string>
     <string name="error_file_not_create">Neizdevās izveidot failu:</string>
@@ -104,7 +96,6 @@
     <string name="list_size_summary">Teksta izmērs ierakstos un grupu sarakstos</string>
     <string name="loading_database">Ielādēt datu bāzi…</string>
     <string name="lowercase">Lower-case</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Sēpt paroles</string>
     <string name="maskpass_summary">Sēpt paroles *****</string>
     <string name="menu_about">Par</string>
@@ -118,7 +109,6 @@
     <string name="menu_donate">Ziedot</string>
     <string name="menu_edit">Rediģēt</string>
     <string name="menu_hide_password">Paslēpt paroli</string>
-    <string name="menu_homepage">Iet uz mājas lapu</string>
     <string name="menu_lock">Bloķēt datu bāzi</string>
     <string name="menu_open">Atvērt</string>
     <string name="menu_rename">Pārdēvēt</string>
@@ -127,7 +117,6 @@
     <string name="menu_url">Saite</string>
     <string name="minus">Minus</string>
     <string name="never">Nekad</string>
-    <string name="no_keys">Nav ierakstu datu bāzē vai grupā.</string>
     <string name="no_results">Nav meklēšanas rezultātu</string>
     <string name="no_url_handler">Neizdevās atvērt saiti.</string>
     <string name="open_recent">Atvērt pēdējo datu bāzi (noklikšķiniet, lai atvērtu):</string>

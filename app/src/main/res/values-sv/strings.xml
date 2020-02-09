@@ -29,17 +29,14 @@
     <string name="add_group">Ny grupp</string>
     <string name="add_group_title">Ny grupp</string>
     <string name="algorithm">Algoritm</string>
-    <string name="algorithm_colon">Algoritm:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Tidsgräns för applikation</string>
     <string name="app_timeout_summary">Tid innan låsning när applikationen är inaktiv.</string>
     <string name="application">Applikation</string>
     <string name="application_settings">Inställningar för applikation</string>
     <string name="beta_dontask">Visa inte igen</string>
-    <string name="beta_warning">Stöd för att spara ändringar i kdbx-filer är EXPERIMENTELL. Ta backup på databasen innan ändringar sparas.</string>
     <string name="brackets">Parenteser</string>
     <string name="browser_intall_text">Filhantering kräver Open Intents File Manager, klicka nedan för att installera. Filhanteraren kanske inte fungerar korrekt vid första användningen.</string>
-    <string name="building_search_idx">Skapar sökindex&#8230;</string>
     <string name="cancel">Avbryt</string>
     <string name="ClearClipboard">Urklippet är rensat.</string>
     <string name="clipboard_error_title">Urklippsfel</string>
@@ -50,11 +47,8 @@
     <string name="copy_username">Kopiera användarnamnet till urklipp</string>
     <string name="copy_password">Kopiera lösenordet till urklipp</string>
     <string name="creating_db_key">Skapar databasnyckel&#8230;</string>
-    <string name="current_group">Aktuell grupp: </string>
-    <string name="current_group_root">Aktuell grupp: Root</string>
     <string name="database">Databas</string>
     <string name="decrypting_db">Dekrypterar databasinnehåll&#8230;</string>
-    <string name="decrypting_entry">Dekrypterar post</string>
     <string name="default_checkbox">Använda denna databasen som standard</string>
     <string name="digits">Siffror</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 Brian Pellin kommer HELT UTAN GARANTIER; Detta är fri programvara och du är välkommen att distribuera den utifrån villkoren i GPL version 2 eller senare.</string>
@@ -76,10 +70,8 @@
     <string name="entry_user_name">Användarnamn: </string>
     <string name="error_arc4">Strömchiffret ArcFour stöds inte.</string>
     <string name="error_can_not_handle_uri">KeePassDroid kan inte hantera denna URI.</string>
-    <string name="error_could_not_create_group">Kunde inte skapa grupp.</string>
     <string name="error_could_not_create_parent">Kunde inte skapa föräldermapp.</string>
     <string name="error_database_exists">Filen existerar redan.</string>
-    <string name="error_database_settings">Det gick inte att fastställa databasinställningar.</string>
     <string name="error_failed_to_launch_link">Kunde inte öppna länk.</string>
     <string name="error_filename_required">Ett filnamn krävs.</string>
     <string name="error_file_not_create">Kunde inte skapa filen:</string>
@@ -124,7 +116,6 @@
     <string name="list_size_summary">Textstorlek i grupplistan</string>
     <string name="loading_database">Laddar databas&#8230;</string>
     <string name="lowercase">Gemener</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Maskera lösenord</string>
     <string name="maskpass_summary">Döljer lösenord som standard</string>
     <string name="menu_about">Om</string>
@@ -138,7 +129,6 @@
     <string name="menu_donate">Donera</string>
     <string name="menu_edit">Redigera</string>
     <string name="menu_hide_password">Göm lösenord</string>
-    <string name="menu_homepage">Gå till webbsidan</string>
     <string name="menu_lock">Lås databas</string>
     <string name="menu_open">Öppna</string>
     <string name="menu_rename">Döp om</string>
@@ -147,7 +137,6 @@
     <string name="menu_url">Gå till URL</string>
     <string name="minus">Bindestreck</string>
     <string name="never">Aldrig</string>
-    <string name="no_keys">Inga poster i databasen eller gruppen.</string>
     <string name="no_results">Inget sökresultat</string>
     <string name="no_url_handler">Inget standardprogram för denna URL.</string>
     <string name="open_recent">Senat öppnade databaser (klicka för att öppna):</string>
