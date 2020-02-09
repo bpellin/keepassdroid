@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009-2017 Brian Pellin.
+ Copyright 2009-2020 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -92,7 +92,7 @@
 		<com.keepassdroid.settings.LongEditTextPreference
 			android:key="@string/roundsFix_key"
 			android:summary="@string/rounds_fix_explaination"
-			android:numeric="integer"
+			android:inputType="number"
 			android:title="@string/rounds_fix"/>
 	</PreferenceScreen>
 </PreferenceScreen>
