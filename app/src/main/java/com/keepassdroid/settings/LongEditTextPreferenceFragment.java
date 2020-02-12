@@ -17,25 +17,29 @@
  *  along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.keepassdroid;
+package com.keepassdroid.settings;
 
-import androidx.fragment.app.FragmentActivity;
 
-import com.keepassdroid.timeout.TimeoutHelper;
+import android.app.Dialog;
+import android.os.Bundle;
 
-public abstract class LockingFragmentActivity extends FragmentActivity {
+import androidx.annotation.NonNull;
+import androidx.preference.EditTextPreferenceDialogFragmentCompat;
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		
-		TimeoutHelper.pause(this);
-	}
+public class LongEditTextPreferenceFragment extends EditTextPreferenceDialogFragmentCompat {
+    private final LongEditTextPreference preference;
 
-	@Override
-	protected void onResume() {
-		super.onResume();
+    public LongEditTextPreferenceFragment(LongEditTextPreference preference) {
+        this.preference = preference;
 
-		TimeoutHelper.resume(this);
-	}
+        final Bundle b = new Bundle();
+        b.putString(ARG_KEY, preference.getKey());
+        setArguments(b);
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return super.onCreateDialog(savedInstanceState);
+    }
 }

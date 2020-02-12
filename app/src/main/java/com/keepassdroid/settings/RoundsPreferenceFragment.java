@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2016 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -20,13 +20,21 @@
 package com.keepassdroid.settings;
 
 
+import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
-import android.preference.DialogPreference;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.preference.EditTextPreference;
+import androidx.preference.EditTextPreferenceDialogFragmentCompat;
+import androidx.preference.Preference;
 
 import com.android.keepass.R;
 import com.keepassdroid.Database;
@@ -36,52 +44,54 @@ import com.keepassdroid.database.PwDatabase;
 import com.keepassdroid.database.edit.OnFinish;
 import com.keepassdroid.database.edit.SaveDB;
 
-public class RoundsPreference extends DialogPreference {
-	
+public class RoundsPreferenceFragment extends EditTextPreferenceDialogFragmentCompat {
+
+	private EditText mEditText;
 	private PwDatabase mPM;
-	private TextView mRoundsView;
 
 	@Override
-	protected View onCreateDialogView() {
-		View view =  super.onCreateDialogView();
-		
-		mRoundsView = (TextView) view.findViewById(R.id.rounds);
-		
+	protected void onBindDialogView(View view) {
+		super.onBindDialogView(view);
+
+		mEditText = view.findViewById(android.R.id.edit);
+		mEditText.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_VARIATION_NORMAL);
+
 		Database db = App.getDB();
 		mPM = db.pm;
-		long numRounds = mPM.getNumRounds();
-		mRoundsView.setText(Long.toString(numRounds));
-		
-		return view;
+		mEditText.setText(Long.toString(db.pm.getNumRounds()));
+
 	}
 
-	public RoundsPreference(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
 
-	public RoundsPreference(Context context, AttributeSet attrs, int defStyle) {
-	   super(context, attrs, defStyle);
-   }
+	public static RoundsPreferenceFragment newInstance(String key) {
+		final RoundsPreferenceFragment
+				fragment = new RoundsPreferenceFragment();
+		final Bundle b = new Bundle(1);
+		b.putString(ARG_KEY, key);
+		fragment.setArguments(b);
+		return fragment;
+	}
 
 	@Override
-	protected void onDialogClosed(boolean positiveResult) {
-		super.onDialogClosed(positiveResult);
+	public void onDialogClosed(boolean positiveResult) {
+	    EditTextPreference pref = (EditTextPreference) getPreference();
 
 		if ( positiveResult ) {
 			int rounds;
-			
+
 			try {
-				String strRounds = mRoundsView.getText().toString(); 
+				String strRounds = mEditText.getText().toString();
 				rounds = Integer.parseInt(strRounds);
 			} catch (NumberFormatException e) {
 				Toast.makeText(getContext(), R.string.error_rounds_not_number, Toast.LENGTH_LONG).show();
 				return;
 			}
-			
+
 			if ( rounds < 1 ) {
 				rounds = 1;
 			}
-			
+
+
 			long oldRounds = mPM.getNumRounds();
 			try {
 				mPM.setNumRounds(rounds);
@@ -89,23 +99,23 @@ public class RoundsPreference extends DialogPreference {
 				Toast.makeText(getContext(), R.string.error_rounds_too_large, Toast.LENGTH_LONG).show();
 				mPM.setNumRounds(Integer.MAX_VALUE);
 			}
-			
+
 			Handler handler = new Handler();
 			SaveDB save = new SaveDB(getContext(), App.getDB(), new AfterSave(getContext(), handler, oldRounds));
 			ProgressTask pt = new ProgressTask(getContext(), save, R.string.saving_database);
 			pt.run();
-			
+
 		}
 
 	}
-	
+
 	private class AfterSave extends OnFinish {
 		private long mOldRounds;
 		private Context mCtx;
-		
+
 		public AfterSave(Context ctx, Handler handler, long oldRounds) {
 			super(handler);
-			
+
 			mCtx = ctx;
 			mOldRounds = oldRounds;
 		}
@@ -113,9 +123,10 @@ public class RoundsPreference extends DialogPreference {
 		@Override
 		public void run() {
 			if ( mSuccess ) {
-				OnPreferenceChangeListener listner = getOnPreferenceChangeListener();
+				Preference preference = getPreference();
+				Preference.OnPreferenceChangeListener listner = preference.getOnPreferenceChangeListener();
 				if ( listner != null ) {
-					listner.onPreferenceChange(RoundsPreference.this, null);
+					listner.onPreferenceChange(preference, null);
 				}
 			} else {
 				displayMessage(mCtx);

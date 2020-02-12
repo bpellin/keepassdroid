@@ -35,7 +35,7 @@ import com.keepassdroid.utils.UriUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class PasswordActivity extends LockingFragmentActivity {
+public class PasswordActivity extends LockingActivity {
 
     public static final String KEY_DEFAULT_FILENAME = "defaultFileName";
     public static final String KEY_FILENAME = "fileName";
