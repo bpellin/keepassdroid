@@ -212,7 +212,9 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
     private void biometricOpenUpdateVisibility() {
         int visibility;
-        if (biometricsAvailable) {
+        BiometricManager biometricManager = BiometricManager.from(getActivity());
+        int auth = biometricManager.canAuthenticate();
+        if (biometricsAvailable && auth != BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED) {
             String encryptedValue = prefsNoBackup.getString(getPreferenceKeyValue(), null);
             String ivSpecValue = prefsNoBackup.getString(getPreferenceKeyIvSpec(), null);
 
