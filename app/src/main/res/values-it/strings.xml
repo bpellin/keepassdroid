@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009-2018 Brian Pellin.
+ Copyright 2009-2020 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License
   along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
 
-  Italian translation by Diego Pierotto. Updated by anthologist on April 2018.
+  Italian translation by Diego Pierotto. Updated by anthologist on February 2020.
 
 -->
 <resources
@@ -39,6 +39,15 @@
     <string name="application">Applicazione</string>
     <string name="application_settings">Impostazioni applicazione</string>
     <string name="beta_dontask">Non mostrare più</string>
+    <string name="biometric_auth_failed">Autenticazione biometrica fallita</string>
+    <string name="biometric_auth_failed_store">Autenticazione fallita, la password non è stata salvata</string>
+    <string name="biometric_auth_error">Errore autenticazione</string>
+    <string name="biometric_auth_to_open">Autentica per aprire il database</string>
+    <string name="biometric_auth_to_store">Autentica per salvare la password</string>
+    <string name="biometric_error">Errore biometrico</string>
+    <string name="biometric_invalidated">Biometria non valida</string>
+    <string name="biometric_open_db">Apri database</string>
+    <string name="biometric_save_password">Salva password</string>
     <string name="brackets">Parentesi</string>
     <string name="browser_intall_text">Sfogliare i file richiede l\'applicazione Gestore File di Open Intents, clicca sotto per installarlo. A causa di alcune stranezze nel gestore file, la prima volta la navigazione potrebbe non funzionare correttamente.</string>
     <string name="cancel">Annulla</string>
@@ -137,6 +146,7 @@
     <string name="menu_hide_password">Nascondi password</string>
     <string name="menu_lock">Blocca database</string>
     <string name="menu_open">Apri</string>
+    <string name="menu_patreon">Patreon</string>
     <string name="menu_rename">Rinomina</string>
     <string name="menu_search">Cerca</string>
     <string name="menu_showpass">Mostra password</string>
