@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2018 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -18,6 +18,8 @@
  *
  */
 package com.keepassdroid.database.load;
+
+import android.util.Base64;
 
 import com.keepassdroid.UpdateStatus;
 import com.keepassdroid.crypto.CipherFactory;
@@ -48,6 +50,7 @@ import com.keepassdroid.utils.Types;
 import com.keepassdroid.utils.Util;
 
 import org.spongycastle.crypto.StreamCipher;
+import org.spongycastle.jcajce.provider.symmetric.ARC4;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -72,8 +75,6 @@ import java.util.zip.GZIPInputStream;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
-
-import biz.source_code.base64Coder.Base64Coder;
 
 import static com.keepassdroid.database.PwDatabaseV4XML.*;
 
@@ -405,7 +406,7 @@ public class ImporterV4 extends Importer {
 			} else if ( name.equalsIgnoreCase(ElemHeaderHash) ) {
 				String encodedHash = ReadString(xpp);
 				if (!EmptyUtils.isNullOrEmpty(encodedHash) && (hashOfHeader != null)) {
-					byte[] hash = Base64Coder.decode(encodedHash);
+					byte[] hash = Base64.decode(encodedHash, Base64.DEFAULT);
 					if (!Arrays.equals(hash, hashOfHeader)) {
 						throw new InvalidDBException();
 					}
@@ -500,7 +501,7 @@ public class ImporterV4 extends Importer {
 			} else if ( name.equalsIgnoreCase(ElemCustomIconItemData) ) {
 				String strData = ReadString(xpp);
 				if ( strData != null && strData.length() > 0 ) {
-					customIconData = Base64Coder.decode(strData);
+					customIconData = Base64.decode(strData, Base64.DEFAULT);
 				} else {
 					assert(false);
 				}
@@ -923,7 +924,7 @@ public class ImporterV4 extends Importer {
 		Date utcDate = null;
 
 		if (version >= PwDbHeaderV4.FILE_VERSION_32_4) {
-			byte[] buf = Base64Coder.decode(sDate);
+			byte[] buf = Base64.decode(sDate, Base64.DEFAULT);
 			if (buf.length != 8) {
 				byte[] buf8 = new byte[8];
 				System.arraycopy(buf, 0, buf8, 0, Math.min(buf.length, 8));
@@ -988,8 +989,7 @@ public class ImporterV4 extends Importer {
 			return PwDatabaseV4.UUID_ZERO;
 		}
 		
-		// TODO: Switch to framework Base64 once API level 8 is the minimum
-		byte[] buf = Base64Coder.decode(encoded);
+		byte[] buf = Base64.decode(encoded, Base64.DEFAULT);
 		
 		return Types.bytestoUUID(buf);
 	}
@@ -1081,7 +1081,7 @@ public class ImporterV4 extends Importer {
 		String base64 = ReadString(xpp);
 		if ( base64.length() == 0 ) return ProtectedBinary.EMPTY;
 		
-		byte[] data = Base64Coder.decode(base64);
+		byte[] data = Base64.decode(base64, Base64.DEFAULT);
 		
 		if (compressed) {
 			data = MemUtil.decompress(data);
@@ -1123,7 +1123,7 @@ public class ImporterV4 extends Importer {
 				String encrypted = ReadStringRaw(xpp);
 				
 				if ( encrypted.length() > 0 ) {
-					buf = Base64Coder.decode(encrypted);
+					buf = Base64.decode(encrypted, Base64.DEFAULT);
 					byte[] plainText = new byte[buf.length];
 					
 					randomStream.processBytes(buf, 0, buf.length, plainText, 0);

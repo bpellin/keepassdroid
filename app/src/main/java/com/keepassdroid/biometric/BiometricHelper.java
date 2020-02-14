@@ -21,11 +21,12 @@ package com.keepassdroid.biometric;
 
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.security.keystore.KeyProperties;
+import android.util.Base64;
 
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.os.CancellationSignal;
-import android.security.keystore.KeyProperties;
 
 import com.keepassdroid.compat.KeyGenParameterSpecCompat;
 import com.keepassdroid.compat.KeyguardManagerCompat;
@@ -40,8 +41,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
-
-import biz.source_code.base64Coder.Base64Coder;
 
 public class BiometricHelper {
 
@@ -167,11 +166,11 @@ public class BiometricHelper {
         try {
             // actual do encryption here
             byte[] encrypted = cipher.doFinal(value.getBytes());
-            final String encryptedValue = new String(Base64Coder.encode(encrypted));
+            final String encryptedValue = new String(Base64.encodeToString(encrypted, Base64.DEFAULT));
 
             // passes updated iv spec on to callback so this can be stored for decryption
             final IvParameterSpec spec = cipher.getParameters().getParameterSpec(IvParameterSpec.class);
-            final String ivSpecValue = new String(Base64Coder.encode(spec.getIV()));
+            final String ivSpecValue = new String(Base64.encode(spec.getIV(), Base64.DEFAULT));
             biometricCallback.handleEncryptedResult(encryptedValue, ivSpecValue);
 
         } catch (final Exception e) {
@@ -215,7 +214,7 @@ public class BiometricHelper {
         final SecretKey key = (SecretKey) keyStore.getKey(ALIAS_KEY, null);
 
         // important to restore spec here that was used for decryption
-        final byte[] iv = Base64Coder.decode(ivSpecValue);
+        final byte[] iv = Base64.decode(ivSpecValue, Base64.DEFAULT);
         final IvParameterSpec spec = new IvParameterSpec(iv);
         cipher.init(Cipher.DECRYPT_MODE, key, spec);
         cryptoInitOk = true;
@@ -232,7 +231,7 @@ public class BiometricHelper {
         }
         try {
             // actual decryption here
-            final byte[] encrypted = Base64Coder.decode(encryptedValue);
+            final byte[] encrypted = Base64.decode(encryptedValue, Base64.DEFAULT);
             byte[] decrypted = cipher.doFinal(encrypted);
             final String decryptedString = new String(decrypted);
 

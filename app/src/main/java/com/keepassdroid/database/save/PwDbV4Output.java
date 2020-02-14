@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 Brian Pellin.
+ * Copyright 2013-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,6 +19,7 @@
  */
 package com.keepassdroid.database.save;
 
+import android.util.Base64;
 import android.util.Xml;
 
 import com.keepassdroid.crypto.CipherFactory;
@@ -73,8 +74,6 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
-
-import biz.source_code.base64Coder.Base64Coder;
 
 import static com.keepassdroid.database.PwDatabaseV4XML.AttrCompressed;
 import static com.keepassdroid.database.PwDatabaseV4XML.AttrId;
@@ -322,7 +321,7 @@ public class PwDbV4Output extends PwDbOutput {
 		writeObject(ElemGenerator, mPM.localizedAppName);
 		
 		if (hashOfHeader != null) {
-			writeObject(ElemHeaderHash, String.valueOf(Base64Coder.encode(hashOfHeader)));
+			writeObject(ElemHeaderHash, Base64.encodeToString(hashOfHeader, Base64.DEFAULT));
 		}
 		
 		writeObject(ElemDbName, mPM.name, true);
@@ -527,15 +526,15 @@ public class PwDbV4Output extends PwDbOutput {
 
 				byte[] encoded = new byte[valLength];
 				randomStream.processBytes(buffer, 0, valLength, encoded, 0);
-				xml.text(String.valueOf(Base64Coder.encode(encoded)));
+				xml.text(Base64.encodeToString(encoded, Base64.DEFAULT));
 
 			} else {
 				if (mPM.compressionAlgorithm == PwCompressionAlgorithm.Gzip) {
 					xml.attribute(null, AttrCompressed, ValTrue);
 					byte[] compressData = MemUtil.compress(buffer);
-					xml.text(String.valueOf(Base64Coder.encode(compressData)));
+					xml.text(Base64.encodeToString(compressData, Base64.DEFAULT));
 				} else {
-					xml.text(String.valueOf(Base64Coder.encode(buffer)));
+					xml.text(Base64.encodeToString(buffer, Base64.DEFAULT));
 				}
 
 			}
@@ -566,7 +565,7 @@ public class PwDbV4Output extends PwDbOutput {
 			DateTime dt = new DateTime(value);
 			long seconds = DateUtil.convertDateToKDBX4Time(dt);
 			byte[] buf = LEDataOutputStream.writeLongBuf(seconds);
-			String b64 = new String(Base64Coder.encode(buf));
+			String b64 = Base64.encodeToString(buf, Base64.DEFAULT);
 			writeObject(name, b64);
 		}
 
@@ -593,7 +592,7 @@ public class PwDbV4Output extends PwDbOutput {
 	
 	private void writeObject(String name, UUID uuid) throws IllegalArgumentException, IllegalStateException, IOException {
 		byte[] data = Types.UUIDtoBytes(uuid);
-		writeObject(name, String.valueOf(Base64Coder.encode(data)));
+		writeObject(name, Base64.encodeToString(data, Base64.DEFAULT));
 	}
 	
 	private void writeObject(String name, String keyName, String keyValue, String valueName, String valueValue) throws IllegalArgumentException, IllegalStateException, IOException {
@@ -677,7 +676,7 @@ public class PwDbV4Output extends PwDbOutput {
 			if (valLength > 0) {
 				byte[] encoded = new byte[valLength];
 				randomStream.processBytes(data, 0, valLength, encoded, 0);
-				xml.text(String.valueOf(Base64Coder.encode(encoded)));
+				xml.text(Base64.encodeToString(encoded, Base64.DEFAULT));
 			}
 		}
 		else {
@@ -790,7 +789,7 @@ public class PwDbV4Output extends PwDbOutput {
 			xml.startTag(null, ElemCustomIconItem);
 			
 			writeObject(ElemCustomIconItemID, icon.uuid);
-			writeObject(ElemCustomIconItemData, String.valueOf(Base64Coder.encode(icon.imageData)));
+			writeObject(ElemCustomIconItemData, Base64.encodeToString(icon.imageData, Base64.DEFAULT));
 			
 			xml.endTag(null, ElemCustomIconItem);
 		}

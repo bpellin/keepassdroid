@@ -19,15 +19,11 @@
  */
 package com.keepassdroid.tests.database;
 
-import java.io.InputStream;
-import java.util.UUID;
-
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Base64;
 
 import androidx.test.platform.app.InstrumentationRegistry;
-
-import biz.source_code.base64Coder.Base64Coder;
 
 import com.keepassdroid.database.PwDatabaseV4;
 import com.keepassdroid.database.PwEntryV4;
@@ -37,6 +33,9 @@ import com.keepassdroid.utils.Types;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.InputStream;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -78,7 +77,7 @@ public class SprEngineTest {
 			return PwDatabaseV4.UUID_ZERO;
 		}
 		
-		byte[] buf = Base64Coder.decode(encoded);
+		byte[] buf = Base64.decode(encoded, Base64.DEFAULT);
 		return Types.bytestoUUID(buf);
 	}
 
