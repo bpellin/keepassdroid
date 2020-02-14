@@ -194,13 +194,6 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     }
 
     private void setFingerPrintVisibilty() {
-        View view = getView();
-        ImageButton browse = (ImageButton) view.findViewById(R.id.browse_button);
-        EditText fn = (EditText) view.findViewById(R.id.pass_keyfile);
-
-        RelativeLayout.LayoutParams browseParams = (RelativeLayout.LayoutParams) browse.getLayoutParams();
-        RelativeLayout.LayoutParams fnParams = (RelativeLayout.LayoutParams) fn.getLayoutParams();
-
         if (biometricsAvailable) {
             biometricCheck.setVisibility(View.VISIBLE);
         } else {
@@ -424,6 +417,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                 auth == BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED){
             initBiometrics();
         } else {
+            biometricsAvailable = false;
             setFingerPrintVisibilty();
         }
     }
