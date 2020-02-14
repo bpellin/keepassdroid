@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2016 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -41,6 +41,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.keepass.KeePass;
 import com.android.keepass.R;
@@ -116,6 +118,9 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.entry_edit);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
 		setResult(KeePass.EXIT_NORMAL);
 		
 		// Likely the app has been killed exit the activity
@@ -270,6 +275,8 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
+	    super.onActivityResult(requestCode, resultCode, data);
+
 		switch (resultCode)
 		{
 			case RESULT_OK_ICON_PICKER:

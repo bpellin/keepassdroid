@@ -48,6 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.keepass.R;
 import com.keepassdroid.AboutDialog;
@@ -159,6 +160,9 @@ public class FileSelectActivity extends AppCompatActivity {
         } else {
             setContentView(R.layout.file_selection_no_recent);
         }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mList = (ListView)findViewById(R.id.file_list);
 

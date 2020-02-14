@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2018 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -38,6 +38,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.keepass.KeePass;
 import com.android.keepass.R;
@@ -90,13 +92,15 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
 			finish();
 			return;
 		}
-		
+
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		this.invalidateOptionsMenu();
 
 		setContentView(new GroupViewOnlyView(this));
 		setResult(KeePass.EXIT_NORMAL);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 
 		styleScrollBars();
 		

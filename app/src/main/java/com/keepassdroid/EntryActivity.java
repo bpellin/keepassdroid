@@ -1,6 +1,6 @@
 /*
  * 
- * Copyright 2009-2018 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -41,6 +41,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -130,7 +132,9 @@ public class EntryActivity extends LockCloseHideActivity {
 		
 		super.onCreate(savedInstanceState);
 		setEntryView();
-		
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
 		Context appCtx = getApplicationContext();
 		dateFormat = android.text.format.DateFormat.getDateFormat(appCtx);
 		timeFormat = android.text.format.DateFormat.getTimeFormat(appCtx);

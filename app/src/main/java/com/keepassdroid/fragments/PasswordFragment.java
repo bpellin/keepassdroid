@@ -163,7 +163,6 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
             @Override
             public void onClick(View v) {
                 clearStoredCredentials();
-                setFingerPrintVisibilty();
             }
         });
     }
@@ -791,6 +790,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                 .remove(getPreferenceKeyValue())
                 .remove(getPreferenceKeyIvSpec())
                 .commit();
+        setFingerPrintVisibilty();
     }
 
     @Override
