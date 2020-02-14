@@ -118,17 +118,18 @@ public class BiometricHelper {
         return initOk;
     }
 
-    public void initEncryptData() {
+    public boolean initEncryptData() {
         cryptoInitOk = false;
 
         if (!isFingerprintInitialized()) {
             if (biometricCallback != null) {
                 biometricCallback.onException();
             }
-            return;
+            return false;
         }
         try {
             initEncryptKey(false);
+            return true;
         } catch (final InvalidKeyException invalidKeyException) {
             try {
                 biometricCallback.onKeyInvalidated();
@@ -142,6 +143,7 @@ public class BiometricHelper {
             biometricCallback.onException();
         }
 
+        return false;
     }
 
     private void initEncryptKey(
@@ -183,12 +185,13 @@ public class BiometricHelper {
         return cipher;
     }
 
-    public void initDecryptData(
+    public boolean initDecryptData(
             final String ivSpecValue) {
 
         cryptoInitOk = false;
         try {
             initDecryptKey(ivSpecValue,false);
+            return true;
         } catch (final InvalidKeyException invalidKeyException) {
             // Key was invalidated (maybe all registered fingerprints were changed)
             // Retry with new key
@@ -203,6 +206,8 @@ public class BiometricHelper {
         } catch (final Exception e) {
             biometricCallback.onException();
         }
+
+        return false;
     }
 
     private void initDecryptKey(

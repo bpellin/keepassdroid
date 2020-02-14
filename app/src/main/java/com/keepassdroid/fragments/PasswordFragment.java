@@ -152,9 +152,10 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         biometricOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initDecryptData();
+                if (!initDecryptData()) {
+                    return;
+                }
                 Cipher cipher = biometricHelper.getCipher();
-                // if cipher == null
                 biometricOpenPrompt.authenticate(loadPrompt, new BiometricPrompt.CryptoObject(cipher));
             }
         });
@@ -326,10 +327,10 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     }
 
 
-    private void initDecryptData() {
+    private boolean initDecryptData() {
         final String ivSpecValue = prefsNoBackup.getString(getPreferenceKeyIvSpec(), null);
 
-        biometricHelper.initDecryptData(ivSpecValue);
+        return biometricHelper.initDecryptData(ivSpecValue);
     }
 
 
@@ -742,7 +743,9 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                 });
             } else if (mSuccess) {
                 if (biometricCheck.isChecked()) {
-                    biometricHelper.initEncryptData();
+                    if (!biometricHelper.initEncryptData()) {
+                        return;
+                    }
                     Cipher cipher = biometricHelper.getCipher();
 
                     biometricSavePrompt.authenticate(savePrompt, new BiometricPrompt.CryptoObject(cipher));
