@@ -105,6 +105,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     private int mode;
     private static final String PREF_KEY_VALUE_PREFIX = "valueFor_"; // key is a combination of db file name and this prefix
     private static final String PREF_KEY_IV_PREFIX = "ivFor_"; // key is a combination of db file name and this prefix
+    private View mView;
 
     private CheckBox biometricCheck;
     private EditText passwordView;
@@ -129,7 +130,10 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       return inflater.inflate(R.layout.password, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        mView = inflater.inflate(R.layout.password, container, false);
+        return mView;
     }
 
     @Override
@@ -347,8 +351,6 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         super.onActivityResult(requestCode, resultCode, data);
 
         Activity activity = getActivity();
-        View view = getView();
-
 
         switch (requestCode) {
 
@@ -367,7 +369,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                 if (resultCode == Activity.RESULT_OK) {
                     String filename = data.getDataString();
                     if (filename != null) {
-                        EditText fn = (EditText) view.findViewById(R.id.pass_keyfile);
+                        EditText fn = (EditText) mView.findViewById(R.id.pass_keyfile);
                         fn.setText(filename);
                         mKeyUri = UriUtil.parseDefaultFile(filename);
                     }
@@ -384,7 +386,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                             }
                             String path = uri.toString();
                             if (path != null) {
-                                EditText fn = (EditText) view.findViewById(R.id.pass_keyfile);
+                                EditText fn = (EditText) mView.findViewById(R.id.pass_keyfile);
                                 fn.setText(path);
 
                             }
@@ -404,7 +406,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         // If the application was shutdown make sure to clear the password field, if it
         // was saved in the instance state
         if (App.isShutdown()) {
-            TextView password = (TextView) getView().findViewById(R.id.password);
+            TextView password = (TextView) mView.findViewById(R.id.password);
             password.setText("");
         }
 
@@ -447,7 +449,6 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
     private class InitTask extends AsyncTask<Intent, Void, Integer> {
 
-        View view = getView();
         String password = "";
         boolean launch_immediately = false;
 
@@ -518,14 +519,14 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
             confirmButton.setOnClickListener(new OkClickHandler());
 
-            CheckBox checkBox = (CheckBox) view.findViewById(R.id.show_password);
+            CheckBox checkBox = (CheckBox) mView.findViewById(R.id.show_password);
             // Show or hide password
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                 public void onCheckedChanged(
                         CompoundButton buttonView,
                         boolean isChecked) {
-                    TextView password = (TextView) view.findViewById(R.id.password);
+                    TextView password = (TextView) mView.findViewById(R.id.password);
 
                     if (isChecked) {
                         password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
@@ -537,14 +538,14 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
             });
 
             if (password != null) {
-                TextView tv_password = (TextView) view.findViewById(R.id.password);
+                TextView tv_password = (TextView) mView.findViewById(R.id.password);
                 tv_password.setText(password);
             }
 
-            CheckBox defaultCheck = (CheckBox) view.findViewById(R.id.default_database);
+            CheckBox defaultCheck = (CheckBox) mView.findViewById(R.id.default_database);
             defaultCheck.setOnCheckedChangeListener(new DefaultCheckChange());
 
-            ImageButton browse = (ImageButton) view.findViewById(R.id.browse_button);
+            ImageButton browse = (ImageButton) mView.findViewById(R.id.browse_button);
             browse.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
@@ -638,7 +639,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     private void retrieveSettings() {
         String defaultFilename = prefs.getString(PasswordActivity.KEY_DEFAULT_FILENAME, "");
         if (!EmptyUtils.isNullOrEmpty(mDbUri.getPath()) && UriUtil.equalsDefaultfile(mDbUri, defaultFilename)) {
-            CheckBox checkbox = (CheckBox) getView().findViewById(R.id.default_database);
+            CheckBox checkbox = (CheckBox) mView.findViewById(R.id.default_database);
             checkbox.setChecked(true);
         }
     }
@@ -667,7 +668,8 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     private void setEditText(
             int resId,
             String str) {
-        TextView te = (TextView) getView().findViewById(resId);
+
+        TextView te = (TextView) mView.findViewById(resId);
         assert (te == null);
 
         if (te != null) {
