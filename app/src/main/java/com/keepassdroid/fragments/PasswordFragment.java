@@ -415,8 +415,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
         BiometricManager biometricManager = BiometricManager.from(getActivity());
         int auth = biometricManager.canAuthenticate();
-        if (auth == BiometricManager.BIOMETRIC_SUCCESS ||
-                auth == BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED){
+        if (auth == BiometricManager.BIOMETRIC_SUCCESS){
             initBiometrics();
         } else {
             biometricsAvailable = false;
