@@ -126,6 +126,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
+        setRetainInstance(true);
     }
 
     @Override
