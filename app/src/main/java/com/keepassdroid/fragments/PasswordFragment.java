@@ -160,6 +160,9 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                 if (!initDecryptData()) {
                     return;
                 }
+
+                biometricCheck.setChecked(false);
+
                 Cipher cipher = biometricHelper.getCipher();
                 biometricOpenPrompt.authenticate(loadPrompt, new BiometricPrompt.CryptoObject(cipher));
             }
