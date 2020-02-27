@@ -104,6 +104,15 @@
              </intent-filter>
             <meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
         </activity>
+        <activity android:name="com.keepassdroid.PanicResponderActivity"
+                  android:launchMode="singleInstance" android:noHistory="true"
+                  android:theme="@android:style/Theme.NoDisplay">
+          <intent-filter>
+            <action android:name="info.guardianproject.panic.action.TRIGGER" />
+            <category android:name="android.intent.category.DEFAULT" />
+          </intent-filter>
+        </activity>
+        <activity android:name="com.keepassdroid.ExitActivity" android:theme="@android:style/Theme.NoDisplay"></activity>
         <activity android:name="com.keepassdroid.settings.AppSettingsActivity"
             android:theme="@style/NoTitleBar"></activity>
         <activity android:name="com.keepassdroid.GeneratePasswordActivity"
