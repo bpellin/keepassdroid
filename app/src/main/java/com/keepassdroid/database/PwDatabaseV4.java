@@ -253,7 +253,7 @@ public class PwDatabaseV4 extends PwDatabase {
 								Node text = children2.item(k);
 								if (text.getNodeType() == Node.TEXT_NODE) {
 									Text txt = (Text) text;
-									return Base64.decode(txt.getNodeValue(), Base64.DEFAULT);
+									return Base64.decode(txt.getNodeValue(), Base64.NO_WRAP);
 								}
 							}
 						}

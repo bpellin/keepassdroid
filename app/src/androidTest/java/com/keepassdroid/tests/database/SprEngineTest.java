@@ -77,7 +77,7 @@ public class SprEngineTest {
 			return PwDatabaseV4.UUID_ZERO;
 		}
 		
-		byte[] buf = Base64.decode(encoded, Base64.DEFAULT);
+		byte[] buf = Base64.decode(encoded, Base64.NO_WRAP);
 		return Types.bytestoUUID(buf);
 	}
 

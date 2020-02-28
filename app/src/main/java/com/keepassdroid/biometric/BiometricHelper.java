@@ -168,11 +168,11 @@ public class BiometricHelper {
         try {
             // actual do encryption here
             byte[] encrypted = cipher.doFinal(value.getBytes());
-            final String encryptedValue = new String(Base64.encodeToString(encrypted, Base64.DEFAULT));
+            final String encryptedValue = new String(Base64.encodeToString(encrypted, Base64.NO_WRAP));
 
             // passes updated iv spec on to callback so this can be stored for decryption
             final IvParameterSpec spec = cipher.getParameters().getParameterSpec(IvParameterSpec.class);
-            final String ivSpecValue = new String(Base64.encode(spec.getIV(), Base64.DEFAULT));
+            final String ivSpecValue = new String(Base64.encode(spec.getIV(), Base64.NO_WRAP));
             biometricCallback.handleEncryptedResult(encryptedValue, ivSpecValue);
 
         } catch (final Exception e) {
@@ -219,7 +219,7 @@ public class BiometricHelper {
         final SecretKey key = (SecretKey) keyStore.getKey(ALIAS_KEY, null);
 
         // important to restore spec here that was used for decryption
-        final byte[] iv = Base64.decode(ivSpecValue, Base64.DEFAULT);
+        final byte[] iv = Base64.decode(ivSpecValue, Base64.NO_WRAP);
         final IvParameterSpec spec = new IvParameterSpec(iv);
         cipher.init(Cipher.DECRYPT_MODE, key, spec);
         cryptoInitOk = true;
@@ -236,7 +236,7 @@ public class BiometricHelper {
         }
         try {
             // actual decryption here
-            final byte[] encrypted = Base64.decode(encryptedValue, Base64.DEFAULT);
+            final byte[] encrypted = Base64.decode(encryptedValue, Base64.NO_WRAP);
             byte[] decrypted = cipher.doFinal(encrypted);
             final String decryptedString = new String(decrypted);
 

@@ -406,7 +406,7 @@ public class ImporterV4 extends Importer {
 			} else if ( name.equalsIgnoreCase(ElemHeaderHash) ) {
 				String encodedHash = ReadString(xpp);
 				if (!EmptyUtils.isNullOrEmpty(encodedHash) && (hashOfHeader != null)) {
-					byte[] hash = Base64.decode(encodedHash, Base64.DEFAULT);
+					byte[] hash = Base64.decode(encodedHash, Base64.NO_WRAP);
 					if (!Arrays.equals(hash, hashOfHeader)) {
 						throw new InvalidDBException();
 					}
@@ -501,7 +501,7 @@ public class ImporterV4 extends Importer {
 			} else if ( name.equalsIgnoreCase(ElemCustomIconItemData) ) {
 				String strData = ReadString(xpp);
 				if ( strData != null && strData.length() > 0 ) {
-					customIconData = Base64.decode(strData, Base64.DEFAULT);
+					customIconData = Base64.decode(strData, Base64.NO_WRAP);
 				} else {
 					assert(false);
 				}
@@ -924,7 +924,7 @@ public class ImporterV4 extends Importer {
 		Date utcDate = null;
 
 		if (version >= PwDbHeaderV4.FILE_VERSION_32_4) {
-			byte[] buf = Base64.decode(sDate, Base64.DEFAULT);
+			byte[] buf = Base64.decode(sDate, Base64.NO_WRAP);
 			if (buf.length != 8) {
 				byte[] buf8 = new byte[8];
 				System.arraycopy(buf, 0, buf8, 0, Math.min(buf.length, 8));
@@ -989,7 +989,7 @@ public class ImporterV4 extends Importer {
 			return PwDatabaseV4.UUID_ZERO;
 		}
 		
-		byte[] buf = Base64.decode(encoded, Base64.DEFAULT);
+		byte[] buf = Base64.decode(encoded, Base64.NO_WRAP);
 		
 		return Types.bytestoUUID(buf);
 	}
@@ -1081,7 +1081,7 @@ public class ImporterV4 extends Importer {
 		String base64 = ReadString(xpp);
 		if ( base64.length() == 0 ) return ProtectedBinary.EMPTY;
 		
-		byte[] data = Base64.decode(base64, Base64.DEFAULT);
+		byte[] data = Base64.decode(base64, Base64.NO_WRAP);
 		
 		if (compressed) {
 			data = MemUtil.decompress(data);
@@ -1123,7 +1123,7 @@ public class ImporterV4 extends Importer {
 				String encrypted = ReadStringRaw(xpp);
 				
 				if ( encrypted.length() > 0 ) {
-					buf = Base64.decode(encrypted, Base64.DEFAULT);
+					buf = Base64.decode(encrypted, Base64.NO_WRAP);
 					byte[] plainText = new byte[buf.length];
 					
 					randomStream.processBytes(buf, 0, buf.length, plainText, 0);
