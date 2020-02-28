@@ -119,6 +119,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     private BiometricPrompt.PromptInfo loadPrompt;
     private BiometricHelper biometricHelper;
 
+    private boolean afterOnCreateBeforeEndOfOnResume = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -126,6 +127,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
         setHasOptionsMenu(true);
         setRetainInstance(true);
+        afterOnCreateBeforeEndOfOnResume = true;
     }
 
     @Override
@@ -156,14 +158,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         biometricOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!initDecryptData()) {
-                    return;
-                }
-
-                biometricCheck.setChecked(false);
-
-                Cipher cipher = biometricHelper.getCipher();
-                biometricOpenPrompt.authenticate(loadPrompt, new BiometricPrompt.CryptoObject(cipher));
+                biometricLogin();
             }
         });
 
@@ -173,6 +168,17 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                 clearStoredCredentials();
             }
         });
+    }
+
+    private void biometricLogin() {
+        if (!initDecryptData()) {
+            return;
+        }
+
+        biometricCheck.setChecked(false);
+
+        Cipher cipher = biometricHelper.getCipher();
+        biometricOpenPrompt.authenticate(loadPrompt, new BiometricPrompt.CryptoObject(cipher));
     }
 
     @Override
@@ -212,6 +218,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
     private void biometricOpenUpdateVisibility() {
         int visibility;
+        boolean autoOpen = false;
         BiometricManager biometricManager = BiometricManager.from(getActivity());
         int auth = biometricManager.canAuthenticate();
         if (biometricsAvailable && auth != BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED) {
@@ -222,6 +229,9 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
             if (hasStoredKey) {
                 // Check key value
                 visibility = View.VISIBLE;
+                autoOpen = prefs.getBoolean(getString(R.string.biometric_autoscan_key),
+                        getResources().getBoolean(R.bool.biometric_autoscan))
+                        && afterOnCreateBeforeEndOfOnResume;
             } else {
                 visibility = View.GONE;
             }
@@ -233,6 +243,27 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         biometricOpen.setVisibility(visibility);
         biometricClear.setVisibility(visibility);
         divider3.setVisibility(visibility);
+
+        if (autoOpen) {
+            Thread delayThread = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        // Ignore
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            biometricLogin();
+                        }
+                    });
+                }
+            };
+            delayThread.start();
+        }
     }
 
     private void initBiometrics() {
@@ -424,6 +455,8 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
             biometricsAvailable = false;
             setFingerPrintVisibilty();
         }
+
+        afterOnCreateBeforeEndOfOnResume = false;
     }
 
     @Override

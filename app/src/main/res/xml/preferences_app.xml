@@ -75,4 +75,9 @@
 		app:summary="@string/rounds_fix_explaination"
 		android:inputType="number"
 		app:title="@string/rounds_fix"/>
+	<CheckBoxPreference
+		android:summary="@string/biometric_auto_open"
+		android:defaultValue="@bool/biometric_autoscan"
+		android:title="@string/biometric_auto_open_title"
+		android:key="@string/biometric_autoscan_key"/>
 </PreferenceScreen>

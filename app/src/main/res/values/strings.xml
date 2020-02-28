@@ -36,6 +36,8 @@
     <string name="application">Application</string>
     <string name="application_settings">Application settings</string>
     <string name="beta_dontask">Don\'t show again</string>
+    <string name="biometric_auto_open">Automatically prompt for biometric login when opening file.</string>
+    <string name="biometric_auto_open_title">Automatic biometric Login</string>
     <string name="biometric_auth_failed">Failed to authenticate biometric</string>
     <string name="biometric_auth_failed_store">Failed to authenticate, password was not stored</string>
     <string name="biometric_auth_error">Authentication error</string>
@@ -191,7 +193,7 @@
     <string name="unsupported_db_version">Unsupported database version.</string>
     <string name="uppercase">Upper-case</string>
     <string name="use_saf_summary">Use Android Storage Access Framework for file browsing (KitKat and later)</string>
-    <string name="use_saf_title">Storage Access Framework</string>
+    <string name="use_saf_title">Storage access framework</string>
     <string name="warning">Warning</string>
     <string name="warning_password_encoding">The .kdb format only supports the Latin1 character set. Your password may contain characters outside of this character set. All non-Latin1 charaters are converted to the same character, which reduces the security of your password. Changing your password is recommended.</string>
     <string name="warning_read_only">Your sd card is currently read-only. You may not be able to save changes to your database.</string>
