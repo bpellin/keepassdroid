@@ -27,7 +27,6 @@
     <string name="add_group">Pridať Skupinu</string>
     <string name="add_group_title">Pridať Skupinu</string>
     <string name="algorithm">Algoritmus</string>
-    <string name="algorithm_colon">Algoritmus:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Časový limit aplikácie.</string>
     <string name="app_timeout_summary">Čas pred uzamknutím databázy, ak je aplikácia neaktívna.</string>
@@ -35,7 +34,6 @@
     <string name="application_settings">Nastavenia aplikácie</string>
     <string name="brackets">Konzoly</string>
     <string name="browser_intall_text">Prezeranie súborov vyžaduje otvorenie Správcu súborov, kliknite nižšie pre inštalovanie. Kôli chybám v správcovi súborov, prehľadávanie nemusí pracovať správne, ak prehľadávate prvý krát.</string>
-    <string name="building_search_idx">Spracúvam index hľadania&#8230;</string>
     <string name="cancel">Zrušiť</string>
     <string name="ClearClipboard">Schránka vyčistená.</string>
     <string name="clipboard_timeout">Timeout Schránky</string>
@@ -43,11 +41,8 @@
     <string name="copy_username">Meno skopírované do schránky</string>
     <string name="copy_password">Heslo skopírované do schránky</string>
     <string name="creating_db_key">Vytváram databázový kľúč&#8230;</string>
-    <string name="current_group">Aktuálna skupina: </string>
-    <string name="current_group_root">Aktuálna skupina: Root</string>
     <string name="database">Databáza</string>
     <string name="decrypting_db">Dešifrujem obsah databázy&#8230;</string>
-    <string name="decrypting_entry">Dešifrujem záznam</string>
     <string name="default_checkbox">Použiť toto ako predvolenú databázu</string>
     <string name="digits">Číslice</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 Brian Pellin použitie Absolútne bez Záruky; Toto je free software, a môžete ho používať pod GPL ver. 2 alebo vyššie.</string>
@@ -69,10 +64,8 @@
     <string name="entry_user_name">Užívateľské meno: </string>
     <string name="error_arc4">ArcFour stream šifra nieje podporovaná.</string>
     <string name="error_can_not_handle_uri">KeePassDroid nevie použiť túto uri.</string>
-    <string name="error_could_not_create_group">Chyba vytvárania Skupiny.</string>
     <string name="error_could_not_create_parent">Neviem vytvoriť nadradený adresár.</string>
     <string name="error_database_exists">Tento súbor už existuje.</string>
-    <string name="error_database_settings">Nedajú sa zistiť nastavenia databázy.</string>
     <string name="error_failed_to_launch_link">Nedá sa spustiť odkaz.</string>
     <string name="error_filename_required">Vyžaduje sa názov súboru.</string>
     <string name="error_file_not_create">Neviem vytvoriť súbor:</string>
@@ -111,7 +104,6 @@
     <string name="list_size_summary">Veľkosť textu v zozname skupín</string>
     <string name="loading_database">Načítavam Databázu&#8230;</string>
     <string name="lowercase">Malé písmená</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Skryť heslo</string>
     <string name="maskpass_summary">Skryť heslá štandardne</string>
     <string name="menu_about">O Programe</string>
@@ -125,7 +117,6 @@
     <string name="menu_donate">Darovať</string>
     <string name="menu_edit">Upraviť</string>
     <string name="menu_hide_password">Skryť Heslo</string>
-    <string name="menu_homepage">Ísť na domovskú stránku</string>
     <string name="menu_lock">Zamknúť Databázu</string>
     <string name="menu_open">Otvoriť</string>
     <string name="menu_rename">Premenovať</string>
@@ -134,7 +125,6 @@
     <string name="menu_url">Ísť na URL</string>
     <string name="minus">Mínus</string>
     <string name="never">Nikdy</string>
-    <string name="no_keys">Žiadne záznamy v Databáze.</string>
     <string name="no_results">Žiadne výsledky hľadania</string>
     <string name="no_url_handler">Žiaden manažér pre url.</string>
     <string name="open_recent">Otvoriť poslednú databázu (kliknutím otvoriť):</string>

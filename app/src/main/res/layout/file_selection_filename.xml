@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2010 Brian Pellin.
+ Copyright 2010-2020 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -19,8 +19,7 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
->
+	android:layout_height="wrap_content">
 	<TextView android:id="@+id/label_warning"
 	  android:layout_width="wrap_content"
 	  android:layout_height="wrap_content"

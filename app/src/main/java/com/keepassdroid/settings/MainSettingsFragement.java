@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2020 Brian Pellin.
+ * Copyright 2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -23,26 +23,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+
 import com.android.keepass.R;
-import com.keepassdroid.LockCloseActivity;
+import com.keepassdroid.Database;
+import com.keepassdroid.app.App;
 
-public class AppSettingsActivity extends LockCloseActivity {
-
+public class MainSettingsFragement extends PreferenceFragmentCompat {
+	public static boolean KEYFILE_DEFAULT = false;
+	
 	public static void Launch(Context ctx) {
-		Intent i = new Intent(ctx, AppSettingsActivity.class);
+		Intent i = new Intent(ctx, MainSettingsFragement.class);
 		
 		ctx.startActivity(i);
 	}
-	
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+		addPreferencesFromResource(R.xml.preferences);
 
-		setContentView(R.layout.settings);
-
-		getSupportFragmentManager()
-			.beginTransaction()
-			.replace(R.id.settings, new MainSettingsFragement())
-			.commit();
+		Database db = App.getDB();
+		if ( !(db.Loaded() && db.pm.appSettingsEnabled()) ) {
+			Preference dbSettings = findPreference(getString(R.string.db_key));
+			dbSettings.setEnabled(false);
+		}
 	}
 }

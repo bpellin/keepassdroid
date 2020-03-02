@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -22,7 +22,9 @@ package com.keepassdroid;
 import android.app.Dialog;
 import android.content.Context;
 
-public class CancelDialog extends Dialog {
+import androidx.appcompat.app.AppCompatDialog;
+
+public class CancelDialog extends AppCompatDialog {
 
 	private boolean mCanceled = false; 
 	

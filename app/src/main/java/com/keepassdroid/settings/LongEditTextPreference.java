@@ -1,6 +1,6 @@
 /*
- * Copyright 2017 Brian Pellin.
- *     
+ * Copyright 2017-2020 Brian Pellin.
+ *
  * This file is part of KeePassDroid.
  *
  *  KeePassDroid is free software: you can redistribute it and/or modify
@@ -19,26 +19,29 @@
  */
 package com.keepassdroid.settings;
 
-
 import android.content.Context;
-import android.preference.EditTextPreference;
 import android.util.AttributeSet;
 import android.widget.Toast;
+
+import androidx.preference.EditTextPreference;
 
 import com.android.keepass.R;
 
 public class LongEditTextPreference extends EditTextPreference {
+    public LongEditTextPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
 
-    public LongEditTextPreference(Context context) {
-        super(context);
+    public LongEditTextPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     public LongEditTextPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public LongEditTextPreference(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    public LongEditTextPreference(Context context) {
+        super(context);
     }
 
     @Override

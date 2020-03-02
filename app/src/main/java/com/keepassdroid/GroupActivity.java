@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2014 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -33,6 +33,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.keepass.KeePass;
 import com.android.keepass.R;
@@ -145,7 +147,8 @@ public abstract class GroupActivity extends GroupBaseActivity {
 		} else {
 			setContentView(new GroupViewOnlyView(this));
 		}
-		Log.w(TAG, "Set view");
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 
 		if ( addGroupEnabled ) {
 			// Add Group button
@@ -203,6 +206,8 @@ public abstract class GroupActivity extends GroupBaseActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
+		super.onActivityResult(requestCode, resultCode, data);
+
 		switch (resultCode)
 		{
 			case Activity.RESULT_OK:

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright 2009-2020 Brian Pellin.
+     
+ This file is part of KeePassDroid.
+
+  KeePassDroid is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
+
+  KeePassDroid is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<PreferenceScreen
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<CheckBoxPreference
+	  app:summary="@string/recentfile_summary"
+	  app:defaultValue="@bool/recentfile_default"
+	  app:title="@string/recentfile_title"
+	  app:key="@string/recentfile_key"/>
+	<CheckBoxPreference
+		app:key="@string/keyfile_key"
+		app:title="@string/remember_keyfile_title"
+		app:summary="@string/remember_keyfile_summary"
+		app:dependency="@string/recentfile_key"
+		app:defaultValue="@bool/keyfile_default"/>
+	<ListPreference
+	  app:key="@string/clipboard_timeout_key"
+	  app:title="@string/clipboard_timeout"
+	  app:summary="@string/clipboard_timeout_summary"
+	  app:entries="@array/clipboard_timeout_options"
+	  app:entryValues="@array/clipboard_timeout_values"
+	  app:dialogTitle="@string/clipboard_timeout"
+	  app:defaultValue="@string/clipboard_timeout_default"/>
+	<ListPreference
+	  app:key="@string/app_timeout_key"
+	  app:title="@string/app_timeout"
+	  app:summary="@string/app_timeout_summary"
+	  app:entries="@array/clipboard_timeout_options"
+	  app:entryValues="@array/clipboard_timeout_values"
+	  app:dialogTitle="@string/app_timeout"
+	  app:defaultValue="@string/clipboard_timeout_default"/>
+	<CheckBoxPreference
+	  app:key="@string/maskpass_key"
+	  app:title="@string/maskpass_title"
+	  app:summary="@string/maskpass_summary"
+	  app:defaultValue="@bool/maskpass_default"/>
+	<ListPreference
+	  app:key="@string/list_size_key"
+	  app:title="@string/list_size_title"
+	  app:summary="@string/list_size_summary"
+	  app:entries="@array/list_size_options"
+	  app:entryValues="@array/list_size_values"
+	  app:dialogTitle="@string/list_size_summary"
+	  app:defaultValue="@string/list_size_default"/>
+	<CheckBoxPreference
+	  app:summary="@string/omitbackup_summary"
+	  app:defaultValue="@bool/omitbackup_default"
+	  app:title="@string/omitbackup_title"
+	  app:key="@string/omitbackup_key"/>
+	<CheckBoxPreference
+		app:summary="@string/use_saf_summary"
+		app:defaultValue="@bool/saf_default"
+		app:title="@string/use_saf_title"
+		app:key="@string/saf_key"/>
+	<com.keepassdroid.settings.LongEditTextPreference
+		app:key="@string/roundsFix_key"
+		app:summary="@string/rounds_fix_explaination"
+		android:inputType="number"
+		app:title="@string/rounds_fix"/>
+	<CheckBoxPreference
+		android:summary="@string/biometric_auto_open"
+		android:defaultValue="@bool/biometric_autoscan"
+		android:title="@string/biometric_auto_open_title"
+		android:key="@string/biometric_autoscan_key"/>
+</PreferenceScreen>

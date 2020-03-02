@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2019 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,8 +19,6 @@
  */
 package com.keepassdroid.fileselect;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -49,6 +47,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.android.keepass.R;
 import com.keepassdroid.AboutDialog;
 import com.keepassdroid.GroupActivity;
@@ -75,7 +76,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLDecoder;
 
-public class FileSelectActivity extends Activity {
+public class FileSelectActivity extends AppCompatActivity {
 
     private ListView mList;
     private ListAdapter mAdapter;
@@ -159,6 +160,9 @@ public class FileSelectActivity extends Activity {
         } else {
             setContentView(R.layout.file_selection_no_recent);
         }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mList = (ListView)findViewById(R.id.file_list);
 

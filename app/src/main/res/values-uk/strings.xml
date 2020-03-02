@@ -27,7 +27,6 @@
     <string name="add_group">Додати групу</string>
     <string name="add_group_title">Додати групу</string>
     <string name="algorithm">Алгоритм</string>
-    <string name="algorithm_colon">Алгоритм:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Тайм-аут програми</string>
     <string name="app_timeout_summary">Час перед закриттям бази даних, коли програма є неактивною.</string>
@@ -35,7 +34,6 @@
     <string name="application_settings">Налаштування програми</string>
     <string name="brackets">Дужки</string>
     <string name="browser_intall_text">Для перегляду файла необхідно Open Intents File Manager, натисніть нижче для його інсталяції. У зв’язку з деякими недоробками у менеджері файлів перегляд може працювати некоректно при запуску перший раз.</string>
-    <string name="building_search_idx">Будується пошуковий індекс&#8230;</string>
     <string name="cancel">Відміна</string>
     <string name="ClearClipboard">Буфер обміну очищено.</string>
     <string name="clipboard_timeout">Тайм-аут буфера обміну</string>
@@ -43,11 +41,8 @@
     <string name="copy_username">Копіювати ім’я користувача до буфера обміну</string>
     <string name="copy_password">Копіювати пароль до буфера обміну</string>
     <string name="creating_db_key">Створення ключа бази даних&#8230;</string>
-    <string name="current_group">Поточна група: </string>
-    <string name="current_group_root">Поточна група: корінь</string>
     <string name="database">База даних</string>
     <string name="decrypting_db">Розшифрування змісту бази даних&#8230;</string>
-    <string name="decrypting_entry">Розшифрування запису</string>
     <string name="default_checkbox">Використовувати як мою типову базу даних</string>
     <string name="digits">Цифри</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 Brian Pellin comes with ABSOLUTELY NO WARRANTY; This is free software, and you are welcome to redistribute it under the conditions of the GPL version 2 or later.</string>
@@ -69,10 +64,8 @@
     <string name="entry_user_name">Ім’я користувача: </string>
     <string name="error_arc4">Потокове шифрування ArcFour не підтримується.</string>
     <string name="error_can_not_handle_uri">KeePassDroid не може опрацювати цю адресу.</string>
-    <string name="error_could_not_create_group">Помилка створення групи.</string>
     <string name="error_could_not_create_parent">Не вдалося створити батьківський каталог.</string>
     <string name="error_database_exists">Файл вже існує.</string>
-    <string name="error_database_settings">Не вдалося визначити параметри бази даних.</string>
     <string name="error_failed_to_launch_link">Не вдалося відкрити посилання.</string>
     <string name="error_filename_required">Необхідно ім’я файла.</string>
     <string name="error_file_not_create">Не можливо створити файл:</string>
@@ -111,7 +104,6 @@
     <string name="list_size_summary">Розмір тексту у списку груп</string>
     <string name="loading_database">Завантаження бази даних&#8230;</string>
     <string name="lowercase">Нижній регістр</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Маска пароля</string>
     <string name="maskpass_summary">Приховати паролі за замовчуванням</string>
     <string name="menu_about">Про</string>
@@ -125,7 +117,6 @@
     <string name="menu_donate">Пожертвувати</string>
     <string name="menu_edit">Редагувати</string>
     <string name="menu_hide_password">Приховати пароль</string>
-    <string name="menu_homepage">Перейти на домашню сторінку</string>
     <string name="menu_lock">Блокувати базу даних</string>
     <string name="menu_open">Відкрити</string>
     <string name="menu_rename">Перейменувати</string>
@@ -134,7 +125,6 @@
     <string name="menu_url">Перейти по посиланню</string>
     <string name="minus">Minus</string>
     <string name="never">Ніколи</string>
-    <string name="no_keys">Нема записів у базі даних або у групі.</string>
     <string name="no_results">Нічого не знайдено.</string>
     <string name="no_url_handler">Нема програми для опрацювання цього посилання.</string>
     <string name="open_recent">Відкрити останню базу даних (натисніть для відкриття):</string>

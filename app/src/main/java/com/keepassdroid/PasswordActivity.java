@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.keepass.R;
 import com.keepassdroid.app.App;
@@ -35,7 +36,7 @@ import com.keepassdroid.utils.UriUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class PasswordActivity extends LockingFragmentActivity {
+public class PasswordActivity extends LockingActivity {
 
     public static final String KEY_DEFAULT_FILENAME = "defaultFileName";
     public static final String KEY_FILENAME = "fileName";
@@ -83,5 +84,8 @@ public class PasswordActivity extends LockingFragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.password_activity);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 }

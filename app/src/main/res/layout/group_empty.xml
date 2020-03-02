@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009 Brian Pellin.
+ Copyright 2009-2020 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -18,12 +18,22 @@
   along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+	<androidx.appcompat.widget.Toolbar
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="?attr/colorPrimary"
+		android:elevation="4dp"
+		android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+		app:popupTheme="@style/ThemeOverlay.AppCompat" />
 	<com.keepassdroid.view.GroupHeaderView
 	  android:id="@+id/group_header"
 	  android:layout_width="wrap_content"
-	  android:layout_height="wrap_content"/>
+	  android:layout_height="wrap_content"
+	  android:layout_below="@id/toolbar"/>
 	<ListView android:id="@+id/group_list"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"

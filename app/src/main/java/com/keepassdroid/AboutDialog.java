@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,7 +19,6 @@
  */
 package com.keepassdroid;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -28,9 +27,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatDialog;
+
 import com.android.keepass.R;
 
-public class AboutDialog extends Dialog {
+public class AboutDialog extends AppCompatDialog {
 	
 	public AboutDialog(Context context) {
 		super(context);

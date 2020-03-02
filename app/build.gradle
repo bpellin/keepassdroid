@@ -9,8 +9,8 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
 
-        versionCode = 182
-        versionName = "2.5.0"
+        versionCode = 188
+        versionName = "2.5.5"
 
         testApplicationId = "com.keepassdroid.tests"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -52,11 +52,15 @@ android {
 dependencies {
 
     implementation 'com.madgag.spongycastle:core:1.58.0.0'
-    implementation 'com.madgag.spongycastle:prov:1.58.0.0'
+    implementation ('com.madgag.spongycastle:prov:1.58.0.0') {
+        exclude group: 'junit'
+    }
     implementation 'joda-time:joda-time:2.9.4'
     implementation 'androidx.core:core:1.2.0'
     implementation 'org.apache.commons:commons-io:1.3.2'
     implementation "androidx.biometric:biometric:1.0.1"
+    implementation "androidx.preference:preference:1.1.0"
+    implementation "com.google.android.material:material:1.1.0"
 
     androidTestImplementation'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

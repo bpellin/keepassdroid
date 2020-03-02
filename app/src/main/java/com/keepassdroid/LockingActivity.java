@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Brian Pellin.
+ * Copyright 2012-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,11 +19,11 @@
  */
 package com.keepassdroid;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.keepassdroid.timeout.TimeoutHelper;
 
-public abstract class LockingActivity extends Activity {
+public abstract class LockingActivity extends AppCompatActivity {
 
 	@Override
 	protected void onPause() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -23,7 +23,10 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
+
 import com.android.keepass.KeePass;
+import com.android.keepass.R;
 import com.keepassdroid.Database;
 import com.keepassdroid.GroupBaseActivity;
 import com.keepassdroid.PwGroupListAdapter;
@@ -69,7 +72,9 @@ public class SearchResults extends GroupBaseActivity {
 		} else {
 			setContentView(new GroupViewOnlyView(this));
 		}
-		
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
 		setGroupTitle();
 		
 		setListAdapter(new PwGroupListAdapter(this, mGroup));

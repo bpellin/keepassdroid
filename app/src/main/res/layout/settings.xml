@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2018 Brian Pellin.
-     
+ Copyright 2020 Brian Pellin.
+
  This file is part of KeePassDroid.
 
   KeePassDroid is free software: you can redistribute it and/or modify
@@ -17,22 +17,8 @@
   You should have received a copy of the GNU General Public License
   along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_patreon"
-        android:title="@string/menu_patreon"
-        android:showAsAction="ifRoom"
-        android:visible="false"
-        />
-    <item android:id="@+id/menu_donate"
-        android:title="@string/menu_donate"
-        android:visible="false"
-        />
-    <item android:id="@+id/menu_about"
-        android:title="@string/menu_about"
-        android:showAsAction="ifRoom"
-    />
-    <item android:id="@+id/menu_app_settings"
-        android:title="@string/menu_app_settings"
-        android:showAsAction="ifRoom"
-    />
-</menu>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settings"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+

@@ -28,14 +28,12 @@
     <string name="add_group_title">Новая группа</string>
     <string name="add_string">Новая строка</string>
     <string name="algorithm">Алгоритм</string>
-    <string name="algorithm_colon">Алгоритм:</string>
     <string name="app_name">KeePass</string>
     <string name="app_timeout">Блокировка базы</string>
     <string name="app_timeout_summary">Задержка блокировки при бездействии</string>
     <string name="application">Программа</string>
     <string name="application_settings">Настройки приложения</string>
     <string name="beta_dontask">Не показывать снова</string>
-    <string name="beta_warning">Поддержка сохранения баз kdbx ЭКСПЕРИМЕНТАЛЬНАЯ. Сделайте резервную копию базы перед сохранением.</string>
     <string name="biometric_auth_failed">Невозможно идентифицировать биометрические данные</string>
     <string name="biometric_auth_failed_store">Идентификация не выполнена, пароль не сохранён</string>
     <string name="biometric_auth_error">Ошибка идентификации</string>
@@ -47,7 +45,6 @@
     <string name="biometric_save_password">Сохранить пароль</string>
     <string name="brackets">{[(Скобки)]}</string>
     <string name="browser_intall_text">Для функции обзора необходим Open Intents File Manager, нажмите ниже, чтобы установить его. Из-за некоторых странностей в нём первый просмотр может работать некорректно.</string>
-    <string name="building_search_idx">Индексирование…</string>
     <string name="cancel">Отмена</string>
     <string name="ClearClipboard">Буфер обмена очищен</string>
     <string name="clipboard_error_title">Ошибка буфера обмена</string>
@@ -58,11 +55,8 @@
     <string name="copy_username">Логин – в буфер</string>
     <string name="copy_password">Пароль – в буфер</string>
     <string name="creating_db_key">Создание ключа…</string>
-    <string name="current_group">Текущая группа:</string>
-    <string name="current_group_root">Текущая группа: корневая</string>
     <string name="database">База</string>
     <string name="decrypting_db">Расшифровка базы…</string>
-    <string name="decrypting_entry">Расшифровка записи…</string>
     <string name="default_checkbox">По умолчанию</string>
     <string name="digits">Цифры 0…9</string>
     <string name="disclaimer_formal">"KeePassDroid © 2009–2020
@@ -88,10 +82,8 @@
     <string name="entry_user_name">Логин:</string>
     <string name="error_arc4">Потоковый шифр ArcFour не поддерживается</string>
     <string name="error_can_not_handle_uri">Невозможно перейти по указанному адресу</string>
-    <string name="error_could_not_create_group">Невозможно создать группу</string>
     <string name="error_could_not_create_parent">Невозможно создать родительскую папку</string>
     <string name="error_database_exists">Такой файл уже существует</string>
-    <string name="error_database_settings">Неправильные настройки базы</string>
     <string name="error_failed_to_launch_link">Невозможно открыть ссылку</string>
     <string name="error_filename_required">Введите имя файла</string>
     <string name="error_file_not_create">Невозможно создать файл:</string>
@@ -137,7 +129,6 @@
     <string name="list_size_summary">Размер шрифта в списке групп и записей</string>
     <string name="loading_database">Загрузка…</string>
     <string name="lowercase">строчные</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Скрыть пароли</string>
     <string name="maskpass_summary">Скрывать пароли маской *****</string>
     <string name="menu_about">Сведения</string>
@@ -151,7 +142,6 @@
     <string name="menu_donate">Помочь</string>
     <string name="menu_edit">Правка</string>
     <string name="menu_hide_password">Скрыть</string>
-    <string name="menu_homepage">Сайт</string>
     <string name="menu_lock">Блокировка</string>
     <string name="menu_open">Открыть</string>
     <string name="menu_patreon">Пожертвование</string>
@@ -161,7 +151,6 @@
     <string name="menu_url">Ссылка</string>
     <string name="minus">-Дефис-</string>
     <string name="never">Никогда</string>
-    <string name="no_keys">Нет записей в базе или группе</string>
     <string name="no_results">Совпадения не найдены</string>
     <string name="no_url_handler">Невозможно открыть ссылку</string>
     <string name="open_recent">Недавно открытые:</string>
@@ -207,19 +196,9 @@
     <string name="warning_read_only">Запись на карту памяти невозможна. Изменения не будут сохранены.</string>
     <string name="warning_unmounted">Карта памяти не подключена. Работа с базой невозможна.</string>
     <string name="version_label">Версия:</string>
-    <string name="configure_fingerprint">Отпечатки пальцев поддерживаются, но не настроены на устройстве</string>
-    <string name="scanning_fingerprint">Ожидание отпечатка пальца</string>
     <string name="encrypted_value_stored">Зашифрованный пароль сохранён</string>
     <string name="fingerprint_invalid_key">Проблема из-за недействительного ключа</string>
-    <string name="fingerprint_error">Проблема с отпечатком пальца</string>
-    <string name="store_with_fingerprint">Используйте отпечаток пальца, чтобы сохранить пароль</string>
-    <string name="no_password_stored">Для этой базы пароль ещё не сохранён</string>
-    <string name="fingerprint_notrecognized">Отпечаток пальца не распознан</string>
-    <string name="fingerprint_key_invalidated">Сохранённый пароль больше не действителен, введите его заново</string>
     <string name="no_external_permissions">В разрешении на чтение и запись на внешнее хранилище было отказано</string>
-    <string name="fingerprint_autoscan">Разрешить автоматическое сканирование отпечатков пальцев при открытии файла. Отключите данную функцию, если сканирование вызывает проблемы.</string>
-    <string name="fingerprint_autoscan_title">Сканирование отпечатков пальцев</string>
-    <string name="fingerprint_autoscan_hint">Автоматическое сканирование отпечатков пальцев не включено</string>
 
     <string-array name="clipboard_timeout_options">
        <item>30 секунд</item>

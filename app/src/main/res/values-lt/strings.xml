@@ -5,7 +5,6 @@
     <string name="ClearClipboard">Iškarpinė išvalyta.</string>
     <string name="FileNotFound">Failas nerastas.</string>
     <string name="InvalidPassword">Neteisingas slaptažodis arba rakto failas.</string>
-    <string name="MaskedPassword">*****</string>
     <string name="about_feedback">Atsiliepimai:</string>
     <string name="about_homepage">Pagrindinis puslapis:</string>
     <string name="about_twitter">Twitter:</string>
@@ -15,7 +14,6 @@
     <string name="add_group_title">Pridėti grupę</string>
     <string name="add_string">Pridėti eilutę</string>
     <string name="algorithm">Algortimas</string>
-    <string name="algorithm_colon">Algortimas:</string>
     <string name="app_timeout_summary">Laikas, per kurį yra užrakinama duomenų bazė po neveiklumo programėlėje.</string>
     <string name="application">Programėlė</string>
     <string name="application_settings">Programėlės nustatymai</string>
@@ -89,7 +87,6 @@
     <string name="menu_copy_pass">Kopijuoti slaptažodį</string>
     <string name="menu_copy_user">Kopijuoti naudotoją</string>
     <string name="invalid_db_sig">Duomenų bazės formatas nežinomas.</string>
-    <string name="current_group">Dabartinė grupė:</string>
     <string name="sort_db">DB rūšiavimo tvarka</string>
     <string name="menu_hide_password">Slėpti slaptažodį</string>
     <string name="app_timeout">Programėlės neveiklumas</string>
@@ -118,7 +115,6 @@
     <string name="open_recent">Atidaryti naujausią duomenų bazę (spausti)</string>
     <string name="default_checkbox">Naudoti šią duomenų bazę kaip numatytąją</string>
     <string name="maskpass_summary">Slėpti slaptažodžius pagal nutylėjimą</string>
-    <string name="menu_homepage">Eiti į pagrindinį puslapį</string>
     <string name="invalid_algorithm">Neteisingas algoritmas.</string>
     <string name="error_invalid_path">Neteisingas kelias.</string>
 </resources>

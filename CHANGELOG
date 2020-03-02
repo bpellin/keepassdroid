@@ -1,3 +1,21 @@
+KeePassDroid (2.5.5)
+ * Add auto login setting
+
+KeePassDroid (2.5.4)
+ * Bug fixes
+
+KeePassDroid (2.5.3)
+ * Bug fixes
+ * Move more into compat library
+
+KeePassDroid (2.5.2)
+ * Bug fixes
+ * Updated Italian translations:x
+
+KeePassDroid (2.5.1)
+ * Updated Russian translations
+ * Small fixes
+
 KeePassDroid (2.5.0)
  * Switch from fingerprint to biometric API
 

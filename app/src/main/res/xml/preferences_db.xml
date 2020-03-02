@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009 Brian Pellin.
+ Copyright 2009-2020 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -17,17 +17,17 @@
   You should have received a copy of the GNU General Public License
   along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-	<EditText android:id="@+id/rounds" 
-	  android:hint="@string/rounds_hint"
-	  android:layout_height="wrap_content"
-	  android:layout_width="fill_parent"
-	  android:inputType="number"/> 
-	<TextView android:id="@+id/rounds_explaination" 
-	  android:text="@string/rounds_explaination"
-	  android:layout_height="wrap_content"
-	  android:layout_width="wrap_content" 
-	  android:layout_below="@id/rounds"/>
-</RelativeLayout>
+<PreferenceScreen
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<Preference
+	  app:key="@string/algorithm_key"
+	  app:title="@string/algorithm"
+	  app:enabled="false"/>
+	<EditTextPreference
+	  app:key="@string/rounds_key"
+	  app:persistent="false"
+	  app:title="@string/rounds"
+	  app:positiveButtonText="@string/entry_save"
+	  app:negativeButtonText="@string/entry_cancel"/>
+</PreferenceScreen>

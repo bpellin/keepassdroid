@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2017 Brian Pellin.
+ * Copyright 2010-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,6 +19,7 @@
  */
 package com.keepassdroid.database;
 
+import android.util.Base64;
 import android.webkit.URLUtil;
 
 import com.keepassdroid.collections.VariantDictionary;
@@ -52,8 +53,6 @@ import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import biz.source_code.base64Coder.Base64Coder;
 
 
 public class PwDatabaseV4 extends PwDatabase {
@@ -254,7 +253,7 @@ public class PwDatabaseV4 extends PwDatabase {
 								Node text = children2.item(k);
 								if (text.getNodeType() == Node.TEXT_NODE) {
 									Text txt = (Text) text;
-									return Base64Coder.decode(txt.getNodeValue());
+									return Base64.decode(txt.getNodeValue(), Base64.NO_WRAP);
 								}
 							}
 						}

@@ -29,17 +29,14 @@
     <string name="add_group">Taldea gehitu</string>
     <string name="add_group_title">Taldea gehitu</string>
     <string name="algorithm">Algoritmoa</string>
-    <string name="algorithm_colon">Algoritmoa:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Aplikazioa itzaltzeko denbora</string>
     <string name="app_timeout_summary">Denbora datubasea blokeatu baino lehenago aplikazioa erabili gabe dagoenean</string>
     <string name="application">Aplikazioa</string>
     <string name="application_settings">Aplikazioaren ezarpenak</string>
     <string name="beta_dontask">Ez erakutsi berriro</string>
-    <string name="beta_warning">kdbx fitxategietan aldatzeko euskarria ESPERIMENTALA da. Egin zure datubasearen segurtasun kopiak aldaketak gorde baino lehenago.</string>
     <string name="brackets">Brackets</string>
     <string name="browser_intall_text">Fitxategietan nabigatzeak Open Intents Fitxategi Kudeatzailea behar du. Klik egin azpian instalatzeko. Fitxategien kudeatzailaren arazo batzuk direla eta, izan daiteke nabigazioak ondo ez funtzionatzea lehenengo aldian.</string>
-    <string name="building_search_idx">Bilatzeko aurkibidea sortzen&#8230;</string>
     <string name="cancel">Utzi</string>
     <string name="ClearClipboard">Arbela ezabatuta.</string>
     <string name="clipboard_error_title">Arbelean errorea</string>
@@ -50,11 +47,8 @@
     <string name="copy_username">Aukeratu erabiltzaile izena edo pasahitza kopiatzeko</string>
     <string name="copy_password">Aukeratu pasahitza arbelera kopiatzeko</string>
     <string name="creating_db_key">Datubasearen gakoa sortzen&#8230;</string>
-    <string name="current_group">Oraingo taldea: </string>
-    <string name="current_group_root">Oraingo taldea: Root</string>
     <string name="database">Datubasea</string>
     <string name="decrypting_db">Datubasearen datuak desenkriptatzen&#8230;</string>
-    <string name="decrypting_entry">Sarrera desenkriptatzen</string>
     <string name="default_checkbox">Hau erabili modu lehenetsitako datubase gisa</string>
     <string name="digits">Zenbakiak</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 Brian Pellin ez dakar inolako bermerik; Lan hau software librea da; banatu edo/eta aldatu egin dezakezu GNU General Public License bigarren bertsioaren baldintzapean.</string>
@@ -77,10 +71,8 @@
     <string name="entry_user_name">Erabiltzaile izena: </string>
     <string name="error_arc4">ArcFour stream zifratze sisterako ez dago euskarririk..</string>
     <string name="error_can_not_handle_uri">KeePassDroid-ek ezin dut uri hau kudeatu.</string>
-    <string name="error_could_not_create_group">Errorea taldea sortzerakoan.</string>
     <string name="error_could_not_create_parent">Ezin izan da aita-direktorioa sortu.</string>
     <string name="error_database_exists">Fitxategia esistitzen da.</string>
-    <string name="error_database_settings">Ezin izan dira zehaztu datubasearen ezarpenak.</string>
     <string name="error_failed_to_launch_link">Ezin izan da esteka ireki.</string>
     <string name="error_filename_required">Fitxategi izen bat beharrezkoa da.</string>
     <string name="error_file_not_create">Ezin izan da fitxategia sortu:</string>
@@ -125,7 +117,6 @@
     <string name="list_size_summary">Testuaren tamaina taldearen listan</string>
     <string name="loading_database">Datubasea kargatzen&#8230;</string>
     <string name="lowercase">minuskulak</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Pasahitza estali</string>
     <string name="maskpass_summary">Pasahitza estali modu lehenetsian</string>
     <string name="menu_about">Honi buruz</string>
@@ -139,7 +130,6 @@
     <string name="menu_donate">Dirua eman</string>
     <string name="menu_edit">Editatu</string>
     <string name="menu_hide_password">Pasahitza Ezkutatu</string>
-    <string name="menu_homepage">Hasierako orrira joan</string>
     <string name="menu_lock">Datubasea Blokeatu</string>
     <string name="menu_open">Ireki</string>
     <string name="menu_rename">Izena aldatu</string>
@@ -148,7 +138,6 @@
     <string name="menu_url">URLra joan</string>
     <string name="minus">Minus</string>
     <string name="never">Inoiz ez</string>
-    <string name="no_keys">Sarrerarik ez datubasean edo taldean.</string>
     <string name="no_results">Emaitzarik gabeko bilaketa</string>
     <string name="no_url_handler">URL kudatzeko euskarririk ez.</string>
     <string name="open_recent">Duela gutxiko datubasea ireki (klik irekitzeko):</string>

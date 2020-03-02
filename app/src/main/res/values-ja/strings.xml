@@ -27,7 +27,6 @@
     <string name="add_group">グループを追加</string>
     <string name="add_group_title">新しいグループ名を入力</string>
     <string name="algorithm">アルゴリズム</string>
-    <string name="algorithm_colon">アルゴリズム:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">アプリケーション タイムアウト</string>
     <string name="app_timeout_summary">KeePassがこの時間非アクティブだった場合、データベースをロックします。</string>
@@ -35,7 +34,6 @@
     <string name="application_settings">アプリケーション設定</string>
     <string name="brackets">カッコ</string>
     <string name="browser_intall_text">ファイルを検索するには OI File Manager が必要です。</string>
-    <string name="building_search_idx">検索中&#8230;</string>
     <string name="cancel">キャンセル</string>
     <string name="ClearClipboard">クリップボードを消去しました。</string>
     <string name="clipboard_timeout">クリップボード タイムアウト</string>
@@ -43,11 +41,8 @@
     <string name="copy_username">ここをタップするとユーザー名をクリップボードにコピーします</string>
     <string name="copy_password">ここをタップするとパスワードをクリップボードにコピーします</string>
     <string name="creating_db_key">データベース認証中&#8230;</string>
-    <string name="current_group">現在のグループ: </string>
-    <string name="current_group_root">現在のグループ: Root</string>
     <string name="database">データベース</string>
     <string name="decrypting_db">データベースを解析中&#8230;</string>
-    <string name="decrypting_entry">暗号解除エントリー</string>
     <string name="default_checkbox">このデータベースを次回以降も利用する</string>
     <string name="digits">数字</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 Brian Pellin によって作られたフリーソフトウェアであり、無保証です。GPLバージョン2以上の条件下でこれを再頒布することができます。</string>
@@ -69,10 +64,8 @@
     <string name="entry_user_name">ユーザー名: </string>
     <string name="error_arc4">ArcFour stream cipherには対応していません。</string>
     <string name="error_can_not_handle_uri">KeePassDroidはこのuriを処理できません。</string>
-    <string name="error_could_not_create_group">グループ追加エラー</string>
     <string name="error_could_not_create_parent">親ディレクトリを作成できませんでした。</string>
     <string name="error_database_exists">ファイルが既に存在します。</string>
-    <string name="error_database_settings">データベース設定の保存に失敗しました。</string>
     <string name="error_failed_to_launch_link">リンクを開けませんでした。</string>
     <string name="error_filename_required">ファイル名は必須入力です。</string>
     <string name="error_file_not_create">ファイルを作成できません。</string>
@@ -111,7 +104,6 @@
     <string name="list_size_summary">グループ一覧の文字サイズ</string>
     <string name="loading_database">データベース読込中&#8230;</string>
     <string name="lowercase">英数小文字</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">パスワードを隠す</string>
     <string name="maskpass_summary">パスワード欄をアスタリスクで表示します</string>
     <string name="menu_about">About</string>
@@ -125,7 +117,6 @@
     <string name="menu_donate">寄付</string>
     <string name="menu_edit">編集</string>
     <string name="menu_hide_password">パスワードを隠す</string>
-    <string name="menu_homepage">URLを開く</string>
     <string name="menu_lock">データベースをロック</string>
     <string name="menu_open">開く</string>
     <string name="menu_rename">タイトルの変更</string>
@@ -134,7 +125,6 @@
     <string name="menu_url">WEBサイトへ</string>
     <string name="minus">マイナス (-)</string>
     <string name="never">期限なし</string>
-    <string name="no_keys">データベース・グループがありません。</string>
     <string name="no_results">検索結果に該当するものはありません。</string>
     <string name="no_url_handler">このuriを処理できません。</string>
     <string name="open_recent">以前使用したデータベースを開く(クリック):</string>

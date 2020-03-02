@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -28,10 +28,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.keepass.R;
 import com.keepassdroid.icons.Icons;
 
-public class GroupEditActivity extends Activity
+public class GroupEditActivity extends AppCompatActivity
 {
 	public static final String KEY_NAME = "name";
 	public static final String KEY_ICON_ID = "icon_id";
@@ -99,6 +101,8 @@ public class GroupEditActivity extends Activity
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
+		super.onActivityResult(requestCode, resultCode, data);
+
 		switch (resultCode)
 		{
 			case EntryEditActivity.RESULT_OK_ICON_PICKER:

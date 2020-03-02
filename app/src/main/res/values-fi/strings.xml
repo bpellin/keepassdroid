@@ -27,17 +27,14 @@
     <string name="add_group">Lisää ryhmä</string>
     <string name="add_group_title">Lisää ryhmä</string>
     <string name="algorithm">Algoritmi</string>
-    <string name="algorithm_colon">Algoritmi:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Ohjelman aikakatkaisu</string>
     <string name="app_timeout_summary">Aika, jonka jälkeen KeePass lukitaan jos se on ollut toimeton.</string>
     <string name="application">Ohjelma</string>
     <string name="application_settings">Ohjelman asetukset</string>
     <string name="beta_dontask">Älä näytä enää uudelleen</string>
-    <string name="beta_warning">Tuki kdbx-tiedostojen muuttamiselle on KOKEELLINEN. Ota varmuuskopioita ennen muutosten tallentamista!</string>
     <string name="brackets">Hakasulkeet</string>
     <string name="browser_intall_text">Tiedostojen selaus vaatii Open Intents File Manager -tiedostonhallintaohjelman, klikkaa alla olevaa linkkiä asentaaksesi sen. Joidenkin ominaisuuksien takia se ei ehkä toimi oikein ensimmäisellä käynnistyksellä.</string>
-    <string name="building_search_idx">Rakennetaan hakuindeksiä&#8230;</string>
     <string name="cancel">Peruuta</string>
     <string name="ClearClipboard">Leikepöytä tyhjennetty.</string>
     <string name="clipboard_error_title">Leikepöytävirhe</string>
@@ -48,11 +45,8 @@
     <string name="copy_username">Valitse kopioidaksesi käyttäjänimi</string>
     <string name="copy_password">Valitse kopioidaksesi salasana</string>
     <string name="creating_db_key">Luodaan tietokanta-avainta&#8230;</string>
-    <string name="current_group">Nykyinen ryhmä: </string>
-    <string name="current_group_root">Nykyinen ryhmä: Juuri</string>
     <string name="database">Tietokanta</string>
     <string name="decrypting_db">Puretaan tietokannan salausta&#8230;</string>
-    <string name="decrypting_entry">Puretaan salasanatietuetta</string>
     <string name="default_checkbox">Käytä tätä oletustietokantana</string>
     <string name="digits">Numerot</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 Brian Pellin comes with ABSOLUTELY NO WARRANTY; This is free software, and you are welcome to redistribute it under the conditions of the GPL version 2 or later.</string>
@@ -75,10 +69,8 @@
     <string name="entry_user_name">Käyttäjänimi: </string>
     <string name="error_arc4">The ArcFour stream cipher ei ole tuettu.</string>
     <string name="error_can_not_handle_uri">KeePassDroid ei osaa käsitellä tätä osoitetta.</string>
-    <string name="error_could_not_create_group">Virhe ryhmän luonnissa.</string>
     <string name="error_could_not_create_parent">Virhe aliryhmän luonnissa.</string>
     <string name="error_database_exists">Tiedosto on jo olemassa.</string>
-    <string name="error_database_settings">Salasanatietokannan asetuksia ei tunnistettu.</string>
     <string name="error_failed_to_launch_link">Linkin avaus epäonnistui.</string>
     <string name="error_filename_required">Tiedostonimi on pakollinen.</string>
     <string name="error_file_not_create">Tiedoston luonti epäonnistui:</string>
@@ -123,7 +115,6 @@
     <string name="list_size_summary">Tekstin koko ryhmälistauksessa</string>
     <string name="loading_database">Ladataan salasanatietokantaa&#8230;</string>
     <string name="lowercase">pienet kirjaimet</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Piilota salasaan</string>
     <string name="maskpass_summary">Piilota salasanat oletuksena</string>
     <string name="menu_about">Tietoa</string>
@@ -137,7 +128,6 @@
     <string name="menu_donate">Lahjoita</string>
     <string name="menu_edit">Muokkaa</string>
     <string name="menu_hide_password">Piilota salasana</string>
-    <string name="menu_homepage">Mene kotisivulle</string>
     <string name="menu_lock">Lukitse salasanatietokanta</string>
     <string name="menu_open">Avaa</string>
     <string name="menu_rename">Nimeä uudelleen</string>
@@ -146,7 +136,6 @@
     <string name="menu_url">Mene URL-osoitteeseen</string>
     <string name="minus">Miinus</string>
     <string name="never">Ei koskaan</string>
-    <string name="no_keys">Ei tietueita tietokannassa tai ryhmässä.</string>
     <string name="no_results">Ei hakutuloksia</string>
     <string name="no_url_handler">Tälle URL:lle ei ole käsittelijää.</string>
     <string name="open_recent">Avaa viimeisin salasanatietokanta (avaa klikkaamalla):</string>

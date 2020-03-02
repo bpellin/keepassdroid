@@ -29,7 +29,6 @@
     <string name="add_group">Groep toevoegen</string>
     <string name="add_group_title">Groep toevoegen</string>
     <string name="algorithm">Algoritme</string>
-    <string name="algorithm_colon">Algoritme:</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Applicatietimeout</string>
     <string name="app_timeout_summary">Tijd tot het vergrendelen van de database bij inactiviteit.</string>
@@ -37,7 +36,6 @@
     <string name="application_settings">Applicatieinstellingen</string>
     <string name="brackets">Haakjes</string>
     <string name="browser_intall_text">Een bestand opzoeken kan alleen met de Open Intents File Manager, klik hieronder om die te installeren. Door gebreken in deze file manager kan het opzoeken van een bestand echter de eerste keer mislukken.</string>
-    <string name="building_search_idx">Zoekindex wordt opgebouwd&#8230;</string>
     <string name="cancel">Annuleren</string>
     <string name="ClearClipboard">Klembord gewist.</string>
     <string name="clipboard_timeout">Klembordtimeout</string>
@@ -45,11 +43,8 @@
     <string name="copy_username">Selecteer om gebruikersnaam naar klembord te kopiëren</string>
     <string name="copy_password">Selecteer om wachtwoord naar klembord te kopiëren</string>
     <string name="creating_db_key">Databasesleutel wordt aangemaakt&#8230;</string>
-    <string name="current_group">Huidige groep: </string>
-    <string name="current_group_root">Huidige groep: Top</string>
     <string name="database">Database</string>
     <string name="decrypting_db">Databaseinhoud wordt ontcijferd&#8230;</string>
-    <string name="decrypting_entry">Record wordt ontcijferd</string>
     <string name="default_checkbox">Gebruik dit als mijn standaard database</string>
     <string name="digits">Cijfers</string>
     <string name="disclaimer_formal">KeePassDroid Copyright 2009&#8211;2012 Brian Pellin biedt GEEN ENKELE GARANTIE; Dit is vrije software, u mag deze software verspreiden onder de voorwaarden van de GPL versie 2 of recenter.</string>
@@ -71,10 +66,8 @@
     <string name="entry_user_name">Gebruikersnaam: </string>
     <string name="error_arc4">De ArcFour stream-versleuteling wordt niet ondersteund.</string>
     <string name="error_can_not_handle_uri">KeePassDroid kan deze uri niet verwerken.</string>
-    <string name="error_could_not_create_group">Fout bij het aanmaken van de groep.</string>
     <string name="error_could_not_create_parent">Kan de hogerliggende map niet aanmaken.</string>
     <string name="error_database_exists">Dit bestand bestaat reeds.</string>
-    <string name="error_database_settings">Kon de instellingen van de database niet bepalen.</string>
     <string name="error_failed_to_launch_link">Kon de koppeling niet opstarten.</string>
     <string name="error_filename_required">Een bestandsnaam ontbreekt.</string>
     <string name="error_file_not_create">Kon het bestand niet aanmaken:</string>
@@ -113,7 +106,6 @@
     <string name="list_size_summary">Grootte van de tekst in de groepslijst</string>
     <string name="loading_database">Database wordt geladen&#8230;</string>
     <string name="lowercase">Kleine letters</string>
-    <string name="MaskedPassword">*****</string>
     <string name="maskpass_title">Maskeer wachtwoord</string>
     <string name="maskpass_summary">Verberg wachtwoorden standaardmatig</string>
     <string name="menu_about">Over</string>
@@ -127,7 +119,6 @@
     <string name="menu_donate">Doneren</string>
     <string name="menu_edit">Bewerken</string>
     <string name="menu_hide_password">Wachtwoord verbergen</string>
-    <string name="menu_homepage">Ga naar homepage</string>
     <string name="menu_lock">Vergrendel database</string>
     <string name="menu_open">Openen</string>
     <string name="menu_rename">Hernoemen</string>
@@ -136,7 +127,6 @@
     <string name="menu_url">Ga naar URL</string>
     <string name="minus">Minus</string>
     <string name="never">Nooit</string>
-    <string name="no_keys">Geen records in de database of groep.</string>
     <string name="no_results">Geen zoekresultaten</string>
     <string name="no_url_handler">Geen afhandeling voor deze url mogelijk.</string>
     <string name="open_recent">Recente database openen (klik om te openen):</string>
@@ -169,18 +159,8 @@
     <string name="warning_read_only">Uw sd-card is mementeel niet beschrijfbaar. U zult wijzigingen in de database niet kunnen opslaan.</string>
     <string name="warning_unmounted">Uw sd-card is momenteel ontkoppeld. U zult geen database kunnen openen of aanmaken.</string>
     <string name="version_label">Versie:</string>
-    <string name="fingerprint_autoscan">Activeer automatisch scannen van vingerafdruk bij het openen van een bestand. Deze optie kun je uitschakelen wanneer dit problemen oplevert.</string>
-    <string name="fingerprint_autoscan_title">Automatisch scannen van vingerafdruk</string>
-    <string name="fingerprint_autoscan_hint">Automatisch scannen vingerafdruk niet actief</string>
-    <string name="configure_fingerprint">Activeer vingerafdruk eerst in uw systeem instellingen</string>
-    <string name="scanning_fingerprint">Klaar voor vingerafdruk</string>
     <string name="encrypted_value_stored">Wachtwoord met encryptie bewaard</string>
     <string name="fingerprint_invalid_key">Probleem met ongeldige sleutel</string>
-    <string name="fingerprint_error">Algemeen vingerafdruk probleem</string>
-    <string name="store_with_fingerprint">Gebruik je vingerafdruk om dit wachtwoord op te slaan</string>
-    <string name="no_password_stored">Nog geen wachtwoord opgeslaan voor dit bestand</string>
-    <string name="fingerprint_notrecognized">Vingerafdruk niet herkend</string>
-    <string name="fingerprint_key_invalidated">Opgeslagen vingerafdruk is niet langer gelding. Voer je wachtwoord opnieuw in</string>
     <string name="no_external_permissions">Geef de app toestemming tot externe opslag</string>
     
     <string-array name="clipboard_timeout_options">
