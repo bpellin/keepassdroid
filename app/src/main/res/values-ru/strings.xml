@@ -34,11 +34,14 @@
     <string name="application">Программа</string>
     <string name="application_settings">Настройки приложения</string>
     <string name="beta_dontask">Не показывать снова</string>
+    <string name="biometric_auto_open">Автоматически запрашивать биометрический вход при открытии файла</string>
+    <string name="biometric_auto_open_title">Автозапрос биометрии</string>
     <string name="biometric_auth_failed">Невозможно идентифицировать биометрические данные</string>
     <string name="biometric_auth_failed_store">Идентификация не выполнена, пароль не сохранён</string>
     <string name="biometric_auth_error">Ошибка идентификации</string>
     <string name="biometric_auth_to_open">Идентификация для открытия базы</string>
     <string name="biometric_auth_to_store">Идентификация для сохранения пароля</string>
+    <string name="biometric_clear_stored_password">Очистить сохранённый пароль</string>
     <string name="biometric_error">Ошибка биометрии</string>
     <string name="biometric_invalidated">Биометрия недействительна</string>
     <string name="biometric_open_db">Открыть базу</string>
@@ -144,10 +147,11 @@
     <string name="menu_hide_password">Скрыть</string>
     <string name="menu_lock">Блокировка</string>
     <string name="menu_open">Открыть</string>
-    <string name="menu_patreon">Пожертвование</string>
+    <string name="menu_patreon">Patreon</string>
     <string name="menu_rename">Новое имя</string>
     <string name="menu_search">Поиск</string>
     <string name="menu_showpass">Показать</string>
+    <string name="menu_support_developer">Поддержать разработчика</string>
     <string name="menu_url">Ссылка</string>
     <string name="minus">-Дефис-</string>
     <string name="never">Никогда</string>
