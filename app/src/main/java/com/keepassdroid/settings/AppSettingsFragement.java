@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -34,11 +35,18 @@ public class AppSettingsFragement extends PreferenceFragmentCompat {
 	public static boolean KEYFILE_DEFAULT = false;
 	
 	private BackupManager backupManager;
-	
+
 	public static void Launch(Context ctx) {
 		Intent i = new Intent(ctx, AppSettingsFragement.class);
 		
 		ctx.startActivity(i);
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setRetainInstance(true);
 	}
 
 	@Override

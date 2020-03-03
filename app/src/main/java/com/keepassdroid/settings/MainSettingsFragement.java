@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -37,6 +38,13 @@ public class MainSettingsFragement extends PreferenceFragmentCompat {
 		Intent i = new Intent(ctx, MainSettingsFragement.class);
 		
 		ctx.startActivity(i);
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setRetainInstance(true);
 	}
 
 	@Override

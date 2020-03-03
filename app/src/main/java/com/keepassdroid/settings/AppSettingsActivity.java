@@ -40,9 +40,11 @@ public class AppSettingsActivity extends LockCloseActivity {
 
 		setContentView(R.layout.settings);
 
-		getSupportFragmentManager()
-			.beginTransaction()
-			.replace(R.id.settings, new MainSettingsFragement())
-			.commit();
+		if (savedInstanceState == null) {
+			getSupportFragmentManager()
+					.beginTransaction()
+					.replace(R.id.settings, new MainSettingsFragement())
+					.commit();
+		}
 	}
 }

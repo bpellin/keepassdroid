@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
       package="com.android.keepass"
       android:installLocation="auto">
     <supports-screens
@@ -62,7 +63,7 @@
                 <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdbx" />
                 <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdbx" />
             </intent-filter>
-            <intent-filter>
+            <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -104,7 +105,7 @@
              </intent-filter>
             <meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
         </activity>
-        <activity android:name="com.keepassdroid.settings.AppSettingsActivity"
+        <activity android:name="com.keepassdroid.settings.AppSettingsActivity" android:configChanges="orientation|keyboardHidden"
             android:theme="@style/NoTitleBar"></activity>
         <activity android:name="com.keepassdroid.GeneratePasswordActivity"
             android:theme="@style/NoTitleBar"></activity>

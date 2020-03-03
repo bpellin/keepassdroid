@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
@@ -43,6 +44,13 @@ public class DBSettingsFragement extends PreferenceFragmentCompat {
 		Intent i = new Intent(ctx, DBSettingsFragement.class);
 		
 		ctx.startActivity(i);
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setRetainInstance(true);
 	}
 
 	private static final String ROUNDS_PREFERENCE_TAG = "ROUNDS";
