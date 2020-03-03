@@ -270,24 +270,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         divider3.setVisibility(visibility);
 
         if (autoOpen) {
-            Thread delayThread = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        // Ignore
-                    }
-
-                    mActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            biometricLogin();
-                        }
-                    });
-                }
-            };
-            delayThread.start();
+            biometricLogin();
         }
     }
 
@@ -402,7 +385,8 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         super.onActivityCreated(savedInstanceState);
 
         Intent i = mActivity.getIntent();
-        new InitTask().execute(i);
+        InitTask task = new InitTask();
+        task.onPostExecute(task.doInBackground(i));
     }
 
     @Override
@@ -507,13 +491,13 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         return PREF_KEY_IV_PREFIX + (mDbUri != null ? mDbUri.getPath() : "");
     }
 
-    private class InitTask extends AsyncTask<Intent, Void, Integer> {
+    // Moved this to the foreground TOOD: Move this to a more typical pattern
+    private class InitTask {
 
         String password = "";
         boolean launch_immediately = false;
 
-        @Override
-        protected Integer doInBackground(Intent... args) {
+        public Integer doInBackground(Intent... args) {
             Intent i = args[0];
             String action = i.getAction();
             ;
