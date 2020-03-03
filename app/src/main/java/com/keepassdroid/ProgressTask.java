@@ -84,7 +84,9 @@ public class ProgressTask implements Runnable {
 	private class CloseProcessDialog implements Runnable {
 
 		public void run() {
-			mPd.dismiss();
+			if ( (mPd != null) && mPd.isShowing()) {
+				mPd.dismiss();
+			}
 		}
 		
 	}
