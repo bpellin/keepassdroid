@@ -119,6 +119,8 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     private BiometricPrompt.PromptInfo loadPrompt;
     private BiometricHelper biometricHelper;
 
+    private Activity mActivity;
+
     private boolean afterOnCreateBeforeEndOfOnResume = false;
 
     @Override
@@ -144,8 +146,8 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
         Context context = getContext();
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        prefsNoBackup = getActivity().getSharedPreferences("nobackup", Context.MODE_PRIVATE);
+        prefs = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        prefsNoBackup = mActivity.getSharedPreferences("nobackup", Context.MODE_PRIVATE);
 
         mRememberKeyfile = prefs.getBoolean(getString(R.string.keyfile_key), getResources().getBoolean(R.bool.keyfile_default));
         confirmButton = (Button) view.findViewById(R.id.pass_ok);
@@ -185,7 +187,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        MenuInflater inflate = getActivity().getMenuInflater();
+        MenuInflater inflate = mActivity.getMenuInflater();
         inflate.inflate(R.menu.password, menu);
     }
 
@@ -206,6 +208,29 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         return super.onContextItemSelected(item);
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Activity) {
+            mActivity = (Activity) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mActivity = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mActivity = null;
+    }
+
     private void setFingerPrintVisibilty() {
         if (biometricsAvailable) {
             biometricCheck.setVisibility(View.VISIBLE);
@@ -219,7 +244,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     private void biometricOpenUpdateVisibility() {
         int visibility;
         boolean autoOpen = false;
-        BiometricManager biometricManager = BiometricManager.from(getActivity());
+        BiometricManager biometricManager = BiometricManager.from(mActivity);
         int auth = biometricManager.canAuthenticate();
         if (biometricsAvailable && auth != BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED) {
             String encryptedValue = prefsNoBackup.getString(getPreferenceKeyValue(), null);
@@ -254,7 +279,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                         // Ignore
                     }
 
-                    getActivity().runOnUiThread(new Runnable() {
+                    mActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             biometricLogin();
@@ -280,7 +305,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                     public void onAuthenticationFailed() {
                         super.onAuthenticationFailed();
                         Toast.makeText(context, R.string.biometric_auth_failed_store, Toast.LENGTH_LONG).show();
-                        GroupActivity.Launch(getActivity());
+                        GroupActivity.Launch(mActivity);
                     }
 
                     @Override
@@ -290,7 +315,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                         // newly store the entered password in encrypted way
                         final String password = passwordView.getText().toString();
                         biometricHelper.encryptData(password);
-                        GroupActivity.Launch(getActivity());
+                        GroupActivity.Launch(mActivity);
 
                     }
 
@@ -300,7 +325,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                         if (!canceledBiometricAuth(errorCode)) {
                             Toast.makeText(context, R.string.biometric_auth_error, Toast.LENGTH_LONG).show();
                         }
-                        GroupActivity.Launch(getActivity());
+                        GroupActivity.Launch(mActivity);
                     }
                 };
 
@@ -376,7 +401,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Intent i = getActivity().getIntent();
+        Intent i = mActivity.getIntent();
         new InitTask().execute(i);
     }
 
@@ -384,7 +409,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Activity activity = getActivity();
+        Activity activity = mActivity;
 
         switch (requestCode) {
 
@@ -447,7 +472,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         // Clear the shutdown flag
         App.clearShutdown();
 
-        BiometricManager biometricManager = BiometricManager.from(getActivity());
+        BiometricManager biometricManager = BiometricManager.from(mActivity);
         int auth = biometricManager.canAuthenticate();
         if (auth == BiometricManager.BIOMETRIC_SUCCESS){
             initBiometrics();
@@ -545,8 +570,8 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
         public void onPostExecute(Integer result) {
             if (result != null) {
-                Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
-                getActivity().finish();
+                Toast.makeText(mActivity, result, Toast.LENGTH_LONG).show();
+                mActivity.finish();
                 return;
             }
 
@@ -584,7 +609,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
             browse.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-                    if (StorageAF.useStorageFramework(getActivity())) {
+                    if (StorageAF.useStorageFramework(mActivity)) {
                         Intent i = new Intent(StorageAF.ACTION_OPEN_DOCUMENT);
                         i.addCategory(Intent.CATEGORY_OPENABLE);
                         i.setType("*/*");
@@ -603,7 +628,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                 }
 
                 private void lookForOpenIntentsFilePicker() {
-                    if (Interaction.isIntentAvailable(getActivity(), Intents.OPEN_INTENTS_FILE_BROWSE)) {
+                    if (Interaction.isIntentAvailable(mActivity, Intents.OPEN_INTENTS_FILE_BROWSE)) {
                         Intent i = new Intent(Intents.OPEN_INTENTS_FILE_BROWSE);
 
                         // Get file path parent if possible
@@ -632,7 +657,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                 }
 
                 private void showBrowserDialog() {
-                    BrowserDialog diag = new BrowserDialog(getActivity());
+                    BrowserDialog diag = new BrowserDialog(mActivity);
                     diag.show();
                 }
             });
@@ -697,7 +722,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     }
 
     private void errorMessage(int resId) {
-        Toast.makeText(getActivity(), resId, Toast.LENGTH_LONG).show();
+        Toast.makeText(mActivity, resId, Toast.LENGTH_LONG).show();
     }
 
     private void setEditText(
@@ -732,7 +757,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         storedPassword = null;
         Uri keyfile = storedKeyUri;
         storedKeyUri = null;
-        Activity activity = getActivity();
+        Activity activity = mActivity;
 
 
         // Clear before we load
@@ -749,7 +774,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     }
 
     private String getEditText(int resId) {
-        return Util.getEditText(getActivity(), resId);
+        return Util.getEditText(mActivity, resId);
     }
     private final class AfterLoad extends OnFinish {
 
@@ -765,7 +790,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
         @Override
         public void run() {
-            final Activity activity = getActivity();
+            final Activity activity = mActivity;
             if (db.passwordEncodingError) {
                 PasswordEncodingDialogHelper dialog = new PasswordEncodingDialogHelper();
                 dialog.show(activity, new DialogInterface.OnClickListener() {
@@ -890,6 +915,6 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
         if (!hasFileUri) return true;
 
-        return PermissionUtil.checkAndRequest(this.getActivity(), PERMISSION_REQUEST_ID);
+        return PermissionUtil.checkAndRequest(this.mActivity, PERMISSION_REQUEST_ID);
     }
 }
