@@ -774,16 +774,15 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
         @Override
         public void run() {
-            final Activity activity = mActivity;
             if (db.passwordEncodingError) {
                 PasswordEncodingDialogHelper dialog = new PasswordEncodingDialogHelper();
-                dialog.show(activity, new DialogInterface.OnClickListener() {
+                dialog.show(mActivity, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(
                             DialogInterface dialog,
                             int which) {
-                        GroupActivity.Launch(activity);
+                        GroupActivity.Launch(mActivity);
                     }
 
                 });
@@ -798,10 +797,10 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
                 }
                 else {
-                    GroupActivity.Launch(activity);
+                    GroupActivity.Launch(mActivity);
                 }
             } else {
-                displayMessage(activity);
+                displayMessage(mActivity);
             }
         }
     }

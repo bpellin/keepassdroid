@@ -77,7 +77,7 @@ public class OnFinish implements Runnable {
 	}
 	
 	protected void displayMessage(Context ctx) {
-		if ( mMessage != null && mMessage.length() > 0 ) {
+		if ( ctx != null && mMessage != null && mMessage.length() > 0 ) {
 			Toast.makeText(ctx, mMessage, Toast.LENGTH_LONG).show();
 		}
 	}
