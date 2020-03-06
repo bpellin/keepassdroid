@@ -73,7 +73,7 @@ public class SprEngineV4 extends SprEngine {
 			int end = StrUtil.indexOfIgnoreCase(text, STR_REF_END, start + 1, Locale.ENGLISH);
 			if (end <= start) { break; }
 			
-			String fullRef = text.substring(start, end - start + 1);
+			String fullRef = text.substring(start, end + 1);
 			TargetResult result = findRefTarget(fullRef, ctx);
 			
 			if (result != null) {
@@ -131,7 +131,7 @@ public class SprEngineV4 extends SprEngine {
 			return null;
 		}
 		
-		String ref = fullRef.substring(STR_REF_START.length(), fullRef.length() - STR_REF_START.length() - STR_REF_END.length());
+		String ref = fullRef.substring(STR_REF_START.length(), fullRef.length() - STR_REF_END.length());
 		if (ref.length() <= 4) { return null; }
 		if (ref.charAt(1) != '@') { return null; }
 		if (ref.charAt(3) != ':') { return null; }
