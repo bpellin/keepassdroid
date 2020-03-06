@@ -19,6 +19,7 @@
  */
 package com.keepassdroid;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Handler;
@@ -84,6 +85,11 @@ public class ProgressTask implements Runnable {
 	private class CloseProcessDialog implements Runnable {
 
 		public void run() {
+			Activity act = mPd.getOwnerActivity();
+			if (act != null && act.isFinishing()) {
+				return;
+			}
+
 			if ( (mPd != null) && mPd.isShowing()) {
 				mPd.dismiss();
 			}
