@@ -22,10 +22,12 @@
     <item android:id="@+id/menu_patreon"
         android:title="@string/menu_patreon"
         app:showAsAction="ifRoom"
+        android:visible="false"
         />
     <item android:id="@+id/menu_donate"
         android:title="@string/menu_support_developer"
         app:showAsAction="never"
+        android:visible="false"
         />
     <item android:id="@+id/menu_about"
         android:title="@string/menu_about"

@@ -32,6 +32,7 @@
     <item android:id="@+id/menu_donate"
         android:title="@string/menu_support_developer"
         app:showAsAction="never"
+        android:visible="false"
         />
     <item android:id="@+id/menu_app_settings"
         android:icon="@android:drawable/ic_menu_preferences"
