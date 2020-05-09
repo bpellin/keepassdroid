@@ -152,12 +152,20 @@ public class RecentFileHistory {
 
     public String getDatabaseAt(int i) {
         init();
-        return databases.get(i);
+        if (i < databases.size()) {
+            return databases.get(i);
+        } else {
+            return "";
+        }
     }
 
     public String getKeyfileAt(int i) {
         init();
-        return keyfiles.get(i);
+        if (i < keyfiles.size()) {
+            return keyfiles.get(i);
+        } else {
+            return "";
+        }
     }
 
     private void loadPrefs() {
@@ -262,8 +270,13 @@ public class RecentFileHistory {
     private void trimLists() {
         int size = databases.size();
         for (int i = FileDbHelper.MAX_FILES; i < size; i++) {
-            databases.remove(i);
-            keyfiles.remove(i);
+            if (i < databases.size()) {
+                databases.remove(i);
+            }
+
+            if (i < keyfiles.size()) {
+                keyfiles.remove(i);
+            }
         }
     }
 }

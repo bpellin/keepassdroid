@@ -219,6 +219,10 @@ public class Database {
                 throw new IOException("Failed to store database.");
             }
 
+            if (os == null) {
+                throw new IOException("Failed to store database.");
+            }
+
             PwDbOutput pmo = PwDbOutput.getInstance(pm, os);
             pmo.output();
             os.close();

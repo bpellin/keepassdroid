@@ -797,7 +797,10 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
                 }
                 else {
-                    GroupActivity.Launch(mActivity);
+                    // Check to see if the fragement detached before this finished
+                    if (mActivity != null) {
+                        GroupActivity.Launch(mActivity);
+                    }
                 }
             } else {
                 displayMessage(mActivity);

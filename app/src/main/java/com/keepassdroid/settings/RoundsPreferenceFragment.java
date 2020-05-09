@@ -102,7 +102,7 @@ public class RoundsPreferenceFragment extends EditTextPreferenceDialogFragmentCo
 
 			Handler handler = new Handler();
 			SaveDB save = new SaveDB(getContext(), App.getDB(), new AfterSave(getContext(), handler, oldRounds));
-			ProgressTask pt = new ProgressTask(getContext(), save, R.string.saving_database);
+			ProgressTask pt = new ProgressTask(getActivity(), save, R.string.saving_database);
 			pt.run();
 
 		}

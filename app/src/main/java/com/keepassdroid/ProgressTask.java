@@ -21,7 +21,7 @@ package com.keepassdroid;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 
 import com.android.keepass.R;
@@ -36,24 +36,24 @@ import com.keepassdroid.database.edit.RunnableOnFinish;
  *
  */
 public class ProgressTask implements Runnable {
-	private Context mCtx;
+	private Activity mAct;
 	private Handler mHandler;
 	private RunnableOnFinish mTask;
 	private ProgressDialog mPd;
 	
-	public ProgressTask(Context ctx, RunnableOnFinish task, int messageId) {
-		mCtx = ctx;
+	public ProgressTask(Activity act, RunnableOnFinish task, int messageId) {
+		mAct = act;
 		mTask = task;
 		mHandler = new Handler();
 		
 		// Show process dialog
-		mPd = new ProgressDialog(mCtx);
+		mPd = new ProgressDialog(mAct);
 		mPd.setCanceledOnTouchOutside(false);
-		mPd.setTitle(ctx.getText(R.string.progress_title));
-		mPd.setMessage(ctx.getText(messageId));
+		mPd.setTitle(act.getText(R.string.progress_title));
+		mPd.setMessage(act.getText(messageId));
 
 		// Set code to run when this is finished
-		mTask.setStatus(new UpdateStatus(ctx, mHandler, mPd));
+		mTask.setStatus(new UpdateStatus(act, mHandler, mPd));
 		mTask.mFinish = new AfterTask(task.mFinish, mHandler);
 		
 	}
@@ -90,7 +90,12 @@ public class ProgressTask implements Runnable {
 				return;
 			}
 
-			if ( (mPd != null) && mPd.isShowing()) {
+			boolean isDestroyed = false;
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+			    isDestroyed = mAct.isDestroyed();
+            }
+
+			if ( (mPd != null) && mPd.isShowing() && !isDestroyed) {
 				mPd.dismiss();
 			}
 		}

@@ -96,7 +96,7 @@ public class SetPasswordDialog extends CancelDialog {
 				}
 				
 				SetPassword sp = new SetPassword(getContext(), App.getDB(), pass, keyfile, new AfterSave(mFinish, new Handler()));
-				final ProgressTask pt = new ProgressTask(getContext(), sp, R.string.saving_database);
+				final ProgressTask pt = new ProgressTask(getOwnerActivity(), sp, R.string.saving_database);
 				boolean valid = sp.validatePassword(getContext(), new OnClickListener() {
 					
 					@Override
