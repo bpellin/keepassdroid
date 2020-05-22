@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2016 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,6 +19,7 @@
  */
 package com.keepassdroid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -43,12 +44,14 @@ public class SetPasswordDialog extends CancelDialog {
 	private Uri mKeyfile;
 	private FileOnFinish mFinish;
 		
-	public SetPasswordDialog(Context context) {
-		super(context);
+	public SetPasswordDialog(Activity act) {
+		super(act);
+
+		setOwnerActivity(act);
 	}
 	
-	public SetPasswordDialog(Context context, FileOnFinish finish) {
-		super(context);
+	public SetPasswordDialog(Activity act, FileOnFinish finish) {
+		this(act);
 		mFinish = finish;
 	}
 	
@@ -96,7 +99,8 @@ public class SetPasswordDialog extends CancelDialog {
 				}
 				
 				SetPassword sp = new SetPassword(getContext(), App.getDB(), pass, keyfile, new AfterSave(mFinish, new Handler()));
-				final ProgressTask pt = new ProgressTask(getOwnerActivity(), sp, R.string.saving_database);
+				Activity act = getOwnerActivity();
+				final ProgressTask pt = new ProgressTask(act, sp, R.string.saving_database);
 				boolean valid = sp.validatePassword(getContext(), new OnClickListener() {
 					
 					@Override
