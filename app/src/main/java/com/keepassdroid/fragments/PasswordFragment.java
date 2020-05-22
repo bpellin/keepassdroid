@@ -787,6 +787,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
                 });
             } else if (mSuccess) {
+                passwordView.setText("");
                 if (biometricCheck.isChecked()) {
                     if (!biometricHelper.initEncryptData()) {
                         return;
