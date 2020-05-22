@@ -106,12 +106,12 @@ public class LEDataInputStream extends InputStream {
 		return baseStream.skip(n);
 	}
 
-	public byte[] readBytes(int length) throws IOException {
+	public static byte[] readBytes(InputStream is, int length) throws IOException {
 		byte[] buf = new byte[length];
 		
 		int count = 0;
 		while ( count < length ) {
-			int read = read(buf, count, length - count);
+			int read = is.read(buf, count, length - count);
 			
 			// Reached end
 			if ( read == -1 ) {
@@ -127,12 +127,14 @@ public class LEDataInputStream extends InputStream {
 		return buf;
 	}
 
+	public byte[] readBytes(int length) throws IOException {
+		return readBytes(baseStream, length);
+	}
+
 	public static int readUShort(InputStream is) throws IOException {
-		  byte[] buf = new byte[2];
+		  byte[] buf = readBytes(is, 2);
 		  
-		  is.read(buf, 0, 2);
-		  
-		  return readUShort(buf, 0); 
+		  return readUShort(buf, 0);
 	  }
 	
 	public int readUShort() throws IOException {
@@ -162,10 +164,8 @@ public class LEDataInputStream extends InputStream {
 	  }
 
 	public static int readInt(InputStream is) throws IOException {
-		  byte[] buf = new byte[4];
+		  byte[] buf = readBytes(is, 4);
 	
-		  is.read(buf, 0, 4);
-		  
 		  return readInt(buf, 0);
 	  }
 
