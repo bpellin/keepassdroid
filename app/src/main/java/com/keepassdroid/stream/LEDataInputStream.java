@@ -133,6 +133,8 @@ public class LEDataInputStream extends InputStream {
 
 	public static int readUShort(InputStream is) throws IOException {
 		  byte[] buf = readBytes(is, 2);
+
+		  buf = padOut(buf, 2);
 		  
 		  return readUShort(buf, 0);
 	  }
@@ -165,9 +167,29 @@ public class LEDataInputStream extends InputStream {
 
 	public static int readInt(InputStream is) throws IOException {
 		  byte[] buf = readBytes(is, 4);
-	
+
+		  buf = padOut(buf, 4);
+
 		  return readInt(buf, 0);
 	  }
+
+	public static byte[] padOut(byte[] input, int length) {
+	  	if (input == null || input.length < length) {
+	  		byte[] output = new byte[4];
+
+	  		if (input == null) {
+	  			return output;
+			}
+
+	  		for (int i = 0; i < input.length; i++) {
+	  			output[i] = input[i];
+			}
+
+	  		return output;
+		}
+
+	  	return input;
+	}
 
 	public static long readUInt(InputStream is) throws IOException {
 		  return (readInt(is) & INT_TO_LONG_MASK);
