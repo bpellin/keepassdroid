@@ -299,6 +299,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                         final String password = passwordView.getText().toString();
                         biometricHelper.encryptData(password);
                         GroupActivity.Launch(mActivity);
+                        passwordView.setText("");
 
                     }
 
@@ -787,7 +788,6 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
                 });
             } else if (mSuccess) {
-                passwordView.setText("");
                 if (biometricCheck.isChecked()) {
                     if (!biometricHelper.initEncryptData()) {
                         return;
@@ -798,6 +798,8 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
                 }
                 else {
+                    passwordView.setText("");
+
                     // Check to see if the fragement detached before this finished
                     if (mActivity != null) {
                         GroupActivity.Launch(mActivity);
