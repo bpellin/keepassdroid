@@ -20,7 +20,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
+	android:padding="@dimen/margin_medium"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
+
 	<androidx.appcompat.widget.Toolbar
 		android:id="@+id/toolbar"
 		android:layout_width="match_parent"
@@ -29,21 +31,25 @@
 		android:elevation="4dp"
 		android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
 		app:popupTheme="@style/ThemeOverlay.AppCompat" />
+
 	<Button android:id="@+id/entry_save"
       android:layout_width="wrap_content"
 	  android:layout_height="wrap_content"
 	  android:layout_alignParentBottom="true"
 	  android:text="@string/entry_save"/>
+
 	<Button android:id="@+id/entry_cancel"
       android:layout_width="wrap_content"
 	  android:layout_height="wrap_content"
 	  android:layout_alignParentBottom="true"
 	  android:layout_toRightOf="@id/entry_save"
 	  android:text="@string/entry_cancel"/>
+
 	<View android:id="@+id/entry_divider"
 	  android:layout_above="@id/entry_save"
 	  android:scaleType="fitXY"
 	  style="@style/DividerEntry"/>
+
 	<com.keepassdroid.view.NoFocusScrollView android:id="@+id/entry_scroll"
 	  android:layout_width="fill_parent"
 	  android:layout_height="fill_parent"
@@ -189,4 +195,5 @@
 			/>    
 		</RelativeLayout>
 	</com.keepassdroid.view.NoFocusScrollView>
+
 </RelativeLayout>
