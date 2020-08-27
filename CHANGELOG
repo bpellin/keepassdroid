@@ -1,3 +1,5 @@
+ * Ensure output files are truncated
+
 KeePassDroid (2.5.12)
  * Fix storing password with biometrics
 

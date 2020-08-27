@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2017 Brian Pellin.
+ * Copyright 2009-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -214,7 +214,7 @@ public class Database {
         else {
             OutputStream os;
             try {
-                os = ctx.getContentResolver().openOutputStream(uri);
+                os = ctx.getContentResolver().openOutputStream(uri, "wt");
             } catch (Exception e) {
                 throw new IOException("Failed to store database.");
             }
