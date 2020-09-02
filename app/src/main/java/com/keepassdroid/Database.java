@@ -214,7 +214,7 @@ public class Database {
         else {
             OutputStream os;
             try {
-                os = ctx.getContentResolver().openOutputStream(uri, "wt");
+                os = ctx.getContentResolver().openOutputStream(uri, "rwt");
             } catch (Exception e) {
                 throw new IOException("Failed to store database.");
             }
