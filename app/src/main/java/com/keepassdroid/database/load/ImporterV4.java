@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2020 Brian Pellin.
+ * Copyright 2009-2021 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -357,7 +357,7 @@ public class ImporterV4 extends Importer {
 			} else {
 				readNextNode = true;
 			}
-			
+
 			switch ( xpp.getEventType() ) {
 			case XmlPullParser.START_TAG:
 				ctx = ReadXmlElement(ctx, xpp);
@@ -365,6 +365,12 @@ public class ImporterV4 extends Importer {
 				
 			case XmlPullParser.END_TAG:
 				ctx = EndXmlElement(ctx, xpp);
+				break;
+
+			case XmlPullParser.TEXT:
+				// Only expect all whitespace text nodes
+				String text = xpp.getText();
+				assert(text.trim().length()==0);
 				break;
 
 			default:
