@@ -715,7 +715,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
             String str) {
 
         TextView te = (TextView) mView.findViewById(resId);
-        assert (te == null);
+        assert (te != null);
 
         if (te != null) {
             te.setText(str);
