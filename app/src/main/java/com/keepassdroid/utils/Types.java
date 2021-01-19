@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2017 Brian Pellin.
+ * Copyright 2009-2021 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -177,6 +177,43 @@ public class Types {
 	  LEDataOutputStream.writeLong(uuid.getLeastSignificantBits(), buf, 8);
 	  
 	  return buf;
+  }
+
+  public static long parseVersion(String ver) {
+  	if (ver == null) {
+  		return 0;
+	}
+
+  	String[] verArray = ver.split("[.,]");
+
+  	int len = verArray.length;
+  	if (len <=0) {
+  		return 0;
+	}
+
+  	try {
+		int part = Integer.parseInt(verArray[0].trim());
+		long version = (long)part << 48;
+
+		if (len >=2) {
+			part = Integer.parseInt(verArray[1].trim());
+			version |= ((long)part << 32);
+		}
+
+		if (len >=3) {
+			part = Integer.parseInt(verArray[2].trim());
+			version |= ((long)part << 16);
+		}
+
+		if (len >=4) {
+			part = Integer.parseInt(verArray[3].trim());
+			version |= (long)part;
+		}
+
+		return version;
+	} catch (NumberFormatException e) {
+  		return 0;
+	}
   }
   
 }

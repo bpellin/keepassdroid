@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2020 Brian Pellin.
+ * Copyright 2009-2021 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -224,5 +224,14 @@ public class TypesTest {
 		byte[] uLongMax = bos.toByteArray();
 
 		assertArrayEquals(ulongBytes, uLongMax);
+	}
+
+	@Test
+	public void testParseVersion() {
+    	long ver1 = Types.parseVersion("1.00");
+    	assertEquals("Version 1.00 doesn't match", ver1, 0x0001000000000000L);
+
+		long ver2 = Types.parseVersion("2.00");
+		assertEquals("Version 2.00 doesn't match", ver2, 0x0002000000000000L);
 	}
 }

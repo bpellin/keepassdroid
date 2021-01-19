@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2020 Brian Pellin.
+ * Copyright 2010-2021 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -32,6 +32,7 @@ import com.keepassdroid.crypto.keyDerivation.KdfFactory;
 import com.keepassdroid.crypto.keyDerivation.KdfParameters;
 import com.keepassdroid.database.exception.InvalidKeyFileException;
 import com.keepassdroid.utils.EmptyUtils;
+import com.keepassdroid.utils.Types;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -218,8 +219,8 @@ public class PwDatabaseV4 extends PwDatabase {
 	}
     
 	private static final String RootElementName = "KeyFile";
-	//private static final String MetaElementName = "Meta";
-	//private static final String VersionElementName = "Version";
+	private static final String MetaElementName = "Meta";
+	private static final String VersionElementName = "Version";
 	private static final String KeyElementName = "Key";
 	private static final String KeyDataElementName = "Data";
 	
@@ -239,10 +240,12 @@ public class PwDatabaseV4 extends PwDatabase {
 			if (children.getLength() < 2) {
 				return null;
 			}
-			
+
+			long version = getVersion(children);
+
 			for ( int i = 0; i < children.getLength(); i++ ) {
 				Node child = children.item(i);
-				
+
 				if ( child.getNodeName().equalsIgnoreCase(KeyElementName) ) {
 					NodeList keyChildren = child.getChildNodes();
 					for ( int j = 0; j < keyChildren.getLength(); j++ ) {
@@ -253,7 +256,7 @@ public class PwDatabaseV4 extends PwDatabase {
 								Node text = children2.item(k);
 								if (text.getNodeType() == Node.TEXT_NODE) {
 									Text txt = (Text) text;
-									return Base64.decode(txt.getNodeValue(), Base64.NO_WRAP);
+									return decodeKey(txt.getNodeValue(), version);
 								}
 							}
 						}
@@ -264,6 +267,96 @@ public class PwDatabaseV4 extends PwDatabase {
 			return null;
 		}
 		return null;
+	}
+
+	private byte[] decodeKey(String value, long version) {
+
+		if (version == 0x0001000000000000L) {
+			return Base64.decode(value, Base64.NO_WRAP);
+		} else if (version == 0x0002000000000000L) {
+			// Strip all whitespace
+			value = value.replaceAll("\\s", "");
+			return decodeKeyV2(value);
+		} else {
+			return null;
+		}
+
+	}
+
+	private byte[] decodeKeyV2(String value) {
+		if ( value == null ) {
+			return null;
+		}
+
+		int len = value.length();
+		if ( (len & 1) != 0) {
+			return null;
+		}
+
+		byte[] pb = new byte[len / 2];
+
+		for (int i = 0; i < len; i+= 2) {
+			char ch = value.charAt(i);
+			byte bt;
+			bt = hexToByte(ch);
+
+			bt <<= 4;
+
+			ch = value.charAt((i+1));
+			byte bt2 = hexToByte(ch);
+
+			bt |= bt2;
+
+			pb[i >> 1]  = bt;
+		}
+
+		return pb;
+
+	}
+
+	private byte hexToByte(char ch) {
+	    byte bt;
+
+		if ( (ch >= '0') && (ch <= '9') ) {
+			bt = (byte)(ch - '0');
+		} else if ((ch >= 'a') && (ch <= 'f') ) {
+			bt = (byte)(ch -'a' + 10);
+		} else if ( (ch >= 'A') && (ch <= 'F') ) {
+			bt = (byte)(ch - 'A' + 10);
+		} else {
+			bt = 0;
+		}
+
+		return bt;
+	}
+
+	private long getVersion(NodeList rootChildren) {
+
+		for (int i = 0; i < rootChildren.getLength(); i++) {
+			Node child = rootChildren.item(i);
+
+			String nodename = child.getNodeName();
+			if (nodename.equalsIgnoreCase(MetaElementName)) {
+				NodeList metaChildren = child.getChildNodes();
+				for (int j = 0; j < metaChildren.getLength(); j++) {
+					Node metaChild = metaChildren.item(j);
+					if (metaChild.getNodeName().equalsIgnoreCase(VersionElementName)) {
+
+						NodeList children2 = metaChild.getChildNodes();
+						for ( int k = 0; k < children2.getLength(); k++) {
+							Node text = children2.item(k);
+							if (text.getNodeType() == Node.TEXT_NODE) {
+								Text txt = (Text) text;
+								String value = txt.getNodeValue();
+								return Types.parseVersion(value);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return 0;
 	}
 
 	@Override
