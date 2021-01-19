@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Brian Pellin.
+ * Copyright 2017-2021 Brian Pellin.
  *
  * This file is part of KeePassDroid.
  *
@@ -27,13 +27,13 @@ public class Argon2Native {
 
     public static byte[] transformKey(byte[] password, byte[] salt, int parallelism,
                                               long memory, long iterations, byte[] secretKey,
-                                              byte[] associatedData, long version) throws IOException {
+                                              byte[] associatedData, long version, int type) throws IOException {
         NativeLib.init();
 
-        return nTransformMasterKey(password, salt, parallelism, memory, iterations, secretKey, associatedData, version);
+        return nTransformMasterKey(password, salt, parallelism, memory, iterations, secretKey, associatedData, version, type);
     }
 
     private static native byte[] nTransformMasterKey(byte[] password, byte[] salt, int parallelism,
                                               long memory, long iterations, byte[] secretKey,
-                                              byte[] associatedData, long version) throws IOException;
+                                              byte[] associatedData, long version, int type) throws IOException;
 }

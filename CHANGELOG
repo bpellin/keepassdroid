@@ -1,4 +1,5 @@
  * Add Keyfile 2.0 support
+ * Add Argon2 ID key derivation
 
 KeePassDroid (2.5.14)
  * Fix Google Drive compatibility

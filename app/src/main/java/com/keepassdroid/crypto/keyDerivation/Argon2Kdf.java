@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Brian Pellin.
+ * Copyright 2017-2021 Brian Pellin.
  *
  * This file is part of KeePassDroid.
  *
@@ -26,11 +26,29 @@ import java.security.SecureRandom;
 import java.util.UUID;
 
 public class Argon2Kdf extends KdfEngine {
-    public static final UUID CIPHER_UUID = Types.bytestoUUID(
+    public enum Argon2Type {
+        D(0), ID(2);
+
+        private int type;
+
+        Argon2Type(int type) {
+            this.type = type;
+        }
+
+        int value() {
+            return type;
+        }
+    }
+
+    public static final UUID CIPHER_UUID_D = Types.bytestoUUID(
             new byte[]{(byte) 0xEF, (byte) 0x63, (byte) 0x6D, (byte) 0xDF, (byte) 0x8C, (byte) 0x29, (byte) 0x44, (byte) 0x4B,
                     (byte) 0x91, (byte) 0xF7, (byte) 0xA9, (byte) 0xA4, (byte)0x03, (byte) 0xE3, (byte) 0x0A, (byte) 0x0C
             });
 
+    public static final UUID CIPHER_UUID_ID = Types.bytestoUUID(
+            new byte[]{(byte) 0x9E, (byte) 0x29, (byte) 0x8B, (byte) 0x19, (byte) 0x56, (byte) 0xDB, (byte) 0x47, (byte) 0x73,
+                    (byte) 0xB2, (byte) 0x3D, (byte) 0xFC, (byte) 0x3E, (byte)0xC6, (byte) 0xF0, (byte) 0xA1, (byte) 0xE6
+            });
     public static final String ParamSalt = "S"; // byte[]
     public static final String ParamParallelism = "P"; // UInt32
     public static final String ParamMemory = "M"; // UInt64
@@ -58,8 +76,16 @@ public class Argon2Kdf extends KdfEngine {
     private static final long DefaultMemory = 1024 * 1024;
     private static final long DefaultParallelism = 2;
 
-    public Argon2Kdf() {
-        uuid = CIPHER_UUID;
+    private Argon2Type type;
+
+    public Argon2Kdf(Argon2Type type) {
+        if (type == Argon2Type.D) {
+            uuid = CIPHER_UUID_D;
+        } else {
+            uuid = CIPHER_UUID_ID;
+        }
+
+        this.type = type;
     }
 
     @Override
@@ -85,7 +111,7 @@ public class Argon2Kdf extends KdfEngine {
         byte[] assocData = p.getByteArray(ParamAssocData);
 
         return Argon2Native.transformKey(masterKey, salt, parallelism, memory, iterations,
-                secretKey, assocData, version);
+                secretKey, assocData, version, type.value());
     }
 
     @Override

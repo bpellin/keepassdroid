@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Brian Pellin.
+ * Copyright 2017-2021 Brian Pellin.
  *
  * This file is part of KeePassDroid.
  *
@@ -131,7 +131,7 @@ void throwExceptionF(JNIEnv *env, jclass exception, const char *format, ...) {
 JNIEXPORT jbyteArray
 JNICALL Java_com_keepassdroid_crypto_keyDerivation_Argon2Native_nTransformMasterKey(JNIEnv *env,
    jclass this, jbyteArray password, jbyteArray salt, jint parallelism, jlong memory,
-   jlong iterations, jbyteArray secretKey, jbyteArray associatedData, jlong version) {
+   jlong iterations, jbyteArray secretKey, jbyteArray associatedData, jlong version, jint type) {
 
     argon2_context context;
     uint8_t *out;
@@ -170,7 +170,14 @@ JNICALL Java_com_keepassdroid_crypto_keyDerivation_Argon2Native_nTransformMaster
     context.flags = ARGON2_DEFAULT_FLAGS;
     context.version = (uint32_t) version;
 
-    int argonResult = argon2_ctx(&context, Argon2_d);
+    enum Argon2_type a_type;
+    if (type == 2) {
+        a_type = Argon2_id;
+    } else {
+        a_type = Argon2_d;
+    }
+
+    int argonResult = argon2_ctx(&context, a_type);
 
     jbyteArray result;
     if (argonResult != ARGON2_OK) {

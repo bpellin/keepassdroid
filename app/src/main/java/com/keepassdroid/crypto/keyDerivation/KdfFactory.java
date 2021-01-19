@@ -29,7 +29,8 @@ public class KdfFactory {
 
     static {
         kdfList.add(new AesKdf());
-        kdfList.add(new Argon2Kdf());
+        kdfList.add(new Argon2Kdf(Argon2Kdf.Argon2Type.D));
+        kdfList.add(new Argon2Kdf(Argon2Kdf.Argon2Type.ID));
     }
 
     public static KdfParameters getDefaultParameters() {
