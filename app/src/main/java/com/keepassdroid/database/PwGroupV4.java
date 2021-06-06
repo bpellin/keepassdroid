@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2017 Brian Pellin.
+ * Copyright 2010-2021 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -46,7 +46,10 @@ public class PwGroupV4 extends PwGroup implements ITimeLogger {
 	private Date expireDate = PwDatabaseV4.DEFAULT_NOW;
 	private boolean expires = false;
 	private long usageCount = 0;
-	public Map<String, String> customData = new HashMap<String, String>();
+
+	public UUID prevParentGroup = PwDatabaseV4.UUID_ZERO;
+	public PwCustomData customData = new PwCustomData();
+	public String tags = "";
 
 	public PwGroupV4() {
 		

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Brian Pellin.
+ * Copyright 2010-2021 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,6 +19,7 @@
  */
 package com.keepassdroid.database;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class PwIconCustom extends PwIcon {
@@ -26,6 +27,9 @@ public class PwIconCustom extends PwIcon {
 	
 	public final UUID uuid;
 	public byte[] imageData;
+
+	public Date lastMod = null;
+	public String name = "";
 	
 	public PwIconCustom(UUID u, byte[] data) {
 		uuid = u;

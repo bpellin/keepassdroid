@@ -32,6 +32,7 @@ import com.keepassdroid.database.EntryHandler;
 import com.keepassdroid.database.GroupHandler;
 import com.keepassdroid.database.ITimeLogger;
 import com.keepassdroid.database.PwCompressionAlgorithm;
+import com.keepassdroid.database.PwCustomData;
 import com.keepassdroid.database.PwDatabaseV4;
 import com.keepassdroid.database.PwDatabaseV4.MemoryProtectionConfig;
 import com.keepassdroid.database.PwDatabaseV4XML;
@@ -139,11 +140,13 @@ import static com.keepassdroid.database.PwDatabaseV4XML.ElemMeta;
 import static com.keepassdroid.database.PwDatabaseV4XML.ElemName;
 import static com.keepassdroid.database.PwDatabaseV4XML.ElemNotes;
 import static com.keepassdroid.database.PwDatabaseV4XML.ElemOverrideUrl;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemPreviousParentGroup;
 import static com.keepassdroid.database.PwDatabaseV4XML.ElemProtNotes;
 import static com.keepassdroid.database.PwDatabaseV4XML.ElemProtPassword;
 import static com.keepassdroid.database.PwDatabaseV4XML.ElemProtTitle;
 import static com.keepassdroid.database.PwDatabaseV4XML.ElemProtURL;
 import static com.keepassdroid.database.PwDatabaseV4XML.ElemProtUserName;
+import static com.keepassdroid.database.PwDatabaseV4XML.ElemQualityCheck;
 import static com.keepassdroid.database.PwDatabaseV4XML.ElemRecycleBinChanged;
 import static com.keepassdroid.database.PwDatabaseV4XML.ElemRecycleBinEnabled;
 import static com.keepassdroid.database.PwDatabaseV4XML.ElemRecycleBinUuid;
@@ -448,7 +451,17 @@ public class PwDbV4Output extends PwDbOutput {
 		writeObject(ElemEnableAutoType, group.enableAutoType);
 		writeObject(ElemEnableSearching, group.enableSearching);
 		writeObject(ElemLastTopVisibleEntry, group.lastTopVisibleEntry);
-		
+
+		if (header.version >= PwDbHeaderV4.FILE_VERSION_32_4_1) {
+			if (!group.prevParentGroup.equals(PwDatabaseV4.UUID_ZERO)) {
+				writeObject(ElemPreviousParentGroup, group.prevParentGroup);
+			}
+
+			if (!EmptyUtils.isNullOrEmpty(group.tags)) {
+				writeObject(ElemTags, group.tags);
+			}
+		}
+
 	}
 	
 	private void endGroup() throws IllegalArgumentException, IllegalStateException, IOException {
@@ -470,8 +483,18 @@ public class PwDbV4Output extends PwDbOutput {
 		writeObject(ElemFgColor, entry.foregroundColor);
 		writeObject(ElemBgColor, entry.backgroupColor);
 		writeObject(ElemOverrideUrl, entry.overrideURL);
+
+		if (header.version >= PwDbHeaderV4.FILE_VERSION_32_4_1 && !entry.qualityCheck) {
+			writeObject(ElemQualityCheck, false);
+		}
+
 		writeObject(ElemTags, entry.tags);
-		
+
+		if (header.version >= PwDbHeaderV4.FILE_VERSION_32_4_1 &&
+				!entry.prevParentGroup.equals(PwDatabaseV4.UUID_ZERO)) {
+			writeObject(ElemPreviousParentGroup, entry.prevParentGroup);
+		}
+
 		writeList(ElemTimes, entry);
 		
 		writeList(entry.strings, true);
@@ -595,7 +618,9 @@ public class PwDbV4Output extends PwDbOutput {
 		writeObject(name, Base64.encodeToString(data, Base64.NO_WRAP));
 	}
 	
-	private void writeObject(String name, String keyName, String keyValue, String valueName, String valueValue) throws IllegalArgumentException, IllegalStateException, IOException {
+	private void writeObject(String name, String keyName, String keyValue, String valueName,
+							 String valueValue, Date lastMod)
+			throws IllegalArgumentException, IllegalStateException, IOException {
 		xml.startTag(null, name);
 		
 		xml.startTag(null, keyName);
@@ -605,6 +630,10 @@ public class PwDbV4Output extends PwDbOutput {
 		xml.startTag(null, valueName);
 		xml.text(safeXmlString(valueValue));
 		xml.endTag(null, valueName);
+
+		if (lastMod != null) {
+			writeObject(ElemLastModTime, lastMod);
+		}
 		
 		xml.endTag(null, name);
 	}
@@ -622,7 +651,8 @@ public class PwDbV4Output extends PwDbOutput {
 		}
 		
 		for (Entry<String, String> pair : autoType.entrySet()) {
-			writeObject(ElemAutoTypeItem, ElemWindow, pair.getKey(), ElemKeystrokeSequence, pair.getValue());
+			writeObject(ElemAutoTypeItem, ElemWindow, pair.getKey(), ElemKeystrokeSequence,
+					pair.getValue(), null);
 		}
 		
 		xml.endTag(null, name);
@@ -736,14 +766,21 @@ public class PwDbV4Output extends PwDbOutput {
 		
 	}
 	
-	private void writeList(String name, Map<String, String> customData) throws IllegalArgumentException, IllegalStateException, IOException {
+	private void writeList(String name, PwCustomData customData) throws IllegalArgumentException, IllegalStateException, IOException {
 		assert(name != null && customData != null);
 		
 		xml.startTag(null, name);
 		
 		for (Entry<String, String> pair : customData.entrySet()) {
-			writeObject(ElemStringDictExItem, ElemKey, pair.getKey(), ElemValue, pair.getValue());
-			  
+			String key = pair.getKey();
+
+			Date lastMod = null;
+			if (header.version >= PwDbHeaderV4.FILE_VERSION_32_4_1) {
+				lastMod = customData.getLastMod(key);
+			}
+
+			writeObject(ElemStringDictExItem, ElemKey, key, ElemValue, pair.getValue(), lastMod);
+
 		}
 		
 		xml.endTag(null, name);
@@ -790,6 +827,16 @@ public class PwDbV4Output extends PwDbOutput {
 			
 			writeObject(ElemCustomIconItemID, icon.uuid);
 			writeObject(ElemCustomIconItemData, Base64.encodeToString(icon.imageData, Base64.NO_WRAP));
+
+			if (header.version >= PwDbHeaderV4.FILE_VERSION_32_4_1) {
+				if (!EmptyUtils.isNullOrEmpty(icon.name)) {
+					writeObject(ElemName, icon.name, true);
+				}
+
+				if (icon.lastMod != null) {
+					writeObject(ElemLastModTime, icon.lastMod);
+				}
+			}
 			
 			xml.endTag(null, ElemCustomIconItem);
 		}

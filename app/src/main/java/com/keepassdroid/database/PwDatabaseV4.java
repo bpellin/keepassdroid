@@ -97,7 +97,7 @@ public class PwDatabaseV4 extends PwDatabase {
     public MemoryProtectionConfig memoryProtection = new MemoryProtectionConfig();
     public List<PwDeletedObject> deletedObjects = new ArrayList<PwDeletedObject>();
     public List<PwIconCustom> customIcons = new ArrayList<PwIconCustom>();
-    public Map<String, String> customData = new HashMap<String, String>();
+    public PwCustomData customData = new PwCustomData();
 	public KdfParameters kdfParameters = KdfFactory.getDefaultParameters();
 	public VariantDictionary publicCustomData = new VariantDictionary();
 	public BinaryPool binPool = new BinaryPool();
@@ -562,9 +562,9 @@ public class PwDatabaseV4 extends PwDatabase {
 		return filename.substring(0, lastExtDot);
 	}
 
-	private class GroupHasCustomData extends GroupHandler<PwGroup> {
+	private class GroupGetMinVer extends GroupHandler<PwGroup> {
 
-		public boolean hasCustomData = false;
+		public int minVer = 0;
 
 		@Override
 		public boolean operate(PwGroup group) {
@@ -572,9 +572,11 @@ public class PwDatabaseV4 extends PwDatabase {
 				return true;
 			}
 			PwGroupV4 g4 = (PwGroupV4) group;
+            if (g4.tags.length() > 0) {
+            	minVer = Math.max(minVer, PwDbHeaderV4.FILE_VERSION_32_4_1);
+			}
 			if (g4.customData.size() > 0) {
-				hasCustomData = true;
-				return false;
+			    minVer = Math.max(minVer, PwDbHeaderV4.FILE_VERSION_32_4);
 			}
 
 			return true;
@@ -583,7 +585,7 @@ public class PwDatabaseV4 extends PwDatabase {
 
 	private class EntryHasCustomData extends EntryHandler<PwEntry> {
 
-        public boolean hasCustomData = false;
+	    public int minVer = 0;
 
 		@Override
 		public boolean operate(PwEntry entry) {
@@ -592,9 +594,11 @@ public class PwDatabaseV4 extends PwDatabase {
 			}
 
 			PwEntryV4 e4 = (PwEntryV4)entry;
+            if (e4.qualityCheck) {
+            	minVer = Math.max(minVer, PwDbHeaderV4.FILE_VERSION_32_4_1);
+			}
 			if (e4.customData.size() > 0) {
-				hasCustomData = true;
-				return false;
+			    minVer = Math.max(minVer, PwDbHeaderV4.FILE_VERSION_32_4);
 			}
 
 			return true;
@@ -602,6 +606,22 @@ public class PwDatabaseV4 extends PwDatabase {
 	}
 
 	public int getMinKdbxVersion() {
+		int minVer = 0;
+
+		EntryHasCustomData entryHandler = new EntryHasCustomData();
+		GroupGetMinVer groupHandler = new GroupGetMinVer();
+
+		if (rootGroup == null ) {
+			return PwDbHeaderV4.FILE_VERSION_32_3;
+		}
+		rootGroup.preOrderTraverseTree(groupHandler, entryHandler);
+		minVer = Math.max(minVer, groupHandler.minVer);
+		minVer = Math.max(minVer, entryHandler.minVer);
+
+		if (minVer >= PwDbHeaderV4.FILE_VERSION_32_4_1) {
+			return minVer;
+		}
+
 		if (!AesKdf.CIPHER_UUID.equals(kdfParameters.kdfUUID)) {
 			return PwDbHeaderV4.FILE_VERSION_32;
 		}
@@ -610,16 +630,7 @@ public class PwDatabaseV4 extends PwDatabase {
 			return PwDbHeaderV4.FILE_VERSION_32;
 		}
 
-		EntryHasCustomData entryHandler = new EntryHasCustomData();
-		GroupHasCustomData groupHandler = new GroupHasCustomData();
 
-		if (rootGroup == null ) {
-			return PwDbHeaderV4.FILE_VERSION_32_3;
-		}
-        rootGroup.preOrderTraverseTree(groupHandler, entryHandler);
-        if (groupHandler.hasCustomData || entryHandler.hasCustomData) {
-			return PwDbHeaderV4.FILE_VERSION_32;
-		}
 
 		return PwDbHeaderV4.FILE_VERSION_32_3;
 	}

@@ -55,6 +55,7 @@ public class PwDatabaseV4XML {
     public static final String ElemHistoryMaxSize = "HistoryMaxSize";
     public static final String ElemLastSelectedGroup = "LastSelectedGroup";
     public static final String ElemLastTopVisibleGroup = "LastTopVisibleGroup";
+    public static final String ElemPreviousParentGroup = "PreviousParentGroup";
 
     public static final String ElemMemoryProt = "MemoryProtection";
     public static final String ElemProtTitle = "ProtectTitle";
@@ -80,6 +81,7 @@ public class PwDatabaseV4XML {
     public static final String ElemFgColor = "ForegroundColor";
     public static final String ElemBgColor = "BackgroundColor";
     public static final String ElemOverrideUrl = "OverrideURL";
+    public static final String ElemQualityCheck = "QualityCheck";
     public static final String ElemTimes = "Times";
     public static final String ElemTags = "Tags";
 

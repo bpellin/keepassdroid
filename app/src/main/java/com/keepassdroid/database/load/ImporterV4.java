@@ -50,13 +50,11 @@ import com.keepassdroid.utils.Types;
 import com.keepassdroid.utils.Util;
 
 import org.spongycastle.crypto.StreamCipher;
-import org.spongycastle.jcajce.provider.symmetric.ARC4;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -316,8 +314,11 @@ public class ImporterV4 extends Importer {
 	private PwDeletedObject ctxDeletedObject = null;
 	private UUID customIconID = PwDatabaseV4.UUID_ZERO;
 	private byte[] customIconData;
+	private String customIconName = null;
+	private Date customIconLastMod = null;
 	private String customDataKey = null;
 	private String customDataValue = null;
+	private Date customDataLastMod = null;
 	private String groupCustomDataKey = null;
 	private String groupCustomDataValue = null;
 	private String entryCustomDataKey = null;
@@ -506,11 +507,15 @@ public class ImporterV4 extends Importer {
 				customIconID = ReadUuid(xpp);
 			} else if ( name.equalsIgnoreCase(ElemCustomIconItemData) ) {
 				String strData = ReadString(xpp);
-				if ( strData != null && strData.length() > 0 ) {
+				if (strData != null && strData.length() > 0) {
 					customIconData = Base64.decode(strData, Base64.NO_WRAP);
 				} else {
-					assert(false);
+					assert (false);
 				}
+			} else if (name.equalsIgnoreCase(ElemName)) {
+				customIconName = ReadString(xpp);
+			} else if (name.equalsIgnoreCase(ElemLastModTime)) {
+				customIconLastMod = ReadTime(xpp);
 			} else {
 				ReadUnknown(xpp);
 			}
@@ -545,6 +550,8 @@ public class ImporterV4 extends Importer {
 				customDataKey = ReadString(xpp);
 			} else if ( name.equalsIgnoreCase(ElemValue) ) {
 				customDataValue = ReadString(xpp);
+			} else if ( name.equalsIgnoreCase(ElemLastModTime)) {
+				customDataLastMod = ReadTime(xpp);
 			} else {
 				ReadUnknown(xpp);
 			}
@@ -590,6 +597,10 @@ public class ImporterV4 extends Importer {
 				ctxGroup.enableSearching = StringToBoolean(ReadString(xpp));
 			} else if ( name.equalsIgnoreCase(ElemLastTopVisibleEntry) ) {
 				ctxGroup.lastTopVisibleEntry = ReadUuid(xpp);
+			} else if ( name.equalsIgnoreCase(ElemPreviousParentGroup)) {
+				ctxGroup.prevParentGroup = ReadUuid(xpp);
+			} else if ( name.equalsIgnoreCase(ElemTags)) {
+				ctxGroup.tags = ReadString(xpp);
 			} else if ( name.equalsIgnoreCase(ElemCustomData) ) {
                 return SwitchContext(ctx, KdbContext.GroupCustomData, xpp);
 			} else if ( name.equalsIgnoreCase(ElemGroup) ) {
@@ -639,8 +650,12 @@ public class ImporterV4 extends Importer {
 				ctxEntry.backgroupColor = ReadString(xpp);
 			} else if ( name.equalsIgnoreCase(ElemOverrideUrl) ) {
 				ctxEntry.overrideURL = ReadString(xpp);
+			} else if ( name.equalsIgnoreCase(ElemQualityCheck)) {
+				ctxEntry.qualityCheck = ReadBool(xpp, true);
 			} else if ( name.equalsIgnoreCase(ElemTags) ) {
 				ctxEntry.tags = ReadString(xpp);
+			} else if ( name.equalsIgnoreCase(ElemPreviousParentGroup)) {
+				ctxEntry.prevParentGroup = ReadUuid(xpp);
 			} else if ( name.equalsIgnoreCase(ElemTimes) ) {
 				return SwitchContext(ctx, KdbContext.EntryTimes, xpp);
 			} else if ( name.equalsIgnoreCase(ElemString) ) {
@@ -809,12 +824,21 @@ public class ImporterV4 extends Importer {
 		} else if ( ctx == KdbContext.CustomIcon && name.equalsIgnoreCase(ElemCustomIconItem) ) {
 			if ( ! customIconID.equals(PwDatabaseV4.UUID_ZERO) ) {
 				PwIconCustom icon = new PwIconCustom(customIconID, customIconData);
+				if (customIconName != null) {
+					icon.name = customIconName;
+				}
+				if (customIconLastMod != null) {
+					icon.lastMod = customIconLastMod;
+				}
+
 				db.customIcons.add(icon);
 				db.iconFactory.put(icon);
 			} else assert(false);
 			
 			customIconID = PwDatabaseV4.UUID_ZERO;
 			customIconData = null;
+			customIconName = null;
+			customIconLastMod = null;
 			
 			return KdbContext.CustomIcons;
 		} else if ( ctx == KdbContext.Binaries && name.equalsIgnoreCase(ElemBinaries) ) {
@@ -823,11 +847,12 @@ public class ImporterV4 extends Importer {
 			return KdbContext.Meta;
 		} else if ( ctx == KdbContext.CustomDataItem && name.equalsIgnoreCase(ElemStringDictExItem) ) {
 			if ( customDataKey != null && customDataValue != null) {
-				db.customData.put(customDataKey, customDataValue);
+				db.customData.put(customDataKey, customDataValue, customDataLastMod);
 			} else assert(false);
 			
 			customDataKey = null;
 			customDataValue = null;
+			customDataLastMod = null;
 			
 			return KdbContext.CustomData;
 		} else if ( ctx == KdbContext.Group && name.equalsIgnoreCase(ElemGroup) ) {
@@ -850,7 +875,7 @@ public class ImporterV4 extends Importer {
 			return KdbContext.Group;
 		} else if ( ctx == KdbContext.GroupCustomDataItem && name.equalsIgnoreCase(ElemStringDictExItem)) {
 			if (groupCustomDataKey != null && groupCustomDataValue != null) {
-				ctxGroup.customData.put(groupCustomDataKey, groupCustomDataKey);
+				ctxGroup.customData.put(groupCustomDataKey, groupCustomDataKey, customDataLastMod);
 			} else {
 				assert(false);
 			}

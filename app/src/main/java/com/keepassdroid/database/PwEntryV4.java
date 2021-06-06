@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2017 Brian Pellin.
+ * Copyright 2010-2021 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -60,7 +60,9 @@ public class PwEntryV4 extends PwEntry implements ITimeLogger {
 	public String url = "";
 	public String additional = "";
 	public String tags = "";
-	public Map<String, String> customData = new HashMap<String, String>();
+	public PwCustomData customData = new PwCustomData();
+	public UUID prevParentGroup = PwDatabaseV4.UUID_ZERO;
+	public boolean qualityCheck = true;
 
 	public class AutoType implements Cloneable {
 		private static final long OBF_OPT_NONE = 0;
