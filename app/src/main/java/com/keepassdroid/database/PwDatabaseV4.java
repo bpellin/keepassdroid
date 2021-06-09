@@ -25,6 +25,7 @@ import android.webkit.URLUtil;
 import com.keepassdroid.collections.VariantDictionary;
 import com.keepassdroid.crypto.CryptoUtil;
 import com.keepassdroid.crypto.engine.AesEngine;
+import com.keepassdroid.crypto.engine.ChaCha20Engine;
 import com.keepassdroid.crypto.engine.CipherEngine;
 import com.keepassdroid.crypto.keyDerivation.AesKdf;
 import com.keepassdroid.crypto.keyDerivation.KdfEngine;
@@ -47,9 +48,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -77,7 +76,7 @@ public class PwDatabaseV4 extends PwDatabase {
     public Date descriptionChanged = DEFAULT_NOW;
     public String defaultUserName = "";
     public Date defaultUserNameChanged = DEFAULT_NOW;
-    
+
     public Date keyLastChanged = DEFAULT_NOW;
     public long keyChangeRecDays = -1;
     public long keyChangeForceDays = 1;
@@ -583,7 +582,7 @@ public class PwDatabaseV4 extends PwDatabase {
 		}
 	}
 
-	private class EntryHasCustomData extends EntryHandler<PwEntry> {
+	private class EntryGetMinVer extends EntryHandler<PwEntry> {
 
 	    public int minVer = 0;
 
@@ -594,7 +593,7 @@ public class PwDatabaseV4 extends PwDatabase {
 			}
 
 			PwEntryV4 e4 = (PwEntryV4)entry;
-            if (e4.qualityCheck) {
+            if (!e4.qualityCheck) {
             	minVer = Math.max(minVer, PwDbHeaderV4.FILE_VERSION_32_4_1);
 			}
 			if (e4.customData.size() > 0) {
@@ -608,29 +607,46 @@ public class PwDatabaseV4 extends PwDatabase {
 	public int getMinKdbxVersion() {
 		int minVer = 0;
 
-		EntryHasCustomData entryHandler = new EntryHasCustomData();
+		EntryGetMinVer entryHandler = new EntryGetMinVer();
 		GroupGetMinVer groupHandler = new GroupGetMinVer();
 
-		if (rootGroup == null ) {
-			return PwDbHeaderV4.FILE_VERSION_32_3;
-		}
-		rootGroup.preOrderTraverseTree(groupHandler, entryHandler);
-		minVer = Math.max(minVer, groupHandler.minVer);
-		minVer = Math.max(minVer, entryHandler.minVer);
+		if (rootGroup != null) {
+			rootGroup.preOrderTraverseTree(groupHandler, entryHandler);
+			minVer = Math.max(minVer, groupHandler.minVer);
+			minVer = Math.max(minVer, entryHandler.minVer);
 
-		if (minVer >= PwDbHeaderV4.FILE_VERSION_32_4_1) {
+			if (minVer >= PwDbHeaderV4.FILE_VERSION_32_4_1) {
+				return minVer;
+			}
+		}
+
+		for (PwIconCustom icon : customIcons) {
+			if (!EmptyUtils.isNullOrEmpty(icon.name) || icon.lastMod != null) {
+				return PwDbHeaderV4.FILE_VERSION_32_4_1;
+			}
+		}
+
+		for (String key : customData.keySet()) {
+			if (customData.getLastMod(key) != null) {
+				return PwDbHeaderV4.FILE_VERSION_32_4_1;
+			}
+		}
+
+		if (minVer >= PwDbHeaderV4.FILE_VERSION_32_4) {
 			return minVer;
 		}
 
+		if (ChaCha20Engine.CIPHER_UUID.equals(dataCipher)) {
+			return PwDbHeaderV4.FILE_VERSION_32_4;
+		}
+
 		if (!AesKdf.CIPHER_UUID.equals(kdfParameters.kdfUUID)) {
-			return PwDbHeaderV4.FILE_VERSION_32;
+			return PwDbHeaderV4.FILE_VERSION_32_4;
 		}
 
 		if (publicCustomData.size() > 0) {
-			return PwDbHeaderV4.FILE_VERSION_32;
+			return PwDbHeaderV4.FILE_VERSION_32_4;
 		}
-
-
 
 		return PwDbHeaderV4.FILE_VERSION_32_3;
 	}
