@@ -98,9 +98,9 @@ public class PwDbHeaderV4 extends PwDbHeader {
 	public long version;
 
     public PwDbHeaderV4(PwDatabaseV4 d) {
-    	db = d;
-		version = d.getMinKdbxVersion();
-    	masterSeed = new byte[32];
+		db = d;
+		version = 0;
+		masterSeed = new byte[32];
     }
 
 	/** Assumes the input stream is at the beginning of the .kdbx file

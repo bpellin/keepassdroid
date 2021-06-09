@@ -419,6 +419,7 @@ public class PwDbV4Output extends PwDbOutput {
 	@Override
 	public PwDbHeader outputHeader(OutputStream os) throws PwDbOutputException {
 		PwDbHeaderV4 header = new PwDbHeaderV4(mPM);
+		header.version = mPM.getMinKdbxVersion();
 		setIVs(header);
 
 		PwDbHeaderOutputV4 pho = new PwDbHeaderOutputV4(mPM, header, os);

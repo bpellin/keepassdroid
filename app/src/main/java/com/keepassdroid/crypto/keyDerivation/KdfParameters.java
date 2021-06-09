@@ -37,6 +37,7 @@ public class KdfParameters extends VariantDictionary {
 
     public KdfParameters(UUID uuid) {
         kdfUUID = uuid;
+        this.setByteArray(ParamUUID, Types.UUIDtoBytes(uuid));
     }
 
     public static KdfParameters deserialize(byte[] data) throws IOException {
