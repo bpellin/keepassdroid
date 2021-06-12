@@ -1,3 +1,5 @@
+ * Fix databases broken with missing AES KDF UUID
+
 KeePassDroid (2.5.17)
  * Fix KDBX3 -> 4 upgrade
 

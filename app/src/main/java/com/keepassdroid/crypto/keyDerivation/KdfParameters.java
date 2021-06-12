@@ -50,7 +50,15 @@ public class KdfParameters extends VariantDictionary {
             return null;
         }
 
-        UUID uuid = Types.bytestoUUID(d.getByteArray(ParamUUID));
+        byte[] uuidBytes = d.getByteArray((ParamUUID));
+        UUID uuid;
+        if (uuidBytes != null) {
+            uuid = Types.bytestoUUID(uuidBytes);
+        } else {
+            // Correct issue where prior versions were writing empty UUIDs for AES
+            uuid = AesKdf.CIPHER_UUID;
+        }
+
         if (uuid == null) {
             assert(false);
             return null;
