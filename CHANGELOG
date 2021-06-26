@@ -1,3 +1,6 @@
+KeePassDroid (2.5.17.2)
+ * Revert to older version of biometric library
+
 KeePassDroid (2.5.17.1)
  * Fix databases broken with missing AES KDF UUID
 
