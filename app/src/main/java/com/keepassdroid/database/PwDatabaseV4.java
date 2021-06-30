@@ -103,7 +103,7 @@ public class PwDatabaseV4 extends PwDatabase {
 
     public String localizedAppName = "KeePassDroid";
     
-    public class MemoryProtectionConfig {
+    public static class MemoryProtectionConfig {
     	public boolean protectTitle = false;
     	public boolean protectUserName = false;
     	public boolean protectPassword = false;
@@ -561,7 +561,7 @@ public class PwDatabaseV4 extends PwDatabase {
 		return filename.substring(0, lastExtDot);
 	}
 
-	private class GroupGetMinVer extends GroupHandler<PwGroup> {
+	private static class GroupGetMinVer extends GroupHandler<PwGroup> {
 
 		public int minVer = 0;
 
@@ -582,7 +582,7 @@ public class PwDatabaseV4 extends PwDatabase {
 		}
 	}
 
-	private class EntryGetMinVer extends EntryHandler<PwEntry> {
+	private static class EntryGetMinVer extends EntryHandler<PwEntry> {
 
 	    public int minVer = 0;
 

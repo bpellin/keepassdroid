@@ -35,7 +35,7 @@ public class SprEngineV4 extends SprEngine {
 	private final String STR_REF_START = "{REF:";
 	private final String STR_REF_END = "}";
 
-	public class TargetResult {
+	public static class TargetResult {
 		public PwEntryV4 entry;
 		public char wanted;
 		

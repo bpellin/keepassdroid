@@ -82,7 +82,7 @@ apply plugin: "net.ltgt.errorprone"
 
 tasks.withType(JavaCompile) {
     options.compilerArgs += [
-        '-Xep:ClassCanBeStatic:OFF',
+        '-Xep:ClassCanBeStatic:ERROR',
         '-Xep:DefaultCharset:OFF',
         '-Xep:EqualsHashCode:OFF',
         '-Xep:FragmentInjection:OFF',

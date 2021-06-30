@@ -56,7 +56,7 @@ public class ProtectedBinary {
 	private static final SecureRandom secureRandom = new SecureRandom();
 	private FileParams fileParams;
 
-	private class FileParams {
+	private static class FileParams {
 
 		private File dataFile;
 		public CipherOutputStream cos;

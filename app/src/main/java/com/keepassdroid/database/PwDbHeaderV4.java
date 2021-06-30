@@ -52,7 +52,7 @@ public class PwDbHeaderV4 extends PwDbHeader {
 	public static final int FILE_VERSION_32_4_1 =         0x00040001;
 	public static final int FILE_VERSION_32 =             FILE_VERSION_32_4_1;
 
-    public class PwDbHeaderV4Fields {
+    public static class PwDbHeaderV4Fields {
         public static final byte EndOfHeader = 0;
 		public static final byte Comment = 1;
         public static final byte CipherID = 2;
@@ -69,19 +69,19 @@ public class PwDbHeaderV4 extends PwDbHeader {
 
     }
 
-	public class PwDbInnerHeaderV4Fields {
+	public static class PwDbInnerHeaderV4Fields {
 		public static final byte EndOfHeader = 0;
 		public static final byte InnerRandomStreamID = 1;
 		public static final byte InnerRandomstreamKey = 2;
 		public static final byte Binary = 3;
 	}
 
-	public class KdbxBinaryFlags {
+	public static class KdbxBinaryFlags {
 		public static final byte None = 0;
 		public static final byte Protected = 1;
 	}
 
-	public class HeaderAndHash {
+	public static class HeaderAndHash {
 		public byte[] header;
 		public byte[] hash;
 
