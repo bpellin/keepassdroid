@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 Brian Pellin.
+ * Copyright 2010-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -27,8 +27,6 @@ import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import android.os.Build;
 
@@ -36,15 +34,15 @@ import com.keepassdroid.crypto.engine.AesEngine;
 import com.keepassdroid.crypto.engine.ChaCha20Engine;
 import com.keepassdroid.crypto.engine.CipherEngine;
 import com.keepassdroid.crypto.engine.TwofishEngine;
-import com.keepassdroid.utils.Types;
 
-import org.spongycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class CipherFactory {
 	private static boolean blacklistInit = false;
 	private static boolean blacklisted;
 
 	static {
+		Security.removeProvider("BC");
 		Security.addProvider(new BouncyCastleProvider());
 	}
 	
@@ -57,7 +55,7 @@ public class CipherFactory {
 		if ( (!deviceBlacklisted()) && (!androidOverride) && hasNativeImplementation(transformation) && NativeLib.loaded() ) {
 			return Cipher.getInstance(transformation, new AESProvider());
 		} else {
-            return Cipher.getInstance(transformation);
+			return Cipher.getInstance(transformation);
 		}
 	}
 	

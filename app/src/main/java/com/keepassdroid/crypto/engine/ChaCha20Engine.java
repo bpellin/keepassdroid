@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Brian Pellin.
+ * Copyright 2017-2022 Brian Pellin.
  *
  * This file is part of KeePassDroid.
  *
@@ -21,7 +21,7 @@ package com.keepassdroid.crypto.engine;
 
 import com.keepassdroid.utils.Types;
 
-import org.spongycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;

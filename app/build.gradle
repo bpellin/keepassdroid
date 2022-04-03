@@ -51,8 +51,8 @@ android {
 
 dependencies {
 
-    implementation 'com.madgag.spongycastle:core:1.58.0.0'
-    implementation ('com.madgag.spongycastle:prov:1.58.0.0') {
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.70'
+    implementation ('org.bouncycastle:bcprov-jdk15to18:1.70') {
         exclude group: 'junit'
     }
     implementation 'joda-time:joda-time:2.9.4'

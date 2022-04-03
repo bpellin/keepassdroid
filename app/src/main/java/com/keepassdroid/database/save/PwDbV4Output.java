@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2020 Brian Pellin.
+ * Copyright 2013-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -58,7 +58,7 @@ import com.keepassdroid.utils.MemUtil;
 import com.keepassdroid.utils.Types;
 
 import org.joda.time.DateTime;
-import org.spongycastle.crypto.StreamCipher;
+import org.bouncycastle.crypto.StreamCipher;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
