@@ -184,7 +184,7 @@ public class ImporterV3 extends Importer {
 			if ( newManager.algorithm == PwEncryptionAlgorithm.Rjindal ) {
 				cipher = CipherFactory.getInstance("AES/CBC/PKCS5Padding");
 			} else if ( newManager.algorithm == PwEncryptionAlgorithm.Twofish ) {
-				cipher = CipherFactory.getInstance("Twofish/CBC/PKCS7PADDING");
+				cipher = CipherFactory.getInstance("Twofish/CBC/PKCS7Padding");
 			} else {
 				throw new IOException( "Encryption algorithm is not supported" );
 			}
@@ -192,7 +192,7 @@ public class ImporterV3 extends Importer {
 		} catch (NoSuchAlgorithmException e1) {
 			throw new IOException("No such algorithm");
 		} catch (NoSuchPaddingException e1) {
-			throw new IOException("No such pdading");
+			throw new IOException("No such padding");
 		}
 
 		try {
