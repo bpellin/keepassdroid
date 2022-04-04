@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2019 Brian Pellin.
+ * Copyright 2009-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,13 +19,14 @@
  */
 package com.keepassdroid.app;
 
-import android.app.Application;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
+
+import androidx.multidex.MultiDexApplication;
 
 import com.keepassdroid.Database;
 import com.keepassdroid.compat.PRNGFixes;
@@ -34,7 +35,7 @@ import com.keepassdroid.intents.Intents;
 
 import java.util.Calendar;
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 	private static Database db = null;
 	private static boolean shutdown = false;
 	private static Calendar calendar = null;
