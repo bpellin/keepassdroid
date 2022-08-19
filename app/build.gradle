@@ -5,12 +5,12 @@ android {
 
     defaultConfig {
         applicationId = "com.android.keepass"
-        minSdkVersion 14
-        targetSdkVersion 29
+        minSdkVersion 19
+        targetSdkVersion 30
 
         multiDexEnabled true
 
-        versionCode = 203
+        versionCode = 204
         versionName = "2.5.17.2"
 
         testApplicationId = "com.keepassdroid.tests"
@@ -19,6 +19,10 @@ android {
 
         ndk {
             abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+        }
+
+        lintOptions {
+            baseline file("lint-baseline.xml")
         }
     }
 

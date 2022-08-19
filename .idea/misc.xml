@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/layout/file_selection.xml" value="0.3845108695652174" />
+        <entry key="app/src/main/res/layout/file_selection_filename.xml" value="0.3845108695652174" />
+        <entry key="app/src/main/res/layout/file_selection_no_recent.xml" value="0.3845108695652174" />
+      </map>
+    </option>
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />

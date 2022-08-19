@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/KeePassDroid.iml" filepath="$PROJECT_DIR$/KeePassDroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KeePassDroid.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KeePassDroid.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KeePassDroid.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KeePassDroid.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KeePassDroid.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KeePassDroid.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KeePassDroid.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KeePassDroid.app.unitTest.iml" />
     </modules>
   </component>
 </project>

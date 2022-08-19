@@ -29,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -87,6 +88,7 @@ public class FileSelectActivity extends AppCompatActivity {
     public static final int GET_CONTENT = 2;
     public static final int OPEN_DOC = 3;
     private static final int PERMISSION_REQUEST_ID = 4;
+    public static final int CREATE_DOC = 5;
 
     private RecentFileHistory fileHistory;
 
@@ -94,45 +96,6 @@ public class FileSelectActivity extends AppCompatActivity {
 
 
     private void createFile(String filename) {
-        // Try to create the file
-        File file = new File(filename);
-        try {
-            if (file.exists()) {
-                Toast.makeText(FileSelectActivity.this,
-                        R.string.error_database_exists,
-                        Toast.LENGTH_LONG).show();
-                return;
-            }
-            File parent = file.getParentFile();
-
-            if ( parent == null || (parent.exists() && ! parent.isDirectory()) ) {
-                Toast.makeText(FileSelectActivity.this,
-                        R.string.error_invalid_path,
-                        Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            if ( ! parent.exists() ) {
-                // Create parent dircetory
-                if ( ! parent.mkdirs() ) {
-                    Toast.makeText(FileSelectActivity.this,
-                            R.string.error_could_not_create_parent,
-                            Toast.LENGTH_LONG).show();
-                    return;
-
-                }
-            }
-
-            file.createNewFile();
-        } catch (IOException e) {
-            Toast.makeText(
-                    FileSelectActivity.this,
-                    getText(R.string.error_file_not_create) + " "
-                            + e.getLocalizedMessage(),
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
         // Prep an object to collect a password once the database has
         // been created
         CollectPassword password = new CollectPassword(
@@ -180,21 +143,13 @@ public class FileSelectActivity extends AppCompatActivity {
         openButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                String fileName = Util.getEditText(FileSelectActivity.this,
-                        R.id.file_filename);
-
-                try {
-                    PasswordActivity.Launch(FileSelectActivity.this, fileName);
-                }
-                catch (ContentFileNotFoundException e) {
-                    Toast.makeText(FileSelectActivity.this,
-                            R.string.file_not_found_content, Toast.LENGTH_LONG).show();
-                }
-                catch (FileNotFoundException e) {
-                    Toast.makeText(FileSelectActivity.this,
-                            R.string.FileNotFound, Toast.LENGTH_LONG).show();
-                }
-
+                Intent i = new Intent(StorageAF.ACTION_OPEN_DOCUMENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("*/*");
+                i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                Uri initialUri = Uri.parse("content://com.android.externalstorage.documents/document/primary:keepass");
+                i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, initialUri);
+                startActivityForResult(i, OPEN_DOC);
             }
         });
 
@@ -203,72 +158,15 @@ public class FileSelectActivity extends AppCompatActivity {
         createButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                String filename = Util.getEditText(FileSelectActivity.this,
-                        R.id.file_filename);
-
-                // Make sure file name exists
-                if (filename.length() == 0) {
-                    Toast
-                            .makeText(FileSelectActivity.this,
-                                    R.string.error_filename_required,
-                                    Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                if (PermissionUtil.checkAndRequest(FileSelectActivity.this, PERMISSION_REQUEST_ID)) {
-                    createFile(filename);
-                }
+                Intent i = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("*/*");
+                i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                Uri initialUri = Uri.parse("content://com.android.externalstorage.documents/document/primary:keepass");
+                i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, initialUri);
+                startActivityForResult(i, CREATE_DOC);
             }
 
-        });
-        
-        ImageButton browseButton = (ImageButton) findViewById(R.id.browse_button);
-        browseButton.setOnClickListener(new View.OnClickListener() {
-            
-            public void onClick(View v) {
-                if (StorageAF.useStorageFramework(FileSelectActivity.this)) {
-                    Intent i = new Intent(StorageAF.ACTION_OPEN_DOCUMENT);
-                    i.addCategory(Intent.CATEGORY_OPENABLE);
-                    i.setType("*/*");
-                    i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-                    startActivityForResult(i, OPEN_DOC);
-                }
-                else {
-                    Intent i;
-                    i = new Intent(Intent.ACTION_GET_CONTENT);
-                    i.addCategory(Intent.CATEGORY_OPENABLE);
-                    i.setType("*/*");
-
-                    try {
-                        startActivityForResult(i, GET_CONTENT);
-                    } catch (ActivityNotFoundException e) {
-                        lookForOpenIntentsFilePicker();
-                    } catch (SecurityException e) {
-                        lookForOpenIntentsFilePicker();
-                    }
-                }
-            }
-            
-            private void lookForOpenIntentsFilePicker() {
-                
-                if (Interaction.isIntentAvailable(FileSelectActivity.this, Intents.OPEN_INTENTS_FILE_BROWSE)) {
-                    Intent i = new Intent(Intents.OPEN_INTENTS_FILE_BROWSE);
-                    i.setData(Uri.parse("file://" + Util.getEditText(FileSelectActivity.this, R.id.file_filename)));
-                    try {
-                        startActivityForResult(i, FILE_BROWSE);
-                    } catch (ActivityNotFoundException e) {
-                        showBrowserDialog();
-                    }
-                    
-                } else {
-                    showBrowserDialog();
-                }
-            }
-            
-            private void showBrowserDialog() {
-                BrowserDialog diag = new BrowserDialog(FileSelectActivity.this);
-                diag.show();
-            }
         });
 
         fillData();
@@ -305,6 +203,7 @@ public class FileSelectActivity extends AppCompatActivity {
         }
     }
 
+    /*
     public void onRequestPermissionsResult (int requestCode,
                                             String[] permissions,
                                             int[] grantResults) {
@@ -320,6 +219,7 @@ public class FileSelectActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.no_external_permissions, Toast.LENGTH_LONG).show();
         }
     }
+     */
 
     private class LaunchGroupActivity extends FileOnFinish {
         private Uri mUri;
@@ -356,10 +256,6 @@ public class FileSelectActivity extends AppCompatActivity {
     }
 
     private void fillData() {
-        // Set the initial value of the filename
-        EditText filename = (EditText) findViewById(R.id.file_filename);
-        filename.setText(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_file_path));
-        
         mAdapter = new ArrayAdapter<String>(this, R.layout.file_row, R.id.file_filename, fileHistory.getDbList());
         mList.setAdapter(mAdapter);
     }
@@ -410,7 +306,9 @@ public class FileSelectActivity extends AppCompatActivity {
             }
             
         }
-        else if ((requestCode == GET_CONTENT || requestCode == OPEN_DOC) && resultCode == RESULT_OK) {
+        else if ((requestCode == GET_CONTENT || requestCode == OPEN_DOC || requestCode == CREATE_DOC)
+                && resultCode == RESULT_OK) {
+
             if (data != null) {
                 Uri uri = data.getData();
                 if (uri != null) {
@@ -428,13 +326,24 @@ public class FileSelectActivity extends AppCompatActivity {
                         uri = UriUtil.translate(this, uri);
                     }
                     filename = uri.toString();
+
+                    if (requestCode == CREATE_DOC) {
+                        createFile(filename);
+                    }
+                    else
+                        {
+                        try {
+                            PasswordActivity.Launch(FileSelectActivity.this, filename);
+                        } catch (ContentFileNotFoundException e) {
+                            Toast.makeText(FileSelectActivity.this,
+                                    R.string.file_not_found_content, Toast.LENGTH_LONG).show();
+                        } catch (FileNotFoundException e) {
+                            Toast.makeText(FileSelectActivity.this,
+                                    R.string.FileNotFound, Toast.LENGTH_LONG).show();
+                        }
+                    }
                 }
             }
-        }
-
-        if (filename != null) {
-            EditText fn = (EditText) findViewById(R.id.file_filename);
-            fn.setText(filename);
         }
     }
 
