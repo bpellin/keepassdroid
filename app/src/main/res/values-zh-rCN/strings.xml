@@ -156,6 +156,7 @@
     <string name="never">从未</string>
     <string name="no_results">无搜索结果</string>
     <string name="no_url_handler">没有处理这个url的程序</string>
+    <string name="open_or_create">打开或创建一个数据库：</string>
     <string name="open_recent">打开最近的数据库 (点击打开):</string>
     <string name="omitbackup_title">不要搜索备份条目</string>
     <string name="omitbackup_summary">从搜索结果中排除 \'备份\' 组 (仅应用于 .kdb文件)</string>
