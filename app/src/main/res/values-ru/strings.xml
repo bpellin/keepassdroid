@@ -62,7 +62,7 @@
     <string name="decrypting_db">Расшифровка базы…</string>
     <string name="default_checkbox">По умолчанию</string>
     <string name="digits">Цифры 0…9</string>
-    <string name="disclaimer_formal">"KeePassDroid © 2009–2020
+    <string name="disclaimer_formal">"KeePassDroid © 2009–2022
 Разработчик Brian Pellin
 
 Программа предоставляется БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ. Распространяется свободно по лицензии GPL v2 или новее."</string>
@@ -157,6 +157,7 @@
     <string name="never">Никогда</string>
     <string name="no_results">Совпадения не найдены</string>
     <string name="no_url_handler">Невозможно открыть ссылку</string>
+    <string name="open_or_create">Открыть/создать базу:</string>
     <string name="open_recent">Недавно открытые:</string>
     <string name="omitbackup_title">Искать в актуальных</string>
     <string name="omitbackup_summary">Не искать в \"Резервировании\" (.kdb)</string>
