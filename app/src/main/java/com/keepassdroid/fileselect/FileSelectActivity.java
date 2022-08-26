@@ -248,6 +248,7 @@ public class FileSelectActivity extends AppCompatActivity {
                     Intent i = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                     i.addCategory(Intent.CATEGORY_OPENABLE);
                     i.setType("*/*");
+                    i.putExtra(Intent.EXTRA_TITLE, "keepass.kdbx");
                     i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
                     Uri initialUri = Uri.parse("content://com.android.externalstorage.documents/document/primary:keepass");
                     i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, initialUri);
