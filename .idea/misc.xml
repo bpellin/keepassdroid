@@ -3,9 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.503125" />
+        <entry key="app/src/main/res/layout-v30/file_selection_filename.xml" value="0.475" />
+        <entry key="app/src/main/res/layout-v30/file_selection_no_recent.xml" value="0.3845108695652174" />
+        <entry key="app/src/main/res/layout/file_row.xml" value="0.475" />
         <entry key="app/src/main/res/layout/file_selection.xml" value="0.3845108695652174" />
         <entry key="app/src/main/res/layout/file_selection_filename.xml" value="0.3845108695652174" />
         <entry key="app/src/main/res/layout/file_selection_no_recent.xml" value="0.3845108695652174" />
+        <entry key="app/src/main/res/layout/group_add_entry.xml" value="0.3845108695652174" />
+        <entry key="app/src/main/res/layout/group_edit.xml" value="0.3845108695652174" />
+        <entry key="app/src/main/res/layout/group_empty.xml" value="0.3845108695652174" />
+        <entry key="app/src/main/res/layout/group_header.xml" value="0.3845108695652174" />
+        <entry key="app/src/main/res/layout/group_list_entry.xml" value="0.3845108695652174" />
+        <entry key="app/src/main/res/layout/password.xml" value="0.3845108695652174" />
       </map>
     </option>
   </component>
