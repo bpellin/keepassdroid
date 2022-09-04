@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.android.keepass.R;
+import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.UriUtil;
 
 import android.content.Context;
@@ -227,7 +228,19 @@ public class RecentFileHistory {
     public List<String> getDbList() {
         init();
 
-        return databases;
+        List<String> displayNames = new ArrayList<String>();
+
+        for (String fileName : databases) {
+            String name = UriUtil.getFileName(Uri.parse(fileName), ctx);
+            if (EmptyUtils.isNullOrEmpty(name)) {
+                name = fileName;
+            }
+
+            displayNames.add(name);
+        }
+
+
+        return displayNames;
     }
 
     public Uri getFileByName(Uri database) {

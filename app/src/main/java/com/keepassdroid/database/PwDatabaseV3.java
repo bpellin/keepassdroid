@@ -47,6 +47,7 @@ package com.keepassdroid.database;
 
 // Java
 import com.keepassdroid.database.exception.InvalidKeyFileException;
+import com.keepassdroid.utils.EmptyUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -345,10 +346,13 @@ public class PwDatabaseV3 extends PwDatabase {
 	}
 
 	@Override
-	public void initNew(String dbPath) {
+	public void initNew(String name) {
 		algorithm = PwEncryptionAlgorithm.Rjindal;
 		numKeyEncRounds = DEFAULT_ENCRYPTION_ROUNDS;
-		name = "KeePass Password Manager";
+
+		if (EmptyUtils.isNullOrEmpty(name)) {
+			name = "KeePass Password Manager";
+		}
 		// Build the root group
 		constructTree(null);
 		

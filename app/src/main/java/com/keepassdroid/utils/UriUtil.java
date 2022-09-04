@@ -22,6 +22,7 @@ package com.keepassdroid.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 
 import com.keepassdroid.compat.StorageAF;
 
@@ -159,6 +160,36 @@ public class UriUtil {
         }
 
         return false;
+    }
+
+    public static String getFileName(Uri uri, Context context) {
+        String result = null;
+        if (uri != null) {
+            if (uri.getScheme().equals("content")) {
+                Cursor cursor = context.getContentResolver().query(uri, null,
+                        null, null, null);
+                try {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                        if (index >= 0) {
+                            result = cursor.getString(index);
+                        }
+                    }
+                } finally {
+                    cursor.close();
+                }
+            }
+
+            if (result == null) {
+                result = uri.getPath();
+                int cut = result.lastIndexOf('/');
+                if (cut != -1) {
+                    result = result.substring(cut + 1);
+                }
+            }
+        }
+
+        return result;
     }
 
 }

@@ -540,10 +540,8 @@ public class PwDatabaseV4 extends PwDatabase {
 	}
 
 	@Override
-	public void initNew(String dbPath) {
-		String filename = URLUtil.guessFileName(dbPath, null, null);
-		
-		rootGroup = new PwGroupV4(true, true, dbNameFromPath(dbPath), iconFactory.getIcon(PwIconStandard.FOLDER));
+	public void initNew(String name) {
+		rootGroup = new PwGroupV4(true, true, name, iconFactory.getIcon(PwIconStandard.FOLDER));
 		groups.put(rootGroup.getId(), rootGroup);
 	}
 	

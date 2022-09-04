@@ -702,6 +702,16 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         String db = (mDbUri == null) ? "" : mDbUri.toString();
         setEditText(R.id.filename, db);
 
+        String displayName = UriUtil.getFileName(mDbUri, getContext());
+        TextView displayNameView = mView.findViewById(R.id.filename_display);
+        if (displayNameView != null) {
+            if (EmptyUtils.isNullOrEmpty(displayName)) {
+                displayNameView.setVisibility(View.GONE);
+            } else {
+                displayNameView.setText(UriUtil.getFileName(mDbUri, getContext()));
+            }
+        }
+
         String key = (mKeyUri == null) ? "" : mKeyUri.toString();
         setEditText(R.id.pass_keyfile, key);
     }

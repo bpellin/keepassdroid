@@ -370,7 +370,7 @@ public abstract class PwDatabase {
     /**
      * Initialize a newly created database
      */
-    public abstract void initNew(String dbPath);
+    public abstract void initNew(String name);
 
     public abstract void clearCache();
 
