@@ -1,6 +1,6 @@
 /*
  * 
- * Copyright 2009-2020 Brian Pellin.
+ * Copyright 2009-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -196,12 +196,13 @@ public class EntryActivity extends LockCloseHideActivity {
 				if ( action.equals(Intents.COPY_USERNAME) ) {
 					String username = mEntry.getUsername();
 					if ( username.length() > 0 ) {
-						timeoutCopyToClipboard(username);
+						timeoutCopyToClipboard(getString(R.string.hint_username), username);
 					}
 				} else if ( action.equals(Intents.COPY_PASSWORD) ) {
 					String password = new String(mEntry.getPassword());
 					if ( password.length() > 0 ) {
-						timeoutCopyToClipboard(new String(mEntry.getPassword()));
+						timeoutCopyToClipboard(getString(R.string.hint_login_pass),
+								new String(mEntry.getPassword()), true);
 					}
 				}
 			}
@@ -397,11 +398,12 @@ public class EntryActivity extends LockCloseHideActivity {
 			return true;
 			
 		case R.id.menu_copy_user:
-			timeoutCopyToClipboard(mEntry.getUsername(true, App.getDB().pm));
+			timeoutCopyToClipboard(getString(R.string.hint_username), mEntry.getUsername(true, App.getDB().pm));
 			return true;
 			
 		case R.id.menu_copy_pass:
-			timeoutCopyToClipboard(new String(mEntry.getPassword(true, App.getDB().pm)));
+			timeoutCopyToClipboard(getString(R.string.hint_login_pass),
+					new String(mEntry.getPassword(true, App.getDB().pm)), true);
 			return true;
 			
 		case R.id.menu_lock:
@@ -413,10 +415,14 @@ public class EntryActivity extends LockCloseHideActivity {
 		
 		return super.onOptionsItemSelected(item);
 	}
-	
-	private void timeoutCopyToClipboard(String text) {
+
+	private void timeoutCopyToClipboard(String label, String text) {
+		timeoutCopyToClipboard(label, text, false);
+	}
+
+	private void timeoutCopyToClipboard(String label, String text, boolean sensitive) {
 		try {
-			Util.copyToClipboard(this, text);
+			Util.copyToClipboard(this, label, text, sensitive);
 		} catch (SamsungClipboardException e) {
 			showSamsungDialog();
 			return;
@@ -453,7 +459,7 @@ public class EntryActivity extends LockCloseHideActivity {
 			
 			if ( currentClip.equals(mClearText) ) {
 				try {
-					Util.copyToClipboard(mCtx, "");
+					Util.copyToClipboard(mCtx, "", "");
 					uiThreadCallback.post(new UIToastTask(mCtx, R.string.ClearClipboard));
 				} catch (SamsungClipboardException e) {
 					uiThreadCallback.post(new UIToastTask(mCtx, R.string.clipboard_error_clear));

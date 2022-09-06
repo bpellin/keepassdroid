@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Brian Pellin.
+ * Copyright 2016-2022 Brian Pellin.
  *
  * This file is part of KeePassDroid.
  *
@@ -27,33 +27,23 @@ import android.net.Uri;
 import java.lang.reflect.Method;
 
 public class ClipDataCompat {
-    private static Class clipData;
-    private static Class clipDataItem;
-    private static Class clipDescription;
     private static Method getClipDataFromIntent;
-    private static Method getDescription;
-    private static Method getItemCount;
-    private static Method getLabel;
-    private static Method getItemAt;
-    private static Method getUri;
+    private static Class persistableBundle;
+    private static Method putBoolean;
+    private static Method setExtras;
 
     private static boolean initSucceded;
 
     static {
         try {
-            /*
-            clipData = ClipData.class;
-            getDescription = clipData.getMethod("getDescription", (Class[])null);
-            getItemCount = clipData.getMethod("getItemCount", (Class[])null);
-            getItemAt = clipData.getMethod("getItemAt", new Class[]{int.class});
-            clipDescription = Class.forName("android.content.ClipDescription");
-            getLabel = clipDescription.getMethod("getLabel", (Class[])null);
-
-            clipDataItem = Class.forName("android.content.ClipData$Item");
-            getUri = clipDataItem.getMethod("getUri", (Class[])null);
-            */
-
             getClipDataFromIntent = Intent.class.getMethod("getClipData", (Class[])null);
+
+            persistableBundle = Class.forName("android.os.PersistableBundle");
+            putBoolean = persistableBundle.getMethod("putBoolean",
+                    new Class[] {String.class, boolean.class});
+
+            setExtras = ClipDescription.class.getMethod("setExtras",
+                    new Class[]{persistableBundle});
 
             initSucceded = true;
         } catch (Exception e) {
@@ -88,5 +78,17 @@ public class ClipDataCompat {
         }
 
         return i.getParcelableExtra(key);
+    }
+
+    public static void markSensitive(ClipData clipData) {
+
+        try {
+            Object extras = persistableBundle.newInstance();
+            putBoolean.invoke(extras, "android.content.extra.IS_SENSITIVE", true);
+
+            setExtras.invoke(clipData.getDescription(), extras);
+        } catch (Exception e) {
+            // Do nothing if this fails
+        }
     }
 }

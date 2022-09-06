@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 Brian Pellin.
+ * Copyright 2009-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -23,14 +23,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.keepassdroid.compat.ClipDataCompat;
 import com.keepassdroid.database.exception.SamsungClipboardException;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.text.ClipboardManager;
+import android.content.ClipboardManager;
 import android.widget.TextView;
 
 public class Util {
@@ -43,12 +45,20 @@ public class Util {
 		
 		return csText.toString();
 	}
-	
-	public static void copyToClipboard(Context context, String text) throws SamsungClipboardException {
+
+	public static void copyToClipboard(Context context, String label, String text) throws SamsungClipboardException {
+		copyToClipboard(context, label, text, false);
+	}
+	public static void copyToClipboard(Context context, String label, String text, boolean sensitive) throws SamsungClipboardException {
 		ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-		
+
+		ClipData clip = ClipData.newPlainText(label, text);
+		if (sensitive) {
+			ClipDataCompat.markSensitive(clip);
+		}
+
 		try {
-			clipboard.setText(text);
+			clipboard.setPrimaryClip(clip);
 		} catch (NullPointerException e) {
 			throw new SamsungClipboardException(e);
 		}
