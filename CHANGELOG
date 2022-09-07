@@ -1,3 +1,9 @@
+KeePassDroid (2.6.0)
+ * Update file handling for Android 13
+ * Mark password clipboard entries as sensitive
+ * Switch from Spongycastle to modern Bouncy Castle
+ * Update Chinese, French, and Russian translations
+
 KeePassDroid (2.5.17.2)
  * Revert to older version of biometric library
 
