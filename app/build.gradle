@@ -57,8 +57,8 @@ android {
 
 dependencies {
 
-    implementation 'org.bouncycastle:bcprov-jdk15to18:1.70'
-    implementation ('org.bouncycastle:bcprov-jdk15to18:1.70') {
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.71'
+    implementation ('org.bouncycastle:bcprov-jdk15to18:1.71') {
         exclude group: 'junit'
     }
     implementation 'joda-time:joda-time:2.9.4'
