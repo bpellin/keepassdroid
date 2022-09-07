@@ -234,6 +234,8 @@ public class RecentFileHistory {
             String name = UriUtil.getFileName(Uri.parse(fileName), ctx);
             if (EmptyUtils.isNullOrEmpty(name)) {
                 name = fileName;
+            } else {
+                name = name + " - " + fileName;
             }
 
             displayNames.add(name);

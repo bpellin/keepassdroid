@@ -166,17 +166,24 @@ public class UriUtil {
         String result = null;
         if (uri != null) {
             if (uri.getScheme().equals("content")) {
-                Cursor cursor = context.getContentResolver().query(uri, null,
-                        null, null, null);
                 try {
-                    if (cursor != null && cursor.moveToFirst()) {
-                        int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                        if (index >= 0) {
-                            result = cursor.getString(index);
+                    Cursor cursor = context.getContentResolver().query(uri, null,
+                            null, null, null);
+                    try {
+                        if (cursor != null && cursor.moveToFirst()) {
+                            int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                            if (index >= 0) {
+                                result = cursor.getString(index);
+                            }
+                        }
+                    } finally {
+                        if (cursor != null) {
+                            cursor.close();
                         }
                     }
-                } finally {
-                    cursor.close();
+                } catch (SecurityException e) {
+                    // Fall through to using path
+                    result = null;
                 }
             }
 
