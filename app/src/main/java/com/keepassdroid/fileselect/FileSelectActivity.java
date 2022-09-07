@@ -76,6 +76,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FileSelectActivity extends AppCompatActivity {
 
@@ -137,16 +139,16 @@ public class FileSelectActivity extends AppCompatActivity {
             return;
         }
 
-        createDB(filename);
+        createDB(filename, file.getName());
     }
 
     private void createFile(Uri fileURI) {
         String filename = fileURI.toString();
 
-        createDB(filename);
+        createDB(filename, UriUtil.getFileName(fileURI, this));
     }
 
-    private void createDB(String filename) {
+    private void createDB(String filename, String dbName) {
 
         // Prep an object to collect a password once the database has
         // been created
@@ -154,7 +156,7 @@ public class FileSelectActivity extends AppCompatActivity {
                 new LaunchGroupActivity(filename));
 
         // Create the new database
-        CreateDB create = new CreateDB(FileSelectActivity.this, filename, password, true);
+        CreateDB create = new CreateDB(FileSelectActivity.this, filename, dbName, password, true);
         ProgressTask createTask = new ProgressTask(
                 FileSelectActivity.this, create,
                 R.string.progress_create);

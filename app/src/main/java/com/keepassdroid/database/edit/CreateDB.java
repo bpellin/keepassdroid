@@ -36,13 +36,15 @@ public class CreateDB extends RunnableOnFinish {
 	
 	private String mFilename;
 	private boolean mDontSave;
+	private String mDbName;
 	private Context ctx;
 
-	public CreateDB(Context ctx, String filename, OnFinish finish, boolean dontSave) {
+	public CreateDB(Context ctx, String filename, String dbName, OnFinish finish, boolean dontSave) {
 		super(finish);
 
 		mFilename = filename;
 		mDontSave = dontSave;
+		mDbName = dbName;
 		this.ctx = ctx;
 	}
 
@@ -53,7 +55,7 @@ public class CreateDB extends RunnableOnFinish {
 		App.setDB(db);
 		
 		PwDatabase pm = PwDatabase.getNewDBInstance(mFilename);
-		pm.initNew(mFilename);
+		pm.initNew(mDbName);
 		
 		// Set Database state
 		db.pm = pm;
