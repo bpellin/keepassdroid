@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Brian Pellin
+ * Copyright 2020-2022 Brian Pellin
  *
  * This file is part of KeePassDroid.
  *
@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -92,6 +91,8 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     private static final String VIEW_INTENT = "android.intent.action.VIEW";
 
     private static final int PERMISSION_REQUEST_ID = 1;
+    private static final int BIOMETRIC_SAVE = 1;
+    private static final int BIOMETRIC_LOAD = 2;
 
     private Uri mDbUri = null;
     private Uri mKeyUri = null;
@@ -118,6 +119,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     private BiometricPrompt.PromptInfo savePrompt;
     private BiometricPrompt.PromptInfo loadPrompt;
     private BiometricHelper biometricHelper;
+    private int biometricMode = 0;
 
     private Activity mActivity;
 
@@ -180,6 +182,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
         biometricCheck.setChecked(false);
 
         Cipher cipher = biometricHelper.getCipher();
+        biometricMode = BIOMETRIC_LOAD;
         biometricOpenPrompt.authenticate(loadPrompt, new BiometricPrompt.CryptoObject(cipher));
     }
 
@@ -282,54 +285,39 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
 
         Executor executor = ContextCompat.getMainExecutor(context);
 
-        BiometricPrompt.AuthenticationCallback saveCallback =
+        BiometricPrompt.AuthenticationCallback biometricCallback =
                 new BiometricPrompt.AuthenticationCallback() {
                     @Override
                     public void onAuthenticationFailed() {
                         super.onAuthenticationFailed();
-                        Toast.makeText(context, R.string.biometric_auth_failed_store, Toast.LENGTH_LONG).show();
-                        GroupActivity.Launch(mActivity);
+
+                        if (biometricMode == BIOMETRIC_SAVE) {
+                            Toast.makeText(context, R.string.biometric_auth_failed_store, Toast.LENGTH_LONG).show();
+                            GroupActivity.Launch(mActivity);
+                        } else if (biometricMode == BIOMETRIC_LOAD) {
+                            Toast.makeText(context, R.string.biometric_auth_failed, Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     @Override
                     public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                         super.onAuthenticationSucceeded(result);
 
-                        // newly store the entered password in encrypted way
-                        final String password = passwordView.getText().toString();
-                        biometricHelper.encryptData(password);
-                        GroupActivity.Launch(mActivity);
-                        passwordView.setText("");
+                        if (biometricMode == BIOMETRIC_SAVE) {
+                            // newly store the entered password in encrypted way
+                            final String password = passwordView.getText().toString();
 
-                    }
-
-                    @Override
-                    public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                        super.onAuthenticationError(errorCode, errString);
-                        if (!canceledBiometricAuth(errorCode)) {
-                            Toast.makeText(context, R.string.biometric_auth_error, Toast.LENGTH_LONG).show();
+                            biometricHelper.encryptData(password);
+                            GroupActivity.Launch(mActivity);
+                            passwordView.setText("");
+                        } else if (biometricMode == BIOMETRIC_LOAD) {
+                            // retrieve the encrypted value from preferences
+                            final String encryptedValue = prefsNoBackup.getString(getPreferenceKeyValue(), null);
+                            if (encryptedValue != null) {
+                                biometricHelper.decryptData(encryptedValue);
+                            }
                         }
-                        GroupActivity.Launch(mActivity);
-                    }
-                };
 
-        BiometricPrompt.AuthenticationCallback openCallback =
-                new BiometricPrompt.AuthenticationCallback() {
-                    @Override
-                    public void onAuthenticationFailed() {
-                        super.onAuthenticationFailed();
-                        Toast.makeText(context, R.string.biometric_auth_failed, Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                        super.onAuthenticationSucceeded(result);
-
-                        // retrieve the encrypted value from preferences
-                        final String encryptedValue = prefsNoBackup.getString(getPreferenceKeyValue(), null);
-                        if (encryptedValue != null) {
-                            biometricHelper.decryptData(encryptedValue);
-                        }
                     }
 
                     @Override
@@ -339,10 +327,14 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                         if (!canceledBiometricAuth(errorCode)) {
                             Toast.makeText(context, R.string.biometric_auth_error, Toast.LENGTH_LONG).show();
                         }
+
+                        if (biometricMode == BIOMETRIC_SAVE) {
+                            GroupActivity.Launch(mActivity);
+                        }
                     }
                 };
 
-        biometricSavePrompt = new BiometricPrompt(this, executor, saveCallback);
+        biometricSavePrompt = new BiometricPrompt(this, executor, biometricCallback);
         BiometricPrompt.PromptInfo.Builder saveBuilder = new BiometricPrompt.PromptInfo.Builder();
         savePrompt = saveBuilder.setDescription(getString(R.string.biometric_auth_to_store))
                 .setConfirmationRequired(false)
@@ -350,14 +342,13 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                 .setNegativeButtonText(getString(android.R.string.cancel))
                 .build();
 
-        biometricOpenPrompt = new BiometricPrompt(this, executor, openCallback);
+        biometricOpenPrompt = new BiometricPrompt(this, executor, biometricCallback);
         BiometricPrompt.PromptInfo.Builder openBuilder = new BiometricPrompt.PromptInfo.Builder();
         loadPrompt = openBuilder.setDescription(getString(R.string.biometric_auth_to_open))
                 .setConfirmationRequired(false)
                 .setTitle(getString(R.string.biometric_open_db))
                 .setNegativeButtonText(getString(android.R.string.cancel))
                 .build();
-
 
         setFingerPrintVisibilty();
     }
@@ -804,6 +795,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                     }
                     Cipher cipher = biometricHelper.getCipher();
 
+                    biometricMode = BIOMETRIC_SAVE;
                     biometricSavePrompt.authenticate(savePrompt, new BiometricPrompt.CryptoObject(cipher));
 
                 }
