@@ -1,3 +1,6 @@
+KeePassDroid (2.6.3)
+ * Add warning for Android 11 file handling
+
 KeePassDroid (2.6.2)
  * Fix issue with saving biometric password
 
@@ -5,7 +8,7 @@ KeePassDroid (2.6.1)
  * Prevent crashes for certain URI types
 
 KeePassDroid (2.6.0)
- * Update file handling for Android 13
+ * Update file handling for Android 11
  * Mark password clipboard entries as sensitive
  * Switch from Spongycastle to modern Bouncy Castle
  * Update Chinese, French, and Russian translations
