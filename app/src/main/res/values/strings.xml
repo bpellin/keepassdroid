@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009-2020 Brian Pellin.
+ Copyright 2009-2022 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -104,6 +104,7 @@
     <string name="field_name">Field Name</string>
     <string name="field_value">Field value</string>
     <string name="FileNotFound">File not found.</string>
+    <string name="FileNotFoundAndroid11">The file was not found. Google recently started enforcing restrictions on file access to internal storage in Android 11 and later. This causes many of the old file URLs to fail. Try using the open button to access the file through the Android file selection dialog.</string>
     <string name="file_not_found_content">File not found. Try reopening from your content provider.</string>
     <string name="file_browser">File Browser</string>
     <string name="generate_password">Generate Password</string>

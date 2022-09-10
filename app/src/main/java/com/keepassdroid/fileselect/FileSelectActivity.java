@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -63,6 +64,7 @@ import com.keepassdroid.compat.StorageAF;
 import com.keepassdroid.database.edit.CreateDB;
 import com.keepassdroid.database.edit.FileOnFinish;
 import com.keepassdroid.database.exception.ContentFileNotFoundException;
+import com.keepassdroid.fragments.Android11WarningFragment;
 import com.keepassdroid.intents.Intents;
 import com.keepassdroid.settings.AppSettingsActivity;
 import com.keepassdroid.utils.EmptyUtils;
@@ -406,6 +408,14 @@ public class FileSelectActivity extends AppCompatActivity {
         mList.setAdapter(mAdapter);
     }
 
+    boolean showAndroid11Warning(String filename) {
+        Uri fileUri = Uri.parse(filename);
+
+        String scheme = fileUri.getScheme();
+        return fileUri.getScheme().equals("file") &&
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R);
+    }
+
     protected void onListItemClick(ListView l, View v, int position, long id) {
 
         new AsyncTask<Integer, Void, Void>() {
@@ -427,8 +437,14 @@ public class FileSelectActivity extends AppCompatActivity {
                             .show();
                 }
                 catch (FileNotFoundException e) {
-                    Toast.makeText(FileSelectActivity.this, R.string.FileNotFound, Toast.LENGTH_LONG)
-                            .show();
+                    // Warn that this is probably due to file access changes in Android 11.
+                    if (showAndroid11Warning(fileName)) {
+                        Android11WarningFragment dialog = new Android11WarningFragment();
+                        dialog.show(getSupportFragmentManager(), "Android11WarningFragment");
+                    } else {
+                        Toast.makeText(FileSelectActivity.this, R.string.FileNotFound, Toast.LENGTH_LONG)
+                                .show();
+                    }
                 }
             }
         }.execute(position);
