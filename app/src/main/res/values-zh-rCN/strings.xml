@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009-2020 Brian Pellin.
+ Copyright 2009-2022 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -64,7 +64,7 @@
     <string name="decrypting_db">解密数据库内容中&#8230;</string>
     <string name="default_checkbox">使用这个作为我的默认数据库</string>
     <string name="digits">数字</string>
-    <string name="disclaimer_formal">KeePassDroid 版权属于 2009&#8211;2020 Brian Pellin，开发者对软件质量无担保; 这是自由软件，欢迎您在GPL版本2或更高版本许可协议的条款下进行再分发。</string>
+    <string name="disclaimer_formal">KeePassDroid 版权属于 2009&#8211;2022 Brian Pellin，开发者对软件质量无担保; 这是自由软件，欢迎您在GPL版本2或更高版本许可协议的条款下进行再分发。</string>
     <string name="ellipsis">\u2026</string>
     <string name="enter_filename">输入数据库文件名:</string>
     <string name="entry_accessed">已访问: </string>
@@ -104,6 +104,7 @@
     <string name="field_name">字段名</string>
     <string name="field_value">字段值</string>
     <string name="FileNotFound">未找到文件</string>
+    <string name="FileNotFoundAndroid11">未找到文件。 谷歌最近开始在 Android 11 和之后的版本中实施访问内部存储文件的限制。这导致许多旧文件 URL 失效。尝试使用打开按钮通过 Android 文件选择对话框访问文件。</string>
     <string name="file_not_found_content">文件未找到。尝试从内容提供程序重新打开。</string>
     <string name="file_browser">文件浏览器</string>
     <string name="generate_password">生成密码</string>
