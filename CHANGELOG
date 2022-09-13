@@ -1,3 +1,7 @@
+KeePassDroid (2.6.5)
+ * Fix implicit pending intent
+ * Update donate link
+
 KeePassDroid (2.6.4)
  * Fix crashes
  * Updated Chinese transaltions
