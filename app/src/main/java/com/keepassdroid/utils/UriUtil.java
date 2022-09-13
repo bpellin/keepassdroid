@@ -165,7 +165,8 @@ public class UriUtil {
     public static String getFileName(Uri uri, Context context) {
         String result = null;
         if (uri != null) {
-            if (uri.getScheme().equals("content")) {
+            String scheme = uri.getScheme();
+            if (scheme != null && scheme.equals("content")) {
                 try {
                     Cursor cursor = context.getContentResolver().query(uri, null,
                             null, null, null);
@@ -181,7 +182,7 @@ public class UriUtil {
                             cursor.close();
                         }
                     }
-                } catch (SecurityException e) {
+                } catch (Exception e) {
                     // Fall through to using path
                     result = null;
                 }
