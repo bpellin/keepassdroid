@@ -24,9 +24,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.android.keepass.KeePass;
 import com.android.keepass.R;
 import com.keepassdroid.intents.Intents;
 
@@ -37,7 +39,12 @@ public class Timeout {
 
 	private static PendingIntent buildIntent(Context ctx) {
 		Intent intent = new Intent(Intents.TIMEOUT);
-		PendingIntent sender = PendingIntent.getBroadcast(ctx, REQUEST_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		intent.setPackage("com.android.keepass");
+		int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+		if (Build.VERSION.SDK_INT >= 23) {
+			flags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+		PendingIntent sender = PendingIntent.getBroadcast(ctx, REQUEST_ID, intent, flags);
 
 		return sender;
 	}
