@@ -30,6 +30,8 @@
     <string name="add_group_title">Add Group</string>
     <string name="add_string">Add string</string>
     <string name="algorithm">Algorithm</string>
+    <string name="Android11FileNotFound">The file was not found. Google recently started enforcing restrictions on file access to internal storage in Android 11 and later. This causes many of the old file URLs to fail. Try going back to the first screen in the app and using the open button to access the file through the Android file selection dialog.</string>
+    <string name="Android11SaveFailed">The file could not be saved. Google recently started enforcing restrictions on file access to internal storage in Android 11 and later. This causes many of the old file URLs to fail. Try going back to the first screen in the app and using the open button to access the file through the Android file selection dialog.</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Application timeout</string>
     <string name="app_timeout_summary">Time before locking database when the application is inactive.</string>
@@ -104,7 +106,6 @@
     <string name="field_name">Field Name</string>
     <string name="field_value">Field value</string>
     <string name="FileNotFound">File not found.</string>
-    <string name="FileNotFoundAndroid11">The file was not found. Google recently started enforcing restrictions on file access to internal storage in Android 11 and later. This causes many of the old file URLs to fail. Try using the open button to access the file through the Android file selection dialog.</string>
     <string name="file_not_found_content">File not found. Try reopening from your content provider.</string>
     <string name="file_browser">File Browser</string>
     <string name="generate_password">Generate Password</string>

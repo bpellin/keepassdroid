@@ -32,6 +32,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.EditTextPreference;
 import androidx.preference.EditTextPreferenceDialogFragmentCompat;
 import androidx.preference.Preference;
@@ -101,7 +104,8 @@ public class RoundsPreferenceFragment extends EditTextPreferenceDialogFragmentCo
 			}
 
 			Handler handler = new Handler();
-			SaveDB save = new SaveDB(getContext(), App.getDB(), new AfterSave(getContext(), handler, oldRounds));
+			FragmentActivity activity = getActivity();
+			SaveDB save = new SaveDB(getContext(), App.getDB(), new AfterSave(activity, activity.getSupportFragmentManager(), handler, oldRounds));
 			ProgressTask pt = new ProgressTask(getActivity(), save, R.string.saving_database);
 			pt.run();
 
@@ -112,11 +116,13 @@ public class RoundsPreferenceFragment extends EditTextPreferenceDialogFragmentCo
 	private class AfterSave extends OnFinish {
 		private long mOldRounds;
 		private Context mCtx;
+		FragmentManager mFm;
 
-		public AfterSave(Context ctx, Handler handler, long oldRounds) {
+		public AfterSave(Context ctx, FragmentManager fm, Handler handler, long oldRounds) {
 			super(handler);
 
 			mCtx = ctx;
+			mFm = fm;
 			mOldRounds = oldRounds;
 		}
 
@@ -129,7 +135,7 @@ public class RoundsPreferenceFragment extends EditTextPreferenceDialogFragmentCo
 					listner.onPreferenceChange(preference, null);
 				}
 			} else {
-				displayMessage(mCtx);
+				displayMessage(mCtx, mFm);
 				mPM.setNumRounds(mOldRounds);
 			}
 			

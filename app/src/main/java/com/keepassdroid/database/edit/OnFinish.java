@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2009-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -23,6 +23,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+
 /**
  * Callback after a task is completed.
  * 
@@ -32,7 +36,8 @@ import android.widget.Toast;
 public class OnFinish implements Runnable {
 	protected boolean mSuccess;
 	protected String mMessage;
-	
+	protected DialogFragment mDialog = null;
+
 	protected OnFinish mOnFinish;
 	protected Handler mHandler;
 
@@ -53,10 +58,15 @@ public class OnFinish implements Runnable {
 		mOnFinish = finish;
 		mHandler = null;
 	}
-	
+
 	public void setResult(boolean success, String message) {
 		mSuccess = success;
 		mMessage = message;
+	}
+
+	public void setResult(boolean success, DialogFragment dialogFragment) {
+		mSuccess = success;
+		mDialog = dialogFragment;
 	}
 	
 	public void setResult(boolean success) {
@@ -66,7 +76,11 @@ public class OnFinish implements Runnable {
 	public void run() {
 		if ( mOnFinish != null ) {
 			// Pass on result on call finish
-			mOnFinish.setResult(mSuccess, mMessage);
+			if (mDialog != null) {
+				mOnFinish.setResult(mSuccess, mDialog);
+			} else {
+				mOnFinish.setResult(mSuccess, mMessage);
+			}
 			
 			if ( mHandler != null ) {
 				mHandler.post(mOnFinish);
@@ -75,10 +89,18 @@ public class OnFinish implements Runnable {
 			}
 		}
 	}
-	
-	protected void displayMessage(Context ctx) {
-		if ( ctx != null && mMessage != null && mMessage.length() > 0 ) {
+
+	protected void displayMessage(AppCompatActivity ctx) {
+		if (ctx == null) { return; }
+
+		displayMessage(ctx, ctx.getSupportFragmentManager());
+	}
+
+	protected void displayMessage(Context ctx, FragmentManager fm) {
+		if (ctx != null && mMessage != null && mMessage.length() > 0) {
 			Toast.makeText(ctx, mMessage, Toast.LENGTH_LONG).show();
+		} else if (fm != null && mDialog != null) {
+			mDialog.show(fm, "message");
 		}
 	}
 

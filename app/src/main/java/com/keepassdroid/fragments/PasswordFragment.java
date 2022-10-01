@@ -48,6 +48,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
@@ -121,7 +122,7 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     private BiometricHelper biometricHelper;
     private int biometricMode = 0;
 
-    private Activity mActivity;
+    private AppCompatActivity mActivity;
 
     private boolean afterOnCreateBeforeEndOfOnResume = false;
 
@@ -215,8 +216,8 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        if (context instanceof Activity) {
-            mActivity = (Activity) context;
+        if (context instanceof AppCompatActivity) {
+            mActivity = (AppCompatActivity) context;
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2020 Brian Pellin.
+ * Copyright 2009-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -29,6 +29,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.keepass.R;
 import com.keepassdroid.app.App;
@@ -145,7 +147,7 @@ public class SetPasswordDialog extends CancelDialog {
 				}
 				dismiss();
 			} else {
-				displayMessage(getContext());
+				displayMessage((AppCompatActivity) getOwnerActivity());
 			}
 			super.run();
 		}

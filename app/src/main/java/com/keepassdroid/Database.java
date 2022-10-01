@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2020 Brian Pellin.
+ * Copyright 2009-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -30,6 +30,7 @@ import com.keepassdroid.database.PwDatabase;
 import com.keepassdroid.database.PwDatabaseV3;
 import com.keepassdroid.database.PwGroup;
 import com.keepassdroid.database.exception.ContentFileNotFoundException;
+import com.keepassdroid.database.exception.FileUriException;
 import com.keepassdroid.database.exception.InvalidDBException;
 import com.keepassdroid.database.exception.InvalidPasswordException;
 import com.keepassdroid.database.exception.PwDbOutputException;
@@ -180,35 +181,31 @@ public class Database {
         return searchHelper.search(this, str);
     }
 
-    public void SaveData(Context ctx) throws IOException, PwDbOutputException {
+    public void SaveData(Context ctx) throws IOException, FileUriException, PwDbOutputException {
         SaveData(ctx, mUri);
     }
 
-    public void SaveData(Context ctx, Uri uri) throws IOException, PwDbOutputException {
+    public void SaveData(Context ctx, Uri uri) throws IOException, FileUriException, PwDbOutputException {
         if (uri.getScheme().equals("file")) {
             String filename = uri.getPath();
+
             File tempFile = new File(filename + ".tmp");
-            FileOutputStream fos = new FileOutputStream(tempFile);
-            //BufferedOutputStream bos = new BufferedOutputStream(fos);
-
-            //PwDbV3Output pmo = new PwDbV3Output(pm, bos, App.getCalendar());
-            PwDbOutput pmo = PwDbOutput.getInstance(pm, fos);
-            pmo.output();
-            //bos.flush();
-            //bos.close();
-            fos.close();
-
-            // Force data to disk before continuing
             try {
-                fos.getFD().sync();
-            } catch (SyncFailedException e) {
-                // Ignore if fsync fails. We tried.
-            }
+                saveFile(tempFile);
 
-            File orig = new File(filename);
+                File orig = new File(filename);
 
-            if (!tempFile.renameTo(orig)) {
-                throw new IOException("Failed to store database.");
+                if (!tempFile.renameTo(orig)) {
+                    throw new IOException("Failed to store database.");
+                }
+            } catch (IOException e) {
+                try {
+                    // Retry without temp file
+                    File db = new File(filename);
+                    saveFile(db);
+                } catch (IOException retryException) {
+                    throw new FileUriException(retryException);
+                }
             }
         }
         else {
@@ -228,6 +225,21 @@ public class Database {
             os.close();
         }
         mUri = uri;
+    }
+
+    private void saveFile(File db) throws IOException, PwDbOutputException {
+        FileOutputStream fos = new FileOutputStream(db);
+
+        PwDbOutput pmo = PwDbOutput.getInstance(pm, fos);
+        pmo.output();
+        fos.close();
+
+        // Force data to disk before continuing
+        try {
+            fos.getFD().sync();
+        } catch (SyncFailedException e) {
+            // Ignore if fsync fails. We tried.
+        }
     }
 
     public void clear(Context context) {

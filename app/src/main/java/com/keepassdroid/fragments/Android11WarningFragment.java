@@ -21,6 +21,8 @@ package com.keepassdroid.fragments;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,11 +33,34 @@ import androidx.fragment.app.DialogFragment;
 import com.android.keepass.R;
 
 public class Android11WarningFragment extends DialogFragment {
+    int resId;
+
+    public static boolean showAndroid11Warning(String filename) {
+        Uri fileUri = Uri.parse(filename);
+        return showAndroid11Warning(fileUri);
+    }
+
+    public static boolean showAndroid11Warning(Uri fileUri) {
+        String scheme = fileUri.getScheme();
+        return fileUri.getScheme().equals("file") && showAndroid11WarningOnThisVersion();
+    }
+
+    public static boolean showAndroid11WarningOnThisVersion() {
+        return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R);
+    }
+
+    public Android11WarningFragment() {
+        this.resId = R.string.Android11FileNotFound;
+    }
+    public Android11WarningFragment(int resId) {
+       this.resId = resId;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.FileNotFoundAndroid11)
+        builder.setMessage(resId)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

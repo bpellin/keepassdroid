@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2009-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,6 +19,10 @@
  */
 package com.keepassdroid.database.edit;
 
+import android.app.Dialog;
+
+import androidx.fragment.app.DialogFragment;
+
 import com.keepassdroid.UpdateStatus;
 
 
@@ -37,7 +41,13 @@ public abstract class RunnableOnFinish implements Runnable {
 			mFinish.run();
 		}
 	}
-	
+	protected void finish(boolean result, DialogFragment dialogFragment) {
+		if ( mFinish != null ) {
+			mFinish.setResult(result, dialogFragment);
+			mFinish.run();
+		}
+	}
+
 	protected void finish(boolean result) {
 		if ( mFinish != null ) {
 			mFinish.setResult(result);

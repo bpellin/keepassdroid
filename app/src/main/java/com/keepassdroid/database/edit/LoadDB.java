@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2016 Brian Pellin.
+ * Copyright 2009-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -39,6 +39,7 @@ import com.keepassdroid.database.exception.InvalidDBVersionException;
 import com.keepassdroid.database.exception.InvalidKeyFileException;
 import com.keepassdroid.database.exception.InvalidPasswordException;
 import com.keepassdroid.database.exception.KeyFileEmptyException;
+import com.keepassdroid.fragments.Android11WarningFragment;
 
 public class LoadDB extends RunnableOnFinish {
     private Uri mUri;
@@ -78,6 +79,10 @@ public class LoadDB extends RunnableOnFinish {
             finish(false, mCtx.getString(R.string.file_not_found_content));
             return;
         } catch (FileNotFoundException e) {
+            if (mUri != null && Android11WarningFragment.showAndroid11Warning(mUri)) {
+                finish(false, new Android11WarningFragment());
+                return;
+            }
             finish(false, mCtx.getString(R.string.FileNotFound));
             return;
         } catch (IOException e) {
