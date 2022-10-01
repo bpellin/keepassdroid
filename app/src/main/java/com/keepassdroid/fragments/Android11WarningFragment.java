@@ -31,16 +31,21 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.android.keepass.R;
+import com.keepassdroid.utils.EmptyUtils;
 
 public class Android11WarningFragment extends DialogFragment {
     int resId;
 
     public static boolean showAndroid11Warning(String filename) {
+        if (EmptyUtils.isNullOrEmpty(filename)) { return false; }
+
         Uri fileUri = Uri.parse(filename);
         return showAndroid11Warning(fileUri);
     }
 
     public static boolean showAndroid11Warning(Uri fileUri) {
+        if (fileUri == null) { return false; }
+
         String scheme = fileUri.getScheme();
         return fileUri.getScheme().equals("file") && showAndroid11WarningOnThisVersion();
     }
