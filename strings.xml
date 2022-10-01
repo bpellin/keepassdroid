@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright 2009-2022 Brian Pellin.
+     
+ This file is part of KeePassDroid.
+
+  KeePassDroid is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
+
+  KeePassDroid is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<resources
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:ignore="MissingTranslation">
+    <string name="about_feedback">反馈:</string>
+    <string name="about_homepage">主页:</string>
+    <string name="AboutText">KeePassDroid是KeePass密码管理器的安卓实现</string>
+    <string name="about_twitter">推特:</string>
+    <string name="accept">接受</string>
+    <string name="add_entry">添加条目</string>
+    <string name="add_group">添加组</string>
+    <string name="add_group_title">组名</string>
+    <string name="add_string">添加字符串</string>
+    <string name="algorithm">算法</string>
+    <string name="Android11FileNotFound">未找到文件。 谷歌最近开始在 Android 11 和之后的版本中实施访问内部存储访问限制。这导致许多旧文件 URL 失效。尝试回到应用程序的第一个屏幕，使用“打开”按钮通过 Android 文件选择对话框访问文件。</string>
+    <string name="Android11SaveFailed">无法保存文件。 谷歌最近开始在 Android 11 和之后的版本中实施内部存储文件访问限制。这导致许多旧文件 URL 失效。尝试回到应用程序的第一个屏幕，使用“打开”按钮通过 Android 文件选择对话框访问文件。</string>
+    <string name="app_name">KeePassDroid</string>
+    <string name="app_timeout">应用程序超时</string>
+    <string name="app_timeout_summary">应用程序处于非活动状态时锁定数据库之前等待的时间。</string>
+    <string name="application">应用程序</string>
+    <string name="application_settings">应用程序设置</string>
+    <string name="beta_dontask">不再显示</string>
+    <string name="biometric_auto_open">打开文件时自动提示生物特征登录</string>
+    <string name="biometric_auto_open_title">自动生物特征登录</string>
+    <string name="biometric_auth_failed">未能验证生物特征</string>
+    <string name="biometric_auth_failed_store">身份验证失败，未存储密码</string>
+    <string name="biometric_auth_error">验证错误</string>
+    <string name="biometric_auth_to_open">通过验证才能打开数据库</string>
+    <string name="biometric_auth_to_store">通过验证才能保存密码</string>
+    <string name="biometric_clear_stored_password">清除保存的密码</string>
+    <string name="biometric_error">生物特征错误</string>
+    <string name="biometric_invalidated">生物特征失效</string>
+    <string name="biometric_open_db">打开数据库</string>
+    <string name="biometric_save_password">保存密码</string>
+    <string name="brackets">范围</string>
+    <string name="browser_intall_text">文件浏览需要打开Intents文件管理器，点击下面安装。由于该文件管理器中的一些怪癖，第一次打开应用时，可能无法正常浏览文件。</string>
+    <string name="cancel">取消</string>
+    <string name="ClearClipboard">剪贴板已清理</string>
+    <string name="clipboard_error_title">剪贴板错误</string>
+    <string name="clipboard_error">一些三星Android手机在剪贴板实现中有一个错误，导致从应用程序复制失败。更多细节请浏览:</string>
+    <string name="clipboard_error_clear">清理剪贴板失败</string>
+    <string name="clipboard_timeout">剪贴板超时</string>
+    <string name="clipboard_timeout_summary">复制用户名或密码后清除剪贴板内容之前的时间</string>
+    <string name="copy_username">选择将用户名复制到剪贴板</string>
+    <string name="copy_password">选择将密码复制到剪贴板</string>
+    <string name="creating_db_key">创建数据库密钥中&#8230;</string>
+    <string name="database">数据库</string>
+    <string name="decrypting_db">解密数据库内容中&#8230;</string>
+    <string name="default_checkbox">使用这个作为我的默认数据库</string>
+    <string name="digits">数字</string>
+    <string name="disclaimer_formal">KeePassDroid 版权属于 2009&#8211;2022 Brian Pellin，开发者对软件质量无担保; 这是自由软件，欢迎您在GPL版本2或更高版本许可协议的条款下进行再分发。</string>
+    <string name="ellipsis">\u2026</string>
+    <string name="enter_filename">输入数据库文件名:</string>
+    <string name="entry_accessed">已访问: </string>
+    <string name="entry_and_or">输入密码和/或密钥文件解锁你的数据库:</string>
+    <string name="entry_cancel">取消</string>
+    <string name="entry_comment">注解: </string>
+    <string name="entry_confpassword">确认密码:</string>
+    <string name="entry_created">已创建: </string>
+    <string name="entry_expires">有效期: </string>
+    <string name="entry_keyfile">密钥文件(可选)</string>
+    <string name="entry_modified">已改动: </string>
+    <string name="entry_not_found">未找到条目数据</string>
+    <string name="entry_password">密码:</string>
+    <string name="entry_save">保存</string>
+    <string name="entry_title">名称: </string>
+    <string name="entry_url">URL: </string>
+    <string name="entry_user_name">用户名: </string>
+    <string name="error_arc4">不支持ArcFour流密码</string>
+    <string name="error_can_not_handle_uri">KeePassDroid 无法处理这个统一资源标识符</string>
+    <string name="error_could_not_create_parent">无法创建父目录</string>
+    <string name="error_database_exists">这个文件已存在</string>
+    <string name="error_failed_to_launch_link">启动链接失败</string>
+    <string name="error_filename_required">需要一个文件名</string>
+    <string name="error_file_not_create">无法创建文件:</string>
+    <string name="error_invalid_db">无效的数据库</string>
+    <string name="error_invalid_path">无效的路径</string>
+    <string name="error_no_name">需要一个名称</string>
+    <string name="error_nopass">需要一个密码或一个密钥文件</string>
+    <string name="error_out_of_memory">手机在解析数据库时内存不足。它可能对你的手机来说太大了。</string>
+    <string name="error_pass_gen_type">必须选择至少一种密码生成类型</string>
+    <string name="error_pass_match">密码不匹配</string>
+    <string name="error_rounds_not_number">圈数必须是一个数字</string>
+    <string name="error_rounds_too_large">圈数过大。上限为2147483648。</string>
+    <string name="error_string_key">每个字符串都需要一个字段名</string>
+    <string name="error_title_required">需要一个标题</string>
+    <string name="error_wrong_length">在长度字段上输入一个正整数</string>
+    <string name="field_name">字段名</string>
+    <string name="field_value">字段值</string>
+    <string name="FileNotFound">未找到文件</string>
+    <string name="file_not_found_content">文件未找到。尝试从内容提供程序重新打开。</string>
+    <string name="file_browser">文件浏览器</string>
+    <string name="generate_password">生成密码</string>
+    <string name="group">组</string>
+    <string name="hint_comment">注解</string>
+    <string name="hint_conf_pass">确认密码</string>
+    <string name="hint_generated_password">生成密码</string>
+    <string name="hint_group_name">组名</string>
+    <string name="hint_keyfile">密钥文件</string>
+    <string name="hint_length">长度</string>
+    <string name="hint_pass">密码</string>
+    <string name="hint_login_pass">密码</string>
+    <string name="hint_title">名称</string>
+    <string name="hint_url">url</string>
+    <string name="hint_username">用户名</string>
+    <string name="install_from_market">从Play Store安装</string>
+    <string name="install_from_website">从Web安装</string>
+    <string name="InvalidPassword">无效的密码或密钥文件</string>
+    <string name="invalid_algorithm">无效的算法</string>
+    <string name="invalid_db_sig">未能识别数据库格式</string>
+    <string name="keyfile_does_not_exist">密钥文件不存在</string>
+    <string name="keyfile_is_empty">密钥文件为空</string>
+    <string name="length">长度</string>
+    <string name="list_size_title">组列表的大小</string>
+    <string name="list_size_summary">组列表的文本大小</string>
+    <string name="loading_database">加载数据库中&#8230;</string>
+    <string name="lowercase">小写</string>
+    <string name="maskpass_title">遮掩密码</string>
+    <string name="maskpass_summary">默认隐藏密码</string>
+    <string name="menu_about">关于</string>
+    <string name="menu_change_key">更改主密码</string>
+    <string name="menu_copy_pass">复制密码</string>
+    <string name="menu_copy_user">复制用户</string>
+    <string name="menu_create">新建</string>
+    <string name="menu_app_settings">设置</string>
+    <string name="menu_db_settings">数据库设置</string>
+    <string name="menu_delete">删除</string>
+    <string name="menu_donate">捐赠</string>
+    <string name="menu_edit">编辑</string>
+    <string name="menu_hide_password">隐藏密码</string>
+    <string name="menu_lock">锁定数据库</string>
+    <string name="menu_open">打开</string>
+    <string name="menu_patreon">Patreon</string>
+    <string name="menu_rename">重命名</string>
+    <string name="menu_search">搜索</string>
+    <string name="menu_showpass">展示密码</string>
+    <string name="menu_support_developer">支持开发者</string>
+    <string name="menu_url">前往 URL</string>
+    <string name="minus">负值</string>
+    <string name="never">从未</string>
+    <string name="no_results">无搜索结果</string>
+    <string name="no_url_handler">没有处理这个url的程序</string>
+    <string name="open_or_create">打开或创建一个数据库：</string>
+    <string name="open_recent">打开最近的数据库 (点击打开):</string>
+    <string name="omitbackup_title">不要搜索备份条目</string>
+    <string name="omitbackup_summary">从搜索结果中排除 \'备份\' 组 (仅应用于 .kdb文件)</string>
+    <string name="pass_filename">KeePass 数据库文件名:</string>
+    <string name="password_title">输入数据库密码</string>
+    <string name="progress_create">新建数据库中&#8230;</string>
+    <string name="progress_title">工作中&#8230;</string>
+    <string name="protection">保护</string>
+    <string name="read_only">只读</string>
+    <string name="read_only_warning">KeePassDroid没有写入数据库位置的权限，因此您的数据库将以只读方式打开</string>
+    <string name="read_only_kitkat_warning">从安卓KitKat开始，一些设备不再允许应用程序写入sd卡</string>
+    <string name="recentfile_title">近期文件历史</string>
+    <string name="recentfile_summary">记住最近用过的文件名</string>
+    <string name="remember_keyfile_summary">记住密钥文件的位置</string>
+    <string name="remember_keyfile_title">保存密钥文件</string>
+    <string name="remove_from_filelist">移除</string>
+    <string name="rijndael">Rijndael (AES)</string>
+    <string name="root">根目录</string>
+    <string name="rounds">加密圈数</string>
+    <string name="rounds_explaination">更高的加密圈数提供了对抗暴力破解攻击的额外保护，但会降低数据库加载和保存的速度。</string>
+    <string name="rounds_fix">损坏前的密钥加密圈数</string>
+    <string name="rounds_fix_explaination">如果你的数据库被KeePassDroid 2.2.0.0到2.2.0.6版本损坏，请输入先前使用的圈数，这将允许您打开数据库。</string>
+    <string name="rounds_hint">圈数</string>
+    <string name="saving_database">保存数据库中&#8230;</string>
+    <string name="space">空格</string>
+    <string name="search_label">搜索</string>
+    <string name="show_password">展示密码</string>
+    <string name="sort_name">按名字排序</string>
+    <string name="sort_db">数据库排序顺序</string>
+    <string name="special">特殊</string>
+    <string name="search_hint">条目标题/描述</string>
+    <string name="search_results">搜索结果</string>
+    <string name="twofish">Twofish</string>
+    <string name="underline">下划线</string>
+    <string name="unsupported_db_version">不支持的数据库版本</string>
+    <string name="uppercase">大写</string>
+    <string name="use_saf_summary">使用安卓存储访问框架进行文件浏览 (KitKat及以上版本)</string>
+    <string name="use_saf_title">存储访问框架</string>
+    <string name="warning">警告</string>
+    <string name="warning_password_encoding">.kdb格式只支持拉丁字符集。你的密码可能包含该字符集以外的字符。所有非拉丁字符将被转换为相同的字符，这将降低你的密码的安全性。建议更改你的密码。</string>
+    <string name="warning_read_only">你的sd卡目前是只读的。你可能无法将更改保存到数据库中。</string>
+    <string name="warning_unmounted">你的sd卡目前没有挂载到你的设备上。你将无法加载或创建数据库。</string>
+    <string name="version_label">版本号:</string>
+    <string name="encrypted_value_stored">已保存加密的密码</string>
+    <string name="fingerprint_invalid_key">无效Key问题</string>
+    <string name="no_external_permissions">读写外部存储的权限被拒绝</string>
+
+    <string-array name="clipboard_timeout_options">
+    	<item>30 秒</item>
+    	<item>1 分钟</item>
+    	<item>5 分钟</item>
+    	<item>永远</item>
+    </string-array>
+    <string-array name="list_size_options">
+    	<item>小</item>
+    	<item>中</item>
+    	<item>大</item>
+    </string-array>
+</resources>
