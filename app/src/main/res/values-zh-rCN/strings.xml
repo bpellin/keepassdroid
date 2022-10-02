@@ -30,7 +30,8 @@
     <string name="add_group_title">组名</string>
     <string name="add_string">添加字符串</string>
     <string name="algorithm">算法</string>
-    <string name="Android11FileNotFound">未找到文件。 谷歌最近开始在 Android 11 和之后的版本中实施访问内部存储文件的限制。这导致许多旧文件 URL 失效。尝试使用打开按钮通过 Android 文件选择对话框访问文件。</string>
+    <string name="Android11FileNotFound">未找到文件。 谷歌最近开始在 Android 11 和之后的版本中实施访问内部存储访问限制。这导致许多旧文件 URL 失效。尝试回到应用程序的第一个屏幕，使用“打开”按钮通过 Android 文件选择对话框访问文件。</string>
+    <string name="Android11SaveFailed">无法保存文件。 谷歌最近开始在 Android 11 和之后的版本中实施内部存储文件访问限制。这导致许多旧文件 URL 失效。尝试回到应用程序的第一个屏幕，使用“打开”按钮通过 Android 文件选择对话框访问文件。</string>
     <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">应用程序超时</string>
     <string name="app_timeout_summary">应用程序处于非活动状态时锁定数据库之前等待的时间。</string>
