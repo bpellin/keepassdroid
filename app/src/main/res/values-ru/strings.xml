@@ -28,6 +28,8 @@
     <string name="add_group_title">Новая группа</string>
     <string name="add_string">Новая строка</string>
     <string name="algorithm">Алгоритм</string>
+    <string name="Android11FileNotFound">Файл не найден. Google начал вводить ограничения на доступ к файлам во внутреннем хранилище на Android 11 и более поздних версиях, что сделало нерабочими многие прежние ссылки на файлы. Попробуйте вернуться к первому экрану приложения и с помощью кнопки \"Открыть\" получить доступ к файлу через диалоговое окно выбора файла Android.</string>
+    <string name="Android11SaveFailed">Невозможно сохранить файл. Google начал вводить ограничения на доступ к файлам во внутреннем хранилище на Android 11 и более поздних версиях, что сделало нерабочими многие прежние ссылки на файлы. Попробуйте вернуться к первому экрану приложения и с помощью кнопки \"Открыть\" получить доступ к файлу через диалоговое окно выбора файла Android.</string>
     <string name="app_name">KeePass</string>
     <string name="app_timeout">Блокировка базы</string>
     <string name="app_timeout_summary">Задержка блокировки при бездействии</string>
@@ -142,7 +144,7 @@
     <string name="menu_app_settings">Настройки</string>
     <string name="menu_db_settings">Настройки базы</string>
     <string name="menu_delete">Удалить</string>
-    <string name="menu_donate">Помочь</string>
+    <string name="menu_donate">Поддержать</string>
     <string name="menu_edit">Правка</string>
     <string name="menu_hide_password">Скрыть</string>
     <string name="menu_lock">Блокировка</string>
