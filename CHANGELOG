@@ -1,3 +1,7 @@
+KeePassDroid (2.6.7)
+ * Update Chinese and Russian translations
+ * Update to target SDK version 31
+
 KeePassDroid (2.6.6.1)
  * Add null checks
 
