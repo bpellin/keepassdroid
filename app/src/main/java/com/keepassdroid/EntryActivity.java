@@ -38,6 +38,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -237,7 +238,11 @@ public class EntryActivity extends LockCloseHideActivity {
 		String desc = getString(descResId);
 
 		Intent intent = new Intent(intentText);
-		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+		if (Build.VERSION.SDK_INT >= 23) {
+			flags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, flags);
 
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
 				NotificationUtil.COPY_CHANNEL_ID);
