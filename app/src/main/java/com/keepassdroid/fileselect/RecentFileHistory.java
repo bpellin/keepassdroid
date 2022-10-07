@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2018 Brian Pellin.
+ * Copyright 2013-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -213,7 +213,11 @@ public class RecentFileHistory {
 
         for (int i = 0; i < databases.size(); i++) {
             String entry = databases.get(i);
-            if (uriName.equals(entry) || fileName.equals(entry)) {
+            boolean delete;
+            delete = (uriName != null && uriName.equals((entry)) ||
+                    (fileName != null && fileName.equals(entry)));
+
+            if (delete) {
                 databases.remove(i);
                 keyfiles.remove(i);
                 break;

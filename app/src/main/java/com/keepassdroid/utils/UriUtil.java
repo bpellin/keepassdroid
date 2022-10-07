@@ -190,6 +190,8 @@ public class UriUtil {
 
             if (result == null) {
                 result = uri.getPath();
+                if (result == null) { return null; }
+
                 int cut = result.lastIndexOf('/');
                 if (cut != -1) {
                     result = result.substring(cut + 1);
