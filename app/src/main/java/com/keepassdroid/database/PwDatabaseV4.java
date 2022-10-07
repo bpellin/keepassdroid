@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2021 Brian Pellin.
+ * Copyright 2010-2022 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -100,6 +100,7 @@ public class PwDatabaseV4 extends PwDatabase {
 	public KdfParameters kdfParameters = KdfFactory.getDefaultParameters();
 	public VariantDictionary publicCustomData = new VariantDictionary();
 	public BinaryPool binPool = new BinaryPool();
+	public long version = PwDbHeaderV4.FILE_VERSION_32;
 
     public String localizedAppName = "KeePassDroid";
     
@@ -602,8 +603,8 @@ public class PwDatabaseV4 extends PwDatabase {
 		}
 	}
 
-	public int getMinKdbxVersion() {
-		int minVer = 0;
+	public long getMinKdbxVersion() {
+		long minVer = version;
 
 		EntryGetMinVer entryHandler = new EntryGetMinVer();
 		GroupGetMinVer groupHandler = new GroupGetMinVer();

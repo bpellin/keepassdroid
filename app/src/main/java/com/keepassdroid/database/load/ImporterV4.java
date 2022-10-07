@@ -115,6 +115,7 @@ public class ImporterV4 extends Importer {
 
 		PwDbHeaderV4.HeaderAndHash hh = header.loadFromFile(inStream);
         version = header.version;
+		db.version = version;
 
 		hashOfHeader = hh.hash;
 		pbHeader = hh.header;
