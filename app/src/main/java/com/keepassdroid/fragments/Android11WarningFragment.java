@@ -47,7 +47,9 @@ public class Android11WarningFragment extends DialogFragment {
         if (fileUri == null) { return false; }
 
         String scheme = fileUri.getScheme();
-        return fileUri.getScheme().equals("file") && showAndroid11WarningOnThisVersion();
+        if (scheme == null) { return true; }
+        
+        return scheme.equals("file") && showAndroid11WarningOnThisVersion();
     }
 
     public static boolean showAndroid11WarningOnThisVersion() {
