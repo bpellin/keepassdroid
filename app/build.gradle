@@ -10,8 +10,8 @@ android {
 
         multiDexEnabled true
 
-        versionCode = 214
-        versionName = "2.6.7"
+        versionCode = 215
+        versionName = "2.6.8"
 
         testApplicationId = "com.keepassdroid.tests"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
