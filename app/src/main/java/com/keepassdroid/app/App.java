@@ -1,6 +1,6 @@
 /*
  * Copyright 2009-2022 Brian Pellin.
- *     
+ *
  * This file is part of KeePassDroid.
  *
  *  KeePassDroid is free software: you can redistribute it and/or modify
@@ -38,94 +38,94 @@ import com.keepassdroid.intents.Intents;
 import java.util.Calendar;
 
 public class App extends MultiDexApplication {
-	private static Database db = null;
-	private static boolean shutdown = false;
-	private static Calendar calendar = null;
-	private static RecentFileHistory fileHistory = null;
-	private static final String TAG = "KeePassDroid Timer";
+    private static Database db = null;
+    private static boolean shutdown = false;
+    private static Calendar calendar = null;
+    private static RecentFileHistory fileHistory = null;
+    private static final String TAG = "KeePassDroid Timer";
 
-	private BroadcastReceiver mIntentReceiver;
+    private BroadcastReceiver mIntentReceiver;
 
-	public static Database getDB() {
-		if ( db == null ) {
-			db = new Database();
-		}
-		
-		return db;
-	}
-	
-	public static RecentFileHistory getFileHistory() {
-		return fileHistory;
-	}
-	
-	public static void setDB(Database d) {
-		db = d;
-	}
-	
-	public static boolean isShutdown() {
-		return shutdown;
-	}
-	
-	public static void setShutdown() {
-		shutdown = true;
-	}
-	
-	public static void clearShutdown() {
-		shutdown = false;
-	}
-	
-	public static Calendar getCalendar() {
-		if ( calendar == null ) {
-			calendar = Calendar.getInstance();
-		}
-		
-		return calendar;
-	}
+    public static Database getDB() {
+        if ( db == null ) {
+            db = new Database();
+        }
 
-	@SuppressLint("UnspecifiedRegisterReceiverFlag")
+        return db;
+    }
+
+    public static RecentFileHistory getFileHistory() {
+        return fileHistory;
+    }
+
+    public static void setDB(Database d) {
+        db = d;
+    }
+
+    public static boolean isShutdown() {
+        return shutdown;
+    }
+
+    public static void setShutdown() {
+        shutdown = true;
+    }
+
+    public static void clearShutdown() {
+        shutdown = false;
+    }
+
+    public static Calendar getCalendar() {
+        if ( calendar == null ) {
+            calendar = Calendar.getInstance();
+        }
+
+        return calendar;
+    }
+
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
-	public void onCreate() {
-		super.onCreate();
-		
-		fileHistory = new RecentFileHistory(this);
-		
-		PRNGFixes.apply();
+    public void onCreate() {
+        super.onCreate();
 
-		mIntentReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				String action = intent.getAction();
+        fileHistory = new RecentFileHistory(this);
 
-				if ( action.equals(Intents.TIMEOUT) ) {
-					timeout(context);
-				}
-			}
-		};
+        PRNGFixes.apply();
 
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(Intents.TIMEOUT);
+        mIntentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+
+                if ( action.equals(Intents.TIMEOUT) ) {
+                    timeout(context);
+                }
+            }
+        };
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intents.TIMEOUT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(mIntentReceiver, filter, RECEIVER_NOT_EXPORTED);
         } else {
-			registerReceiver(mIntentReceiver, filter);
-		}
+            registerReceiver(mIntentReceiver, filter);
+        }
     }
 
-	private void timeout(Context context) {
-		Log.d(TAG, "Timeout");
-		App.setShutdown();
+    private void timeout(Context context) {
+        Log.d(TAG, "Timeout");
+        App.setShutdown();
 
-		NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		nm.cancelAll();
-	}
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.cancelAll();
+    }
 
-	@Override
-	public void onTerminate() {
-		if ( db != null ) {
-			db.clear(getApplicationContext());
-		}
+    @Override
+    public void onTerminate() {
+        if ( db != null ) {
+            db.clear(getApplicationContext());
+        }
 
-		unregisterReceiver(mIntentReceiver);
-		super.onTerminate();
-	}
+        unregisterReceiver(mIntentReceiver);
+        super.onTerminate();
+    }
 }
