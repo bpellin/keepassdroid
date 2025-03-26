@@ -26,6 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -126,7 +127,8 @@ public class EntryActivity extends LockCloseHideActivity {
 		}
 	}
 
-	@Override
+	@SuppressLint("UnspecifiedRegisterReceiverFlag")
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mShowPassword = ! prefs.getBoolean(getString(R.string.maskpass_key), getResources().getBoolean(R.bool.maskpass_default));
@@ -212,7 +214,12 @@ public class EntryActivity extends LockCloseHideActivity {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intents.COPY_USERNAME);
 		filter.addAction(Intents.COPY_PASSWORD);
-		registerReceiver(mIntentReceiver, filter);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			registerReceiver(mIntentReceiver, filter, RECEIVER_NOT_EXPORTED);
+		} else {
+			registerReceiver(mIntentReceiver, filter);
+		}
 	}
 	
 	@Override

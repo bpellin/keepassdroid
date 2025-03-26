@@ -19,11 +19,13 @@
  */
 package com.keepassdroid.app;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.multidex.MultiDexApplication;
@@ -80,7 +82,8 @@ public class App extends MultiDexApplication {
 		return calendar;
 	}
 
-	@Override
+	@SuppressLint("UnspecifiedRegisterReceiverFlag")
+    @Override
 	public void onCreate() {
 		super.onCreate();
 		
@@ -101,8 +104,12 @@ public class App extends MultiDexApplication {
 
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intents.TIMEOUT);
-		registerReceiver(mIntentReceiver, filter);
-	}
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mIntentReceiver, filter, RECEIVER_NOT_EXPORTED);
+        } else {
+			registerReceiver(mIntentReceiver, filter);
+		}
+    }
 
 	private void timeout(Context context) {
 		Log.d(TAG, "Timeout");
