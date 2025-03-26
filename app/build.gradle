@@ -1,17 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion = 33
+    compileSdkVersion = 34
 
     defaultConfig {
         applicationId = "com.android.keepass"
         minSdkVersion 16
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         multiDexEnabled true
 
-        versionCode = 215
-        versionName = "2.6.8"
+        versionCode = 216
+        versionName = "2.6.8.1"
 
         testApplicationId = "com.keepassdroid.tests"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
