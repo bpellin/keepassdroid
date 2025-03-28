@@ -68,6 +68,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.5'
     implementation "androidx.biometric:biometric:1.1.0"
     implementation "androidx.preference:preference:1.2.1"
+    implementation "androidx.activity:activity:1.8.2"
     implementation "com.google.android.material:material:1.9.0"
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
 

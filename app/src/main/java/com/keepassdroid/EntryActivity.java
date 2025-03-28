@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2009-2022 Brian Pellin.
+ * Copyright 2009-2025 Brian Pellin.
  *
  * This file is part of KeePassDroid.
  *
@@ -44,6 +44,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 import android.text.SpannableString;
@@ -105,6 +108,17 @@ public class EntryActivity extends LockCloseHideActivity {
     private DateFormat dateFormat;
     private DateFormat timeFormat;
 
+    private final ActivityResultLauncher<String> mNotificationPermLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+                    new ActivityResultCallback<Boolean>() {
+                        @Override
+                        public void onActivityResult(Boolean result) {
+                            if (result) {
+                                showNotification();
+                            }
+                        }
+                    });
+
     protected void setEntryView() {
         setContentView(R.layout.entry_view);
     }
@@ -127,7 +141,6 @@ public class EntryActivity extends LockCloseHideActivity {
         }
     }
 
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -175,8 +188,35 @@ public class EntryActivity extends LockCloseHideActivity {
         setupEditButtons();
 
         // Notification Manager
-        NotificationUtil.createChannels(getApplicationContext());
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationUtil.createChannels(getApplicationContext());
+        if (NotificationUtil.requestPermission(this, mNotificationPermLauncher)) {
+            showNotification();
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        // These members might never get initialized if the app timed out
+        if ( mIntentReceiver != null ) {
+            unregisterReceiver(mIntentReceiver);
+        }
+
+        if ( mNM != null ) {
+            try {
+                mNM.cancelAll();
+            } catch (SecurityException e) {
+                // Some android devices give a SecurityException when trying to cancel notifications without the WAKE_LOCK permission,
+                // we'll ignore these.
+            }
+        }
+
+        super.onDestroy();
+    }
+
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    private void showNotification() {
 
         if ( mEntry.getPassword().length() > 0 ) {
             // only show notification if password is available
@@ -220,25 +260,6 @@ public class EntryActivity extends LockCloseHideActivity {
         } else {
             registerReceiver(mIntentReceiver, filter);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        // These members might never get initialized if the app timed out
-        if ( mIntentReceiver != null ) {
-            unregisterReceiver(mIntentReceiver);
-        }
-
-        if ( mNM != null ) {
-            try {
-                mNM.cancelAll();
-            } catch (SecurityException e) {
-                // Some android devices give a SecurityException when trying to cancel notifications without the WAKE_LOCK permission,
-                // we'll ignore these.
-            }
-        }
-
-        super.onDestroy();
     }
 
     private Notification getNotification(String intentText, int descResId) {
