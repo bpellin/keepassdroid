@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2020 Brian Pellin.
+ * Copyright 2009-2025 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -118,8 +118,9 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.entry_edit);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
+		Toolbar toolbar;
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
 		setResult(KeePass.EXIT_NORMAL);
 		
@@ -143,7 +144,6 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 			
 		} else {
 			UUID uuid = Types.bytestoUUID(uuidBytes);
-			assert(uuid != null);
 
 			mEntry = pm.entries.get(uuid);
 			mIsNew = false;
@@ -154,15 +154,15 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 		View scrollView = findViewById(R.id.entry_scroll);
 		scrollView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
 
-		ImageButton iconButton = (ImageButton) findViewById(R.id.icon_button);
-		iconButton.setOnClickListener(new View.OnClickListener() {
+		ImageButton iconButton = findViewById(R.id.icon_button);
+        iconButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				IconPickerActivity.Launch(EntryEditActivity.this);
 			}
 		});
 
 		// Generate password button
-		Button generatePassword = (Button) findViewById(R.id.generate_button);
+		Button generatePassword = findViewById(R.id.generate_button);
 		generatePassword.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -171,7 +171,7 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 		});
 		
 		// Save button
-		Button save = (Button) findViewById(R.id.entry_save);
+		Button save = findViewById(R.id.entry_save);
 		save.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -319,17 +319,18 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch ( item.getItemId() ) {
-		case R.id.menu_donate:
+		int itemId = item.getItemId();
+
+		if (itemId == R.id.menu_donate) {
 			try {
 				Util.gotoUrl(this, R.string.donate_url);
 			} catch (ActivityNotFoundException e) {
 				Toast.makeText(this, R.string.error_failed_to_launch_link, Toast.LENGTH_LONG).show();
 				return false;
 			}
-			
+
 			return true;
-		case R.id.menu_toggle_pass:
+		} else if (itemId == R.id.menu_toggle_pass) {
 			if ( mShowPassword ) {
 				item.setTitle(R.string.menu_showpass);
 				mShowPassword = false;
@@ -366,7 +367,7 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 		populateText(R.id.entry_user_name, mEntry.getUsername());
 		populateText(R.id.entry_url, mEntry.getUrl());
 		
-		String password = new String(mEntry.getPassword());
+		String password = mEntry.getPassword();
 		populateText(R.id.entry_password, password);
 		populateText(R.id.entry_confpassword, password);
 		setPasswordStyle();

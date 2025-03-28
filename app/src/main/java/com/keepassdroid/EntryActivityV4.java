@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 Brian Pellin.
+ * Copyright 2010-2025 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -45,9 +45,9 @@ public class EntryActivityV4 extends EntryActivity {
 	protected void fillData(boolean trimList) {
 		super.fillData(trimList);
 		
-		ViewGroup group = (ViewGroup) findViewById(R.id.extra_strings);
-		
-		if (trimList) {
+		ViewGroup group = findViewById(R.id.extra_strings);
+
+        if (trimList) {
 			group.removeAllViews();
 		}
 		
@@ -57,10 +57,10 @@ public class EntryActivityV4 extends EntryActivity {
 		SprEngine spr = SprEngineV4.getInstance(pm);
 		
 		// Display custom strings
-		if (entry.strings.size() > 0) {
+		if (!entry.strings.isEmpty()) {
 			for (Map.Entry<String, ProtectedString> pair : entry.strings.entrySet()) {
 				String key = pair.getKey();
-				
+
 				if (!PwEntryV4.IsStandardString(key)) {
 					String text = pair.getValue().toString();
 					View view = new EntrySection(this, null, key, spr.compile(text, entry, pm));

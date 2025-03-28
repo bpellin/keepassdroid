@@ -44,7 +44,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.Toolbar;
@@ -98,7 +97,7 @@ public class EntryActivity extends LockCloseHideActivity {
     }
 
     protected PwEntry mEntry;
-    private Timer mTimer = new Timer();
+    private final Timer mTimer = new Timer();
     private boolean mShowPassword;
     private int mPos;
     private NotificationManager mNM;
@@ -110,12 +109,9 @@ public class EntryActivity extends LockCloseHideActivity {
 
     private final ActivityResultLauncher<String> mNotificationPermLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(),
-                    new ActivityResultCallback<Boolean>() {
-                        @Override
-                        public void onActivityResult(Boolean result) {
-                            if (result) {
-                                showNotification();
-                            }
+                    result -> {
+                        if (result) {
+                            showNotification();
                         }
                     });
 
@@ -124,14 +120,8 @@ public class EntryActivity extends LockCloseHideActivity {
     }
 
     protected void setupEditButtons() {
-        Button edit = (Button) findViewById(R.id.entry_edit);
-        edit.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                EntryEditActivity.Launch(EntryActivity.this, mEntry);
-            }
-
-        });
+        Button edit = findViewById(R.id.entry_edit);
+        edit.setOnClickListener(v -> EntryEditActivity.Launch(EntryActivity.this, mEntry));
 
         if (readOnly) {
             edit.setVisibility(View.GONE);
@@ -148,7 +138,7 @@ public class EntryActivity extends LockCloseHideActivity {
 
         super.onCreate(savedInstanceState);
         setEntryView();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Context appCtx = getApplicationContext();
@@ -168,7 +158,6 @@ public class EntryActivity extends LockCloseHideActivity {
         Intent i = getIntent();
         UUID uuid = Types.bytestoUUID(i.getByteArrayExtra(KEY_ENTRY));
         mPos = i.getIntExtra(KEY_REFRESH_POS, -1);
-        assert(uuid != null);
 
         mEntry = db.pm.entries.get(uuid);
         if (mEntry == null) {
@@ -218,13 +207,13 @@ public class EntryActivity extends LockCloseHideActivity {
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private void showNotification() {
 
-        if ( mEntry.getPassword().length() > 0 ) {
+        if (!mEntry.getPassword().isEmpty()) {
             // only show notification if password is available
             Notification password = getNotification(Intents.COPY_PASSWORD, R.string.copy_password);
             mNM.notify(NOTIFY_PASSWORD, password);
         }
 
-        if ( mEntry.getUsername().length() > 0 ) {
+        if (!mEntry.getUsername().isEmpty()) {
             // only show notification if username is available
             Notification username = getNotification(Intents.COPY_USERNAME, R.string.copy_username);
             mNM.notify(NOTIFY_USERNAME, username);
@@ -235,18 +224,21 @@ public class EntryActivity extends LockCloseHideActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
+                if ( action == null)
+                {
+                    return;
+                }
 
                 if ( action.equals(Intents.COPY_USERNAME) ) {
                     String username = mEntry.getUsername();
-                    if ( username.length() > 0 ) {
+                    if (!username.isEmpty()) {
                         timeoutCopyToClipboard(getString(R.string.hint_username), username);
                     }
                 } else if ( action.equals(Intents.COPY_PASSWORD) ) {
-                    String password = new String(mEntry.getPassword());
-                    if ( password.length() > 0 ) {
+                    String password = mEntry.getPassword();
+                    if (!password.isEmpty())
                         timeoutCopyToClipboard(getString(R.string.hint_login_pass),
-                                new String(mEntry.getPassword()), true);
-                    }
+                                mEntry.getPassword(), true);
                 }
             }
         };
@@ -274,10 +266,9 @@ public class EntryActivity extends LockCloseHideActivity {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
                 NotificationUtil.COPY_CHANNEL_ID);
-        Notification notify = builder.setContentIntent(pending).setContentText(desc).setContentTitle(getString(R.string.app_name))
-                .setSmallIcon(R.drawable.notify).setTicker(desc).setWhen(System.currentTimeMillis()).build();
 
-        return notify;
+        return builder.setContentIntent(pending).setContentText(desc).setContentTitle(getString(R.string.app_name))
+                .setSmallIcon(R.drawable.notify).setTicker(desc).setWhen(System.currentTimeMillis()).build();
     }
 
     private String getDateTime(Date dt) {
@@ -286,7 +277,7 @@ public class EntryActivity extends LockCloseHideActivity {
     }
 
     protected void fillData(boolean trimList) {
-        ImageView iv = (ImageView) findViewById(R.id.entry_icon);
+        ImageView iv = findViewById(R.id.entry_icon);
         Database db = App.getDB();
         db.drawFactory.assignDrawableTo(iv, getResources(), mEntry.getIcon());
 
@@ -314,12 +305,12 @@ public class EntryActivity extends LockCloseHideActivity {
     }
 
     private void populateText(int viewId, int resId) {
-        TextView tv = (TextView) findViewById(viewId);
+        TextView tv = findViewById(viewId);
         tv.setText(resId);
     }
 
     private void populateText(int viewId, String text) {
-        TextView tv = (TextView) findViewById(viewId);
+        TextView tv = findViewById(viewId);
         tv.setText(text);
     }
 
@@ -367,11 +358,11 @@ public class EntryActivity extends LockCloseHideActivity {
                 // disable button if url is not available
                 gotoUrl.setVisible(false);
             }
-            if ( mEntry.getUsername().length() == 0 ) {
+            if (mEntry.getUsername().isEmpty()) {
                 // disable button if username is not available
                 copyUser.setVisible(false);
             }
-            if ( mEntry.getPassword().length() == 0 ) {
+            if (mEntry.getPassword().isEmpty()) {
                 // disable button if password is not available
                 copyPass.setVisible(false);
             }
@@ -381,7 +372,7 @@ public class EntryActivity extends LockCloseHideActivity {
     }
 
     private void setPasswordStyle() {
-        TextView password = (TextView) findViewById(R.id.entry_password);
+        TextView password = findViewById(R.id.entry_password);
 
         if ( mShowPassword ) {
             password.setTransformationMethod(null);
@@ -392,58 +383,55 @@ public class EntryActivity extends LockCloseHideActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch ( item.getItemId() ) {
-            case R.id.menu_donate:
-                try {
-                    Util.gotoUrl(this, R.string.donate_url);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(this, R.string.error_failed_to_launch_link, Toast.LENGTH_LONG).show();
-                    return false;
-                }
 
-                return true;
-            case R.id.menu_toggle_pass:
-                if ( mShowPassword ) {
-                    item.setTitle(R.string.menu_showpass);
-                    mShowPassword = false;
-                } else {
-                    item.setTitle(R.string.menu_hide_password);
-                    mShowPassword = true;
-                }
-                setPasswordStyle();
+        int itemId = item.getItemId();
+        if (itemId ==  R.id.menu_donate) {
+            try {
+                Util.gotoUrl(this, R.string.donate_url);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, R.string.error_failed_to_launch_link, Toast.LENGTH_LONG).show();
+                return false;
+            }
 
-                return true;
+            return true;
+        } else if (itemId == R.id.menu_toggle_pass) {
+            if (mShowPassword) {
+                item.setTitle(R.string.menu_showpass);
+                mShowPassword = false;
+            } else {
+                item.setTitle(R.string.menu_hide_password);
+                mShowPassword = true;
+            }
+            setPasswordStyle();
 
-            case R.id.menu_goto_url:
-                String url;
-                url = mEntry.getUrl();
+            return true;
+        } else if (itemId == R.id.menu_goto_url) {
+            String url;
+            url = mEntry.getUrl();
 
-                // Default http:// if no protocol specified
-                if ( ! url.contains("://") ) {
-                    url = "http://" + url;
-                }
+            // Default http:// if no protocol specified
+            if (!url.contains("://")) {
+                url = "http://" + url;
+            }
 
-                try {
-                    Util.gotoUrl(this, url);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(this, R.string.no_url_handler, Toast.LENGTH_LONG).show();
-                }
-                return true;
-
-            case R.id.menu_copy_user:
-                timeoutCopyToClipboard(getString(R.string.hint_username), mEntry.getUsername(true, App.getDB().pm));
-                return true;
-
-            case R.id.menu_copy_pass:
-                timeoutCopyToClipboard(getString(R.string.hint_login_pass),
-                        new String(mEntry.getPassword(true, App.getDB().pm)), true);
-                return true;
-
-            case R.id.menu_lock:
-                App.setShutdown();
-                setResult(KeePass.EXIT_LOCK);
-                finish();
-                return true;
+            try {
+                Util.gotoUrl(this, url);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, R.string.no_url_handler, Toast.LENGTH_LONG).show();
+            }
+            return true;
+        } else if (itemId == R.id.menu_copy_user) {
+            timeoutCopyToClipboard(getString(R.string.hint_username), mEntry.getUsername(true, App.getDB().pm));
+            return true;
+        } else if (itemId == R.id.menu_copy_pass) {
+            timeoutCopyToClipboard(getString(R.string.hint_login_pass),
+                    mEntry.getPassword(true, App.getDB().pm), true);
+            return true;
+        } else if (itemId == R.id.menu_lock) {
+            App.setShutdown();
+            setResult(KeePass.EXIT_LOCK);
+            finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -512,12 +500,7 @@ public class EntryActivity extends LockCloseHideActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.clipboard_error_title)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
                 .setView(tv)
                 .show();
 
