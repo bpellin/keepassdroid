@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion = 34
+    compileSdkVersion = 35
 
     defaultConfig {
         applicationId = "com.android.keepass"
