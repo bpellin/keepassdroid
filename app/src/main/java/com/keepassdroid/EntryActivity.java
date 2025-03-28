@@ -216,7 +216,7 @@ public class EntryActivity extends LockCloseHideActivity {
         filter.addAction(Intents.COPY_PASSWORD);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(mIntentReceiver, filter, RECEIVER_NOT_EXPORTED);
+            registerReceiver(mIntentReceiver, filter, RECEIVER_EXPORTED);
         } else {
             registerReceiver(mIntentReceiver, filter);
         }
