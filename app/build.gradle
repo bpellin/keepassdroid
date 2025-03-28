@@ -10,8 +10,8 @@ android {
 
         multiDexEnabled true
 
-        versionCode = 216
-        versionName = "2.6.8.1"
+        versionCode = 217
+        versionName = "2.6.8.2"
 
         testApplicationId = "com.keepassdroid.tests"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -54,7 +54,6 @@ android {
     }
     namespace 'com.android.keepass'
 
-
 }
 
 dependencies {
@@ -65,7 +64,7 @@ dependencies {
     implementation 'joda-time:joda-time:2.9.4'
     implementation 'androidx.core:core:1.10.1'
     implementation "androidx.multidex:multidex:2.0.1"
-    implementation 'commons-io:commons-io:2.5'
+    implementation 'commons-io:commons-io:2.16.1'
     implementation "androidx.biometric:biometric:1.1.0"
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.activity:activity:1.8.2"
