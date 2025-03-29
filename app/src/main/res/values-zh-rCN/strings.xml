@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  Copyright 2009-2022 Brian Pellin.
-     
+
  This file is part of KeePassDroid.
 
   KeePassDroid is free software: you can redistribute it and/or modify
@@ -66,7 +66,7 @@
     <string name="decrypting_db">解密数据库内容中&#8230;</string>
     <string name="default_checkbox">使用这个作为我的默认数据库</string>
     <string name="digits">数字</string>
-    <string name="disclaimer_formal">KeePassDroid 版权属于 2009&#8211;2022 Brian Pellin，开发者对软件质量无担保; 这是自由软件，欢迎您在GPL版本2或更高版本许可协议的条款下进行再分发。</string>
+    <string name="disclaimer_formal">KeePassDroid 版权属于 2009&#8211;2025 Brian Pellin，开发者对软件质量无担保; 这是自由软件，欢迎您在GPL版本2或更高版本许可协议的条款下进行再分发。</string>
     <string name="ellipsis">\u2026</string>
     <string name="enter_filename">输入数据库文件名:</string>
     <string name="entry_accessed">已访问: </string>
@@ -158,6 +158,8 @@
     <string name="never">从未</string>
     <string name="no_results">无搜索结果</string>
     <string name="no_url_handler">没有处理这个url的程序</string>
+    <string name="notification_permission_title">通知权限</string>
+    <string name="notification_permission_text">如果授予了通知权限，KeePassDroid 在条目打开时会添加通知。单击通知时，用户名和密码会被复制到剪贴板。</string>
     <string name="open_or_create">打开或创建一个数据库：</string>
     <string name="open_recent">打开最近的数据库 (点击打开):</string>
     <string name="omitbackup_title">不要搜索备份条目</string>
