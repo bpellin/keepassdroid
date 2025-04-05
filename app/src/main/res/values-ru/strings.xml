@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009-2020 Brian Pellin.
+ Copyright 2009-2025 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -64,7 +64,7 @@
     <string name="decrypting_db">Расшифровка базы…</string>
     <string name="default_checkbox">По умолчанию</string>
     <string name="digits">Цифры 0…9</string>
-    <string name="disclaimer_formal">"KeePassDroid © 2009–2022
+    <string name="disclaimer_formal">"KeePassDroid © 2009–2025
 Разработчик Brian Pellin
 
 Программа предоставляется БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ. Распространяется свободно по лицензии GPL v2 или новее."</string>
@@ -159,6 +159,8 @@
     <string name="never">Никогда</string>
     <string name="no_results">Совпадения не найдены</string>
     <string name="no_url_handler">Невозможно открыть ссылку</string>
+    <string name="notification_permission_title">Разрешение на уведомление</string>
+    <string name="notification_permission_text">Если разрешение предоставлено, KeePassDroid будет показывать уведомление при открытии записи. В нём нажатием на имя пользователя или пароль можно скопировать их в буфер обмена.</string>
     <string name="open_or_create">Открыть/создать базу:</string>
     <string name="open_recent">Недавно открытые:</string>
     <string name="omitbackup_title">Искать в актуальных</string>
