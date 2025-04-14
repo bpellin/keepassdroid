@@ -1,3 +1,5 @@
+ * Decode recent URIs in background thread
+
 KeePassDroid (2.6.8.4)
  * Update Russian localization
 

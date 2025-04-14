@@ -69,7 +69,11 @@ dependencies {
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.activity:activity:1.8.2"
     implementation "com.google.android.material:material:1.9.0"
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation "androidx.loader:loader:1.1.0"
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.6.2'
 
     androidTestImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.5.2'

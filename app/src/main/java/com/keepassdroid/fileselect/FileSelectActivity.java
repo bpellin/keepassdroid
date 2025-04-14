@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2020 Brian Pellin.
+ * Copyright 2009-2025 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,6 +19,7 @@
  */
 package com.keepassdroid.fileselect;
 
+import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -51,6 +52,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.keepass.R;
 import com.keepassdroid.AboutDialog;
@@ -74,15 +79,19 @@ import com.keepassdroid.utils.UriUtil;
 import com.keepassdroid.utils.Util;
 import com.keepassdroid.view.FileNameView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileSelectActivity extends AppCompatActivity {
 
     private ListView mList;
-    private ListAdapter mAdapter;
+    private ArrayAdapter mAdapter;
 
     private static final int CMENU_CLEAR = Menu.FIRST;
 
@@ -94,6 +103,8 @@ public class FileSelectActivity extends AppCompatActivity {
 
 
     private RecentFileHistory fileHistory;
+    private RecentFileViewModel fileViewModel;
+    private List<String> fileList;
 
     private boolean recentMode = false;
     private boolean supportsDirectFile = false;
@@ -311,8 +322,21 @@ public class FileSelectActivity extends AppCompatActivity {
             });
         }
 
+        fileViewModel = new ViewModelProvider(this,
+                new RecentFileViewModelFactory(getApplication(), fileHistory)).get(RecentFileViewModel.class);
+
+        LiveData<List<String>> files = fileViewModel.getRecentFiles();
+        mAdapter = new ArrayAdapter<String>(this, R.layout.file_row, R.id.file_filename, files.getValue());
+        mList.setAdapter(mAdapter);
+        files.observe(this, new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> strings) {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
         fillData();
-        
+
         registerForContextMenu(mList);
         
         // Load default database
@@ -404,8 +428,6 @@ public class FileSelectActivity extends AppCompatActivity {
             filename.setText(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_file_path));
         }
 
-        mAdapter = new ArrayAdapter<String>(this, R.layout.file_row, R.id.file_filename, fileHistory.getDbList());
-        mList.setAdapter(mAdapter);
     }
 
     protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -584,13 +606,19 @@ public class FileSelectActivity extends AppCompatActivity {
             String filename = tv.getText().toString();
             new AsyncTask<String, Void, Void>() {
                 protected java.lang.Void doInBackground(String... args) {
-                    String filename = args[0];
-                    fileHistory.deleteFile(Uri.parse(args[0]));
+                    String caption = args[0];
+
+                    if (!EmptyUtils.isNullOrEmpty(caption)) {
+                        String filename = args[0];
+                        String[] pieces = filename.split(" - ");
+                        if (pieces.length > 1) {
+                            fileHistory.deleteFile(Uri.parse(pieces[pieces.length - 1]));
+                        }
+                    }
                     return null;
                 }
 
                 protected void onPostExecute(Void v) {
-                    refreshList();
                 }
             }.execute(filename);
             return true;
@@ -598,9 +626,10 @@ public class FileSelectActivity extends AppCompatActivity {
         
         return false;
     }
-    
+
     private void refreshList() {
         ((BaseAdapter) mAdapter).notifyDataSetChanged();
     }
 
 }
+

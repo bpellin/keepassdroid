@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2022 Brian Pellin.
+ * Copyright 2013-2025 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -32,14 +32,20 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Looper;
 import android.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 public class RecentFileHistory {
 
     private static String DB_KEY = "recent_databases";
     private static String KEYFILE_KEY = "recent_keyfiles";
 
-    private List<String> databases = new ArrayList<String>();
+    private final MutableLiveData<List<String>> databases =
+            new MutableLiveData<List<String>>(new ArrayList<String>());
     private List<String> keyfiles = new ArrayList<String>();
     private Context ctx;
     private SharedPreferences prefs;
@@ -83,7 +89,9 @@ public class RecentFileHistory {
                 return false;
             }
 
-            databases.clear();
+            List<String> files = databases.getValue();
+            files.clear();
+
             keyfiles.clear();
 
             FileDbHelper helper = new FileDbHelper(ctx);
@@ -98,10 +106,12 @@ public class RecentFileHistory {
                     String filename = cursor.getString(dbIndex);
                     String keyfile = cursor.getString(keyIndex);
 
-                    databases.add(filename);
+                    files.add(filename);
                     keyfiles.add(keyfile);
                 }
             }
+
+            updateDatabases(files);
 
             savePrefs();
 
@@ -134,7 +144,9 @@ public class RecentFileHistory {
         // Remove any existing instance of the same filename
         deleteFile(uri, false);
 
-        databases.add(0, uri.toString());
+        List<String> files = databases.getValue();
+        files.add(0, uri.toString());
+        updateDatabases(files);
 
         String key = (keyUri == null) ? "" : keyUri.toString();
         keyfiles.add(0, key);
@@ -148,13 +160,15 @@ public class RecentFileHistory {
 
         init();
 
-        return databases.size() > 0;
+        return databases.getValue().size() > 0;
     }
 
     public String getDatabaseAt(int i) {
         init();
-        if (i < databases.size()) {
-            return databases.get(i);
+
+        List<String> files = databases.getValue();
+        if (i < files.size()) {
+            return files.get(i);
         } else {
             return "";
         }
@@ -170,12 +184,15 @@ public class RecentFileHistory {
     }
 
     private void loadPrefs() {
-        loadList(databases, DB_KEY);
+        List<String> files = databases.getValue();
+        loadList(files, DB_KEY);
+        databases.setValue(files);
+
         loadList(keyfiles, KEYFILE_KEY);
     }
 
     private void savePrefs() {
-        saveList(DB_KEY, databases);
+        saveList(DB_KEY, databases.getValue());
         saveList(KEYFILE_KEY, keyfiles);
     }
 
@@ -211,14 +228,16 @@ public class RecentFileHistory {
         String uriName = uri.toString();
         String fileName = uri.getPath();
 
-        for (int i = 0; i < databases.size(); i++) {
-            String entry = databases.get(i);
+        List<String> files = databases.getValue();
+        for (int i = 0; i < files.size(); i++) {
+            String entry = files.get(i);
             boolean delete;
             delete = (uriName != null && uriName.equals((entry)) ||
                     (fileName != null && fileName.equals(entry)));
 
             if (delete) {
-                databases.remove(i);
+                files.remove(i);
+                updateDatabases(files);
                 keyfiles.remove(i);
                 break;
             }
@@ -229,12 +248,17 @@ public class RecentFileHistory {
         }
     }
 
-    public List<String> getDbList() {
+    public @NonNull LiveData<List<String>> getDbList() {
+        init();
+        return databases;
+    }
+
+    public List<String> getDbListOld() {
         init();
 
         List<String> displayNames = new ArrayList<String>();
 
-        for (String fileName : databases) {
+        for (String fileName : databases.getValue()) {
             String name = UriUtil.getFileName(Uri.parse(fileName), ctx);
             if (EmptyUtils.isNullOrEmpty(name)) {
                 name = fileName;
@@ -254,9 +278,10 @@ public class RecentFileHistory {
 
         init();
 
-        int size = databases.size();
+        List<String> files = databases.getValue();
+        int size = files.size();
         for (int i = 0; i < size; i++) {
-            if (UriUtil.equalsDefaultfile(database,databases.get(i))) {
+            if (UriUtil.equalsDefaultfile(database,files.get(i))) {
                 return UriUtil.parseDefaultFile(keyfiles.get(i));
             }
         }
@@ -267,7 +292,10 @@ public class RecentFileHistory {
     public void deleteAll() {
         init();
 
-        databases.clear();
+        List<String> files = databases.getValue();
+        files.clear();
+        updateDatabases(files);
+
         keyfiles.clear();
 
         savePrefs();
@@ -278,7 +306,7 @@ public class RecentFileHistory {
 
         keyfiles.clear();
 
-        int size = databases.size();
+        int size = databases.getValue().size();
         for (int i = 0; i < size; i++) {
             keyfiles.add("");
         }
@@ -287,15 +315,31 @@ public class RecentFileHistory {
     }
 
     private void trimLists() {
-        int size = databases.size();
+        List<String> files = databases.getValue();
+        boolean updated = false;
+        int size = files.size();
         for (int i = FileDbHelper.MAX_FILES; i < size; i++) {
-            if (i < databases.size()) {
-                databases.remove(i);
+            if (i < files.size()) {
+                files.remove(i);
+                updated = true;
             }
 
             if (i < keyfiles.size()) {
                 keyfiles.remove(i);
             }
+        }
+
+        if (updated) {
+            updateDatabases(files);
+        }
+    }
+
+    private void updateDatabases(List<String> files) {
+        // On the main thread
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            databases.setValue(files);
+        } else {
+            databases.postValue(files);
         }
     }
 }
