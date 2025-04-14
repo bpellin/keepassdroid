@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2022 Brian Pellin.
+ * Copyright 2009-2025 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,6 +19,7 @@
  */
 package com.keepassdroid.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,6 +35,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.content.ClipboardManager;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 public class Util {
 	public static String getClipboard(Context context) {
@@ -128,6 +131,19 @@ public class Util {
 		return origMax - maxBytes;
 	}
 
-	
-	
+	public static boolean cleanDirectory(@NonNull File directory) throws IOException{
+		boolean success = true;
+
+		for (File file: directory.listFiles()) {
+			if (file.isDirectory()) {
+				cleanDirectory(file);
+			}
+
+			if (!file.delete()) {
+				success = false;
+			}
+		}
+
+		return success;
+	}
 }

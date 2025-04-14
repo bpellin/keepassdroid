@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2022 Brian Pellin.
+ * Copyright 2009-2025 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -40,8 +40,7 @@ import com.keepassdroid.database.save.PwDbOutput;
 import com.keepassdroid.icons.DrawableFactory;
 import com.keepassdroid.search.SearchDbHelper;
 import com.keepassdroid.utils.UriUtil;
-
-import org.apache.commons.io.FileUtils;
+import com.keepassdroid.utils.Util;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -250,7 +249,7 @@ public class Database {
             pm.clearCache();
         // In all cases, delete all the files in the temp dir
         try {
-            FileUtils.cleanDirectory(context.getFilesDir());
+            Util.cleanDirectory(context.getFilesDir());
         } catch (IOException e) {
             Log.e(TAG, "Unable to clear the directory cache.", e);
         }
