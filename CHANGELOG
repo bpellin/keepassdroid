@@ -1,5 +1,6 @@
  * Decode recent URIs in background thread
  * Fix crash cleaning file cache on API level <26
+ * Catch search failure instead of crashing
 
 KeePassDroid (2.6.8.4)
  * Update Russian localization

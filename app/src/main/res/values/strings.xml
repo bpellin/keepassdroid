@@ -191,6 +191,7 @@
     <string name="sort_name">Sort by name</string>
     <string name="sort_db">DB sort order</string>
     <string name="special">Special</string>
+    <string name="search_failed">Search failed</string>
     <string name="search_hint">Entry title/description</string>
     <string name="search_results">Search results</string>
     <string name="twofish">Twofish</string>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2020 Brian Pellin.
+ * Copyright 2009-2025 Brian Pellin.
  *
  * This file is part of KeePassDroid.
  *
@@ -24,6 +24,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -219,7 +220,11 @@ public abstract class GroupBaseActivity extends LockCloseListActivity {
             finish();
             return true;
         } else if (itemId == R.id.menu_search) {
-            onSearchRequested();
+            try {
+                onSearchRequested();
+            } catch (Resources.NotFoundException e) {
+                Toast.makeText(this, R.string.search_failed, Toast.LENGTH_LONG).show();
+            }
             return true;
         } else if (itemId == R.id.menu_app_settings) {
             AppSettingsActivity.Launch(this);
