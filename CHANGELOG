@@ -1,3 +1,4 @@
+KeePassDroid (2.6.9)
  * Decode recent URIs in background thread
  * Fix crash cleaning file cache on API level <26
  * Catch search failure instead of crashing
