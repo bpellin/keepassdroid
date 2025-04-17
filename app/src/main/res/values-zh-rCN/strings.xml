@@ -191,6 +191,7 @@
     <string name="sort_name">按名字排序</string>
     <string name="sort_db">数据库排序顺序</string>
     <string name="special">特殊</string>
+    <string name="search_failed">搜索失败了</string>
     <string name="search_hint">条目标题/描述</string>
     <string name="search_results">搜索结果</string>
     <string name="twofish">Twofish</string>
