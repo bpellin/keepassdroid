@@ -192,6 +192,7 @@
     <string name="sort_name">Сортировка по имени</string>
     <string name="sort_db">Сортировка как в базе</string>
     <string name="special">$пеци@льные</string>
+    <string name="search_failed">Ошибка поиска</string>
     <string name="search_hint">название, комментарий</string>
     <string name="search_results">Результаты поиска</string>
     <string name="twofish">Twofish</string>
