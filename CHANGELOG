@@ -1,3 +1,6 @@
+KeePassDroid (2.6.9.1) 
+ * Update Chinese and Russian translations
+
 KeePassDroid (2.6.9)
  * Decode recent URIs in background thread
  * Fix crash cleaning file cache on API level <26
