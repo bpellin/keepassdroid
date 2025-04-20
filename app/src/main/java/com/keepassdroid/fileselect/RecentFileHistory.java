@@ -22,9 +22,9 @@ package com.keepassdroid.fileselect;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.android.keepass.R;
-import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.UriUtil;
 
 import android.content.Context;
@@ -45,7 +45,7 @@ public class RecentFileHistory {
     private static String KEYFILE_KEY = "recent_keyfiles";
 
     private final MutableLiveData<List<String>> databases =
-            new MutableLiveData<List<String>>(new ArrayList<String>());
+            new MutableLiveData<List<String>>(new CopyOnWriteArrayList<String>());
     private List<String> keyfiles = new ArrayList<String>();
     private Context ctx;
     private SharedPreferences prefs;
@@ -186,7 +186,7 @@ public class RecentFileHistory {
     private void loadPrefs() {
         List<String> files = databases.getValue();
         loadList(files, DB_KEY);
-        databases.setValue(files);
+        updateDatabases(files);
 
         loadList(keyfiles, KEYFILE_KEY);
     }
@@ -251,26 +251,6 @@ public class RecentFileHistory {
     public @NonNull LiveData<List<String>> getDbList() {
         init();
         return databases;
-    }
-
-    public List<String> getDbListOld() {
-        init();
-
-        List<String> displayNames = new ArrayList<String>();
-
-        for (String fileName : databases.getValue()) {
-            String name = UriUtil.getFileName(Uri.parse(fileName), ctx);
-            if (EmptyUtils.isNullOrEmpty(name)) {
-                name = fileName;
-            } else {
-                name = name + " - " + fileName;
-            }
-
-            displayNames.add(name);
-        }
-
-
-        return displayNames;
     }
 
     public Uri getFileByName(Uri database) {

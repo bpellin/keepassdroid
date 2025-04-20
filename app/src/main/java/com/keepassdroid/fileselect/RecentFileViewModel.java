@@ -26,23 +26,21 @@ import android.os.Looper;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.Transformations;
 
 import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.UriUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 
 public class RecentFileViewModel extends AndroidViewModel
 {
     private final MediatorLiveData<List<String>> files =
-            new MediatorLiveData<List<String>>(new ArrayList<String>());
+            new MediatorLiveData<List<String>>(new CopyOnWriteArrayList<String>());
     private RecentFileHistory fileHistory;
 
     public RecentFileViewModel(@NotNull Application application) {
@@ -73,8 +71,7 @@ public class RecentFileViewModel extends AndroidViewModel
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public synchronized void run() {
-                //List<String> displayNames = files.getValue();
-                List<String> displayNames = new ArrayList<>();
+                List<String> displayNames = files.getValue();
                 displayNames.clear();
 
                 List<String> databases = fileHistory.getDbList().getValue();
@@ -89,32 +86,12 @@ public class RecentFileViewModel extends AndroidViewModel
                     displayNames.add(name);
                 }
 
-                updateFiles(displayNames);
+                postFilesUpdate(displayNames);
             }
         });
     }
 
-    /*
-    public void updateDbList(RecentFileHistory fileHistory) {
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<String> list = files.getValue();
-                if (list != null) {
-                    list.clear();
-                    //list.addAll(fileHistory.getDbList());
-                }
-                files.postValue(list);
-            }
-        });
-    }
-     */
-
-    private void updateFiles(List<String> dbs) {
-        List<String> liveData = files.getValue();
-        liveData.clear();
-        liveData.addAll(dbs);
-
+    private void postFilesUpdate(List<String> liveData) {
         // On the main thread
         if (Looper.myLooper() == Looper.getMainLooper()) {
             files.setValue(liveData);
