@@ -61,6 +61,8 @@
     <string name="clipboard_timeout_summary">复制用户名或密码后清除剪贴板内容之前的时间</string>
     <string name="copy_username">选择将用户名复制到剪贴板</string>
     <string name="copy_password">选择将密码复制到剪贴板</string>
+    <string name="username_copied">用户名已复制到剪贴板</string>
+    <string name="password_copied">密码已复制到剪贴板</string>
     <string name="creating_db_key">创建数据库密钥中&#8230;</string>
     <string name="database">数据库</string>
     <string name="decrypting_db">解密数据库内容中&#8230;</string>

@@ -61,6 +61,8 @@
     <string name="clipboard_timeout_summary">Time before clearing clipboard after copying username or password</string>
     <string name="copy_username">Select to copy username to clipboard</string>
     <string name="copy_password">Select to copy password to clipboard</string>
+    <string name="username_copied">Username copied to clipboard</string>
+    <string name="password_copied">Password copied to clipboard</string>
     <string name="creating_db_key">Creating database key&#8230;</string>
     <string name="database">Database</string>
     <string name="decrypting_db">Decrypting database contents&#8230;</string>

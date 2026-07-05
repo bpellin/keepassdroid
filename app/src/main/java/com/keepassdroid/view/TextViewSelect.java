@@ -38,9 +38,6 @@ public class TextViewSelect extends AppCompatEditText {
 	
 	public TextViewSelect(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		
-		setFocusable(true);
-		setFocusableInTouchMode(true);
 	}
 
 

@@ -59,6 +59,8 @@
     <string name="clipboard_timeout_summary">Tempo prima di eliminare gli appunti dopo la copia del nome file o password</string>
     <string name="copy_username">Copia nome utente negli appunti</string>
     <string name="copy_password">Copia password negli appunti</string>
+    <string name="username_copied">Nome utente copiato negli appunti</string>
+    <string name="password_copied">Password copiata negli appunti</string>
     <string name="creating_db_key">Creazione file chiave database&#8230;</string>
     <string name="database">Database</string>
     <string name="decrypting_db">Decodifica contenuto database&#8230;</string>

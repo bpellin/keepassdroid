@@ -43,6 +43,8 @@
     <string name="clipboard_timeout_summary">Tempo até limpar o clipboard após copiar usuário ou senha.</string>
     <string name="copy_username">Copiar usuário para o clipboard</string>
     <string name="copy_password">Copiar senha para o clipboard</string>
+    <string name="username_copied">Nome de usuário copiado para o clipboard</string>
+    <string name="password_copied">Senha copiada para o clipboard</string>
     <string name="creating_db_key">Criando a chave do banco de dados&#8230;</string>
     <string name="database">Banco de Dados</string>
     <string name="decrypting_db">Decifrando conteúdo do banco de dados&#8230;</string>

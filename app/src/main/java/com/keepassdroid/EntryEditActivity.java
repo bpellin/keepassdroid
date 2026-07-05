@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -204,7 +205,7 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
         });
 
         // Cancel button
-        Button cancel = (Button) findViewById(R.id.entry_cancel);
+        Button cancel = findViewById(R.id.entry_cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -216,8 +217,8 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 
         // Respect mask password setting
         if (mShowPassword) {
-            EditText pass = (EditText) findViewById(R.id.entry_password);
-            EditText conf = (EditText) findViewById(R.id.entry_confpassword);
+            EditText pass = findViewById(R.id.entry_password);
+            EditText conf = findViewById(R.id.entry_confpassword);
 
             pass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             conf.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
@@ -228,7 +229,7 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
     protected boolean validateBeforeSaving() {
         // Require title
         String title = Util.getEditText(this, R.id.entry_title);
-        if ( title.length() == 0 ) {
+        if (title.isEmpty()) {
             Toast.makeText(this, R.string.error_title_required, Toast.LENGTH_LONG).show();
             return false;
         }
@@ -281,14 +282,14 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
         {
             case RESULT_OK_ICON_PICKER:
                 mSelectedIconID = data.getExtras().getInt(IconPickerActivity.KEY_ICON_ID);
-                ImageButton currIconButton = (ImageButton) findViewById(R.id.icon_button);
+                ImageButton currIconButton = findViewById(R.id.icon_button);
                 currIconButton.setImageResource(Icons.iconToResId(mSelectedIconID));
                 break;
 
             case RESULT_OK_PASSWORD_GENERATOR:
                 String generatedPassword = data.getStringExtra("com.keepassdroid.password.generated_password");
-                EditText password = (EditText) findViewById(R.id.entry_password);
-                EditText confPassword = (EditText) findViewById(R.id.entry_confpassword);
+                EditText password = findViewById(R.id.entry_password);
+                EditText confPassword = findViewById(R.id.entry_confpassword);
 
                 password.setText(generatedPassword);
                 confPassword.setText(generatedPassword);
@@ -346,8 +347,8 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
     }
 
     private void setPasswordStyle() {
-        TextView password = (TextView) findViewById(R.id.entry_password);
-        TextView confpassword = (TextView) findViewById(R.id.entry_confpassword);
+        TextView password = findViewById(R.id.entry_password);
+        TextView confpassword = findViewById(R.id.entry_confpassword);
 
         if ( mShowPassword ) {
             password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
@@ -357,10 +358,13 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
             password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             confpassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
+
+        password.setTypeface(Typeface.MONOSPACE);
+        confpassword.setTypeface(Typeface.MONOSPACE);
     }
 
     protected void fillData() {
-        ImageButton currIconButton = (ImageButton) findViewById(R.id.icon_button);
+        ImageButton currIconButton = findViewById(R.id.icon_button);
         App.getDB().drawFactory.assignDrawableTo(currIconButton, getResources(), mEntry.getIcon());
 
         populateText(R.id.entry_title, mEntry.getTitle());
@@ -376,7 +380,7 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
     }
 
     private void populateText(int viewId, String text) {
-        TextView tv = (TextView) findViewById(viewId);
+        TextView tv = findViewById(viewId);
         tv.setText(text);
     }
 

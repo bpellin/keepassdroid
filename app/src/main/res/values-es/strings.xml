@@ -42,6 +42,8 @@ Spanish translation by José I. Paños. Updated by David García-Abad (23-09-201
     <string name="clipboard_timeout_summary">Tiempo hasta que el portapapeles se vacía después de copiar el usuario o la contraseña</string>
     <string name="copy_username">Seleccionar para copiar el usuario al portapapeles</string>
     <string name="copy_password">Seleccionar para copiar la contraseña al portapapeles</string>
+    <string name="username_copied">Nombre de usuario copiado al portapapeles</string>
+    <string name="password_copied">Contraseña copiada al portapapeles</string>
     <string name="creating_db_key">Creando clave de la base de datos&#8230;</string>
     <string name="database">Base de datos</string>
     <string name="decrypting_db">Descifrando el contenido de la base de datos&#8230;</string>

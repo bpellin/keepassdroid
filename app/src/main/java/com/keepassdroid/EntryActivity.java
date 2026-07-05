@@ -35,10 +35,10 @@ import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -131,6 +131,28 @@ public class EntryActivity extends LockCloseHideActivity {
         }
     }
 
+    private void setupClickListeners() {
+        View.OnClickListener passListener = v -> {
+            String pass = mEntry.getPassword();
+            if (!pass.isEmpty()) {
+                timeoutCopyToClipboard(getString(R.string.hint_login_pass), pass, true);
+            }
+        };
+
+        findViewById(R.id.entry_password_container).setOnClickListener(passListener);
+        findViewById(R.id.entry_password).setOnClickListener(passListener);
+
+        View.OnClickListener userListener = v -> {
+            String user = mEntry.getUsername();
+            if (!user.isEmpty()) {
+                timeoutCopyToClipboard(getString(R.string.hint_username), user);
+            }
+        };
+
+        findViewById(R.id.entry_user_name_container).setOnClickListener(userListener);
+        findViewById(R.id.entry_user_name).setOnClickListener(userListener);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -175,6 +197,7 @@ public class EntryActivity extends LockCloseHideActivity {
         fillData(false);
 
         setupEditButtons();
+        setupClickListeners();
 
         // Notification Manager
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -259,6 +282,7 @@ public class EntryActivity extends LockCloseHideActivity {
 
         Intent intent = new Intent(intentText);
         int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+        //noinspection ObsoleteSdkInt minSdkVersion handles this now, but check to be sure
         if (Build.VERSION.SDK_INT >= 23) {
             flags |= PendingIntent.FLAG_IMMUTABLE;
         }
@@ -379,6 +403,8 @@ public class EntryActivity extends LockCloseHideActivity {
         } else {
             password.setTransformationMethod(PasswordTransformationMethod.getInstance());
         }
+
+        password.setTypeface(Typeface.MONOSPACE);
     }
 
     @Override
@@ -449,6 +475,16 @@ public class EntryActivity extends LockCloseHideActivity {
             return;
         }
 
+        // For versions of Android that don't already show an overlay when the clipboard is copied
+        // to, show a toast.
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+            if (sensitive) {
+                Toast.makeText(this, R.string.password_copied, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.username_copied, Toast.LENGTH_SHORT).show();
+            }
+        }
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String sClipClear = prefs.getString(getString(R.string.clipboard_timeout_key), getString(R.string.clipboard_timeout_default));
 
@@ -490,7 +526,7 @@ public class EntryActivity extends LockCloseHideActivity {
     }
 
     private void showSamsungDialog() {
-        String text = getString(R.string.clipboard_error).concat(System.getProperty("line.separator")).concat(getString(R.string.clipboard_error_url));
+        String text = getString(R.string.clipboard_error).concat(System.lineSeparator()).concat(getString(R.string.clipboard_error_url));
         SpannableString s = new SpannableString(text);
         TextView tv = new TextView(this);
         tv.setText(s);

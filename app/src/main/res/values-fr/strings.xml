@@ -47,6 +47,8 @@
     <string name="clipboard_timeout_summary">Temps avant le vidage du presse-papiers après copie du nom d\'utilisateur ou du mot de passe</string>
     <string name="copy_username">Copier le nom d\'utilisateur vers le presse-papiers</string>
     <string name="copy_password">Copier le mot de passe vers le presse-papiers</string>
+    <string name="username_copied">Nom d\'utilisateur copié dans le presse-papiers</string>
+    <string name="password_copied">Mot de passe copié dans le presse-papiers</string>
     <string name="creating_db_key">Création de la clé de base de données…</string>
     <string name="database">Base de données</string>
     <string name="decrypting_db">Déchiffrement du contenu de la base de données…</string>

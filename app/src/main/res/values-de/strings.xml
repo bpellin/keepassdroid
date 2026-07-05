@@ -50,6 +50,8 @@
     <string name="clipboard_timeout_summary">Bei inaktiver Anwendung wird die Zwischenablage nach Ablauf der eingestellten Zeit automatisch geleert.</string>
     <string name="copy_username">Benutzername in die Zwischenablage kopieren</string>
     <string name="copy_password">Passwort in die Zwischenablage kopieren</string>
+    <string name="username_copied">Benutzername in die Zwischenablage kopiert</string>
+    <string name="password_copied">Passwort in die Zwischenablage kopiert</string>
     <string name="creating_db_key">Datenbank-Schlüsseldatei erzeugen\u2026</string>
     <string name="database">Datenbank</string>
     <string name="decrypting_db">Entschlüsselung der Datenbankinhalte\u2026</string>

@@ -59,6 +59,8 @@
     <string name="clipboard_timeout_summary">Задержка очистки после копирования в буфер</string>
     <string name="copy_username">Логин – в буфер</string>
     <string name="copy_password">Пароль – в буфер</string>
+    <string name="username_copied">Логин скопирован в буфер</string>
+    <string name="password_copied">Пароль скопирован в буфер</string>
     <string name="creating_db_key">Создание ключа…</string>
     <string name="database">База</string>
     <string name="decrypting_db">Расшифровка базы…</string>

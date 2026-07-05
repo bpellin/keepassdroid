@@ -40,6 +40,8 @@
     <string name="clipboard_timeout_summary">複製用戶名或密碼到剪貼板後清除的時間</string>
     <string name="copy_username">複製用戶名到剪貼板</string>
     <string name="copy_password">複製密碼到剪貼板</string>
+    <string name="username_copied">用戶名已複製到剪貼板</string>
+    <string name="password_copied">密碼已複製到剪貼板</string>
     <string name="creating_db_key">創建資料庫密鑰&#8230;</string>
     <string name="database">資料庫</string>
     <string name="decrypting_db">解密資料庫內容中&#8230;</string>
