@@ -20,6 +20,7 @@
 package com.keepassdroid;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -81,6 +82,8 @@ public class PasswordActivity extends LockingActivity {
     }
 
     @Override
+    // The statically inflated PasswordFragment supplies the toolbar in password_activity.
+    @SuppressLint("MissingInflatedId")
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.password_activity);

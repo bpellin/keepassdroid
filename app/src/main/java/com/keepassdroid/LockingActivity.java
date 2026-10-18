@@ -19,11 +19,20 @@
  */
 package com.keepassdroid;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.keepassdroid.timeout.TimeoutHelper;
+import com.keepassdroid.utils.WindowInsetsUtil;
 
 public abstract class LockingActivity extends AppCompatActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		WindowInsetsUtil.apply(this);
+	}
 
 	@Override
 	protected void onPause() {

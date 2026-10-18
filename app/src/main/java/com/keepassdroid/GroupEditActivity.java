@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.keepass.R;
 import com.keepassdroid.icons.Icons;
+import com.keepassdroid.utils.WindowInsetsUtil;
 
 public class GroupEditActivity extends AppCompatActivity
 {
@@ -48,6 +49,7 @@ public class GroupEditActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		WindowInsetsUtil.apply(this);
 		setContentView(R.layout.group_edit);
 		setTitle(R.string.add_group_title);
 		

@@ -26,10 +26,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.StrictMode;
 import android.util.Log;
 
 import androidx.multidex.MultiDexApplication;
 
+import com.android.keepass.BuildConfig;
 import com.keepassdroid.Database;
 import com.keepassdroid.compat.PRNGFixes;
 import com.keepassdroid.fileselect.RecentFileHistory;
@@ -86,6 +88,13 @@ public class App extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder(StrictMode.getVmPolicy())
+                    .detectUnsafeIntentLaunch()
+                    .penaltyLog()
+                    .build());
+        }
 
         fileHistory = new RecentFileHistory(this);
 

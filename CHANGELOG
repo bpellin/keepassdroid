@@ -1,3 +1,8 @@
+KeePassDroid (2.7)
+ * Update to target SDK 36 (Android 16)
+ * Keep controls clear of system bars, display cutouts, and the keyboard
+ * Add native crypto library support for 16 KB memory pages
+
 KeePassDroid (2.6.9.2) 
  * Fix recent files concurrency issues
 

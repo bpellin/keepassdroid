@@ -77,6 +77,7 @@ import com.keepassdroid.utils.Interaction;
 import com.keepassdroid.utils.PermissionUtil;
 import com.keepassdroid.utils.UriUtil;
 import com.keepassdroid.utils.Util;
+import com.keepassdroid.utils.WindowInsetsUtil;
 import com.keepassdroid.view.FileNameView;
 
 import org.jetbrains.annotations.NotNull;
@@ -179,6 +180,7 @@ public class FileSelectActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowInsetsUtil.apply(this);
 
         fileHistory = App.getFileHistory();
 

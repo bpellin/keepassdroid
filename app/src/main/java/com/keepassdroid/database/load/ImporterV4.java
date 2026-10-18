@@ -233,8 +233,9 @@ public class ImporterV4 extends Importer {
 
 		byte[] data = new byte[0];
 		if (size > 0) {
-			if (fieldId != PwDbHeaderV4.PwDbInnerHeaderV4Fields.Binary)
-			data = lis.readBytes(size);
+			if (fieldId != PwDbHeaderV4.PwDbInnerHeaderV4Fields.Binary) {
+				data = lis.readBytes(size);
+			}
 		}
 
 		boolean result = true;

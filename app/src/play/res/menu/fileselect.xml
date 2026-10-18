@@ -31,12 +31,10 @@
         />
     <item android:id="@+id/menu_about"
         android:title="@string/menu_about"
-        android:showAsAction="ifRoom"
         app:showAsAction="ifRoom"
     />
     <item android:id="@+id/menu_app_settings"
         android:title="@string/menu_app_settings"
-        android:showAsAction="ifRoom"
         app:showAsAction="ifRoom"
     />
 </menu>
