@@ -1,0 +1,42 @@
+# Android default rules preserve native method names and their declaring classes.
+# JCA instantiates this SPI through the provider's class-name registration.
+-keepclassmembers class com.keepassdroid.crypto.NativeAESCipherSpi {
+    public <init>();
+}
+
+# PreferenceFragmentCompat instantiates these names from preference XML.
+-keep,allowoptimization class com.keepassdroid.settings.AppSettingsFragement {
+    public <init>();
+}
+-keep,allowoptimization class com.keepassdroid.settings.DBSettingsFragement {
+    public <init>();
+}
+
+# Bouncy Castle discovers mappings by constructed names, then JCA instantiates
+# registered implementations by name. Keep only the algorithm families used by
+# KeePass, allowing their directly referenced crypto internals to be optimized.
+# Mappings build implementation names from the outer class name plus "$...".
+-keepnames class org.bouncycastle.jcajce.provider.symmetric.AES
+-keepnames class org.bouncycastle.jcajce.provider.symmetric.Twofish
+-keepnames class org.bouncycastle.jcajce.provider.symmetric.ChaCha
+-keepnames class org.bouncycastle.jcajce.provider.digest.SHA256
+-keepnames class org.bouncycastle.jcajce.provider.digest.SHA512
+-keep,allowoptimization class org.bouncycastle.jcajce.provider.symmetric.AES$* {
+    public <init>(...);
+}
+-keep,allowoptimization class org.bouncycastle.jcajce.provider.symmetric.Twofish$* {
+    public <init>(...);
+}
+-keep,allowoptimization class org.bouncycastle.jcajce.provider.symmetric.ChaCha$* {
+    public <init>(...);
+}
+-keep,allowoptimization class org.bouncycastle.jcajce.provider.digest.SHA256$* {
+    public <init>(...);
+}
+-keep,allowoptimization class org.bouncycastle.jcajce.provider.digest.SHA512$* {
+    public <init>(...);
+}
+
+# Optional Joda Convert annotations; this app does not use Joda Convert.
+-dontwarn org.joda.convert.FromString
+-dontwarn org.joda.convert.ToString
