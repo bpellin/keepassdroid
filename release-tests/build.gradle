@@ -1,0 +1,38 @@
+// Tests the optimized APK without contributing keep roots to the app's R8 run.
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.keepassdroid.release.tests'
+    compileSdk = 37
+
+    defaultConfig {
+        minSdk = 23
+        targetSdk = 36
+        applicationId = 'com.keepassdroid.release.tests'
+    }
+
+    buildTypes {
+        release {
+            debuggable = true
+            signingConfig = signingConfigs.debug
+        }
+    }
+    sourceSets.main.assets.srcDirs = ['../app/src/main/assets']
+    flavorDimensions 'store'
+    productFlavors {
+        general { dimension 'store' }
+        play { dimension 'store' }
+    }
+}
+
+androidComponents {
+    beforeVariants(selector().withBuildType('debug')) { variant ->
+        variant.enable = false
+    }
+}
+
+dependencies {
+    implementation 'junit:junit:4.13.2'
+    implementation 'androidx.test:runner:1.7.0'
+    implementation 'androidx.test:rules:1.7.0'
+}

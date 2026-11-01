@@ -569,19 +569,16 @@ public class FileSelectActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.menu_patreon:
+        int id = item.getItemId();
+        if (id == R.id.menu_patreon) {
             return launchUrl(R.string.patreon_url);
-
-        case R.id.menu_donate:
+        } else if (id == R.id.menu_donate) {
             return launchUrl(R.string.donate_url);
-
-        case R.id.menu_about:
+        } else if (id == R.id.menu_about) {
             AboutDialog dialog = new AboutDialog(this);
             dialog.show();
             return true;
-            
-        case R.id.menu_app_settings:
+        } else if (id == R.id.menu_app_settings) {
             AppSettingsActivity.Launch(this);
             return true;
         }

@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- A separate instrumentation APK with no tested-app compile dependency.
+         The app optimizer must never treat tests as application keep roots. -->
+    <instrumentation
+        android:name="androidx.test.runner.AndroidJUnitRunner"
+        android:targetPackage="com.android.keepass" />
+    <application android:label="KeePassDroid release tests">
+        <provider
+            android:name=".FixtureProvider"
+            android:authorities="com.keepassdroid.release.tests.fixtures"
+            android:exported="true" />
+    </application>
+</manifest>

@@ -198,15 +198,14 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Context context = getContext();
-        switch (item.getItemId()) {
-            case R.id.menu_about:
-                AboutDialog dialog = new AboutDialog(context);
-                dialog.show();
-                return true;
-
-            case R.id.menu_app_settings:
-                AppSettingsActivity.Launch(context);
-                return true;
+        int id = item.getItemId();
+        if (id == R.id.menu_about) {
+            AboutDialog dialog = new AboutDialog(context);
+            dialog.show();
+            return true;
+        } else if (id == R.id.menu_app_settings) {
+            AppSettingsActivity.Launch(context);
+            return true;
         }
 
         return super.onContextItemSelected(item);
