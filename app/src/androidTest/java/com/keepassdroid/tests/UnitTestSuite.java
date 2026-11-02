@@ -27,6 +27,7 @@ import org.junit.runners.Suite;
         ProtectedBinaryTest.class,
         SprEngineTest.class,
         PwManagerOutputTest.class,
+        SaveFailureDiagnosticsTest.class,
         SearchTest.class,
         HashedBlock.class,
         StrUtilTest.class,

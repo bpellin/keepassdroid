@@ -20,6 +20,7 @@
 package com.keepassdroid.database.edit;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -30,6 +31,7 @@ import com.keepassdroid.database.exception.PwDbOutputException;
 import com.keepassdroid.fragments.Android11WarningFragment;
 
 public class SaveDB extends RunnableOnFinish {
+	private static final String TAG = "SaveDB";
 	private Database mDb;
 	private boolean mDontSave;
 	private Context mCtx;
@@ -67,7 +69,9 @@ public class SaveDB extends RunnableOnFinish {
 				}
 				return;
 			} catch (PwDbOutputException e) {
-				throw new RuntimeException(e);
+				Log.e(TAG, e.getDiagnosticSummary(), e);
+				finish(false, e.getDiagnosticSummary());
+				return;
 			}
 		}
 
