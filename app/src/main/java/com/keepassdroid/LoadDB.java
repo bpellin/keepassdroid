@@ -17,7 +17,7 @@
  *  along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.keepassdroid.database.edit;
+package com.keepassdroid;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,10 +28,12 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import com.android.keepass.R;
-import com.keepassdroid.Database;
 import com.keepassdroid.app.App;
+import com.keepassdroid.database.edit.OnFinish;
+import com.keepassdroid.database.edit.RunnableOnFinish;
 import com.keepassdroid.database.exception.ArcFourException;
 import com.keepassdroid.database.exception.ContentFileNotFoundException;
+import com.keepassdroid.database.exception.EmptyKeyException;
 import com.keepassdroid.database.exception.InvalidAlgorithmException;
 import com.keepassdroid.database.exception.InvalidDBException;
 import com.keepassdroid.database.exception.InvalidDBSignatureException;
@@ -74,6 +76,9 @@ public class LoadDB extends RunnableOnFinish {
             return;
         } catch (InvalidPasswordException e) {
             finish(false, mCtx.getString(R.string.InvalidPassword));
+            return;
+        } catch (EmptyKeyException e) {
+            finish(false, mCtx.getString(R.string.error_nopass));
             return;
         } catch (ContentFileNotFoundException e) {
             finish(false, mCtx.getString(R.string.file_not_found_content));
