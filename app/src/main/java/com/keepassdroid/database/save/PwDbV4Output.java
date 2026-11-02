@@ -47,6 +47,7 @@ import com.keepassdroid.database.PwGroup;
 import com.keepassdroid.database.PwGroupV4;
 import com.keepassdroid.database.PwIconCustom;
 import com.keepassdroid.database.exception.PwDbOutputException;
+import com.keepassdroid.database.exception.PwDbOutputException.Reason;
 import com.keepassdroid.database.security.ProtectedBinary;
 import com.keepassdroid.database.security.ProtectedString;
 import com.keepassdroid.stream.HashedBlockOutputStream;
@@ -185,7 +186,7 @@ public class PwDbV4Output extends PwDbOutput {
 			try {
 				engine = CipherFactory.getInstance(mPM.dataCipher);
 			} catch (NoSuchAlgorithmException e) {
-				throw new PwDbOutputException("No such cipher", e);
+				throw new PwDbOutputException(Reason.CRYPTO, "No such cipher", e);
 			}
 
 			header = (PwDbHeaderV4) outputHeader(mOS);
@@ -224,12 +225,12 @@ public class PwDbV4Output extends PwDbOutput {
 				outputDatabase(osXml);
 				osXml.close();
 			} catch (IllegalArgumentException e) {
-				throw new PwDbOutputException(e);
+				throw new PwDbOutputException(Reason.SERIALIZATION, "Invalid KDBX data during serialization.", e);
 			} catch (IllegalStateException e) {
-				throw new PwDbOutputException(e);
+				throw new PwDbOutputException(Reason.SERIALIZATION, "Invalid KDBX serializer state.", e);
 			}
 		} catch (IOException e) {
-			throw new PwDbOutputException(e);
+			throw new PwDbOutputException(Reason.IO, "Failed to write or close KDBX output.", e);
 		}
 	}
 	
@@ -370,7 +371,7 @@ public class PwDbV4Output extends PwDbOutput {
 
 			cipher = engine.getCipher(Cipher.ENCRYPT_MODE, mPM.finalKey, header.encryptionIV);
 		} catch (Exception e) {
-			throw new PwDbOutputException("Invalid algorithm.", e);
+			throw new PwDbOutputException(Reason.CRYPTO, "Invalid algorithm.", e);
 		}
 		
 		CipherOutputStream cos = new CipherOutputStream(os, cipher);
@@ -406,7 +407,7 @@ public class PwDbV4Output extends PwDbOutput {
 
 		randomStream = PwStreamCipherFactory.getInstance(h.innerRandomStream, h.innerRandomStreamKey);
 		if (randomStream == null) {
-			throw new PwDbOutputException("Invalid random cipher");
+			throw new PwDbOutputException(Reason.RANDOM, "Invalid random cipher");
 		}
 
 		if ( h.version < PwDbHeaderV4.FILE_VERSION_32_4) {
@@ -426,7 +427,7 @@ public class PwDbV4Output extends PwDbOutput {
 		try {
 			pho.output();
 		} catch (IOException e) {
-			throw new PwDbOutputException("Failed to output the header.", e);
+			throw new PwDbOutputException(Reason.IO, "Failed to output the KDBX header.", e);
 		}
 		
 		hashOfHeader = pho.getHashOfHeader();

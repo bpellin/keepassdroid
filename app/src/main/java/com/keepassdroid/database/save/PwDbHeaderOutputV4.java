@@ -34,6 +34,7 @@ import com.keepassdroid.database.PwDbHeader;
 import com.keepassdroid.database.PwDbHeaderV4;
 import com.keepassdroid.database.PwDbHeaderV4.PwDbHeaderV4Fields;
 import com.keepassdroid.database.exception.PwDbOutputException;
+import com.keepassdroid.database.exception.PwDbOutputException.Reason;
 import com.keepassdroid.stream.HmacBlockStream;
 import com.keepassdroid.stream.LEDataOutputStream;
 import com.keepassdroid.stream.MacOutputStream;
@@ -60,13 +61,13 @@ public class PwDbHeaderOutputV4 extends PwDbHeaderOutput {
 		try {
 			md = MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
-			throw new PwDbOutputException("SHA-256 not implemented here.");
+			throw new PwDbOutputException(Reason.CRYPTO, "SHA-256 not implemented here.", e);
 		}
 
 		try {
 			d.makeFinalKey(header.masterSeed, d.kdfParameters);
 		} catch (IOException e) {
-		    throw new PwDbOutputException(e);
+		    throw new PwDbOutputException(Reason.KEY_DERIVATION, "KDBX key creation failed.", e);
 		}
 
 		Mac hmac;
@@ -75,9 +76,9 @@ public class PwDbHeaderOutputV4 extends PwDbHeaderOutput {
 			SecretKeySpec signingKey = new SecretKeySpec(HmacBlockStream.GetHmacKey64(db.hmacKey, Types.ULONG_MAX_VALUE), "HmacSHA256");
 			hmac.init(signingKey);
 		} catch (NoSuchAlgorithmException e) {
-            throw new PwDbOutputException(e);
+            throw new PwDbOutputException(Reason.CRYPTO, "Failed to initialize KDBX header HMAC.", e);
 		} catch (InvalidKeyException e) {
-			throw new PwDbOutputException(e);
+			throw new PwDbOutputException(Reason.CRYPTO, "Failed to initialize KDBX header HMAC.", e);
 		}
 
 		dos = new DigestOutputStream(os, md);

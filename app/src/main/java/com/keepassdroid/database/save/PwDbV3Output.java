@@ -46,6 +46,7 @@ import com.keepassdroid.database.PwEntryV3;
 import com.keepassdroid.database.PwGroup;
 import com.keepassdroid.database.PwGroupV3;
 import com.keepassdroid.database.exception.PwDbOutputException;
+import com.keepassdroid.database.exception.PwDbOutputException.Reason;
 import com.keepassdroid.stream.LEDataOutputStream;
 import com.keepassdroid.stream.NullOutputStream;
 
@@ -66,7 +67,7 @@ public class PwDbV3Output extends PwDbOutput {
 			mPM.makeFinalKey(h3.masterSeed, h3.transformSeed, mPM.numKeyEncRounds);
 			return mPM.finalKey;
 		} catch (IOException e) {
-			throw new PwDbOutputException("Key creation failed: " + e.getMessage());
+			throw new PwDbOutputException(Reason.KEY_DERIVATION, "KDB key creation failed.", e);
 		}
 	}
 	
@@ -88,7 +89,7 @@ public class PwDbV3Output extends PwDbOutput {
 				throw new Exception();
 			}
 		} catch (Exception e) {
-			throw new PwDbOutputException("Algorithm not supported.");
+			throw new PwDbOutputException(Reason.CRYPTO, "Algorithm not supported.", e);
 		}
 
 		try {
@@ -100,11 +101,11 @@ public class PwDbV3Output extends PwDbOutput {
 			bos.close();
 
 		} catch (InvalidKeyException e) {
-			throw new PwDbOutputException("Invalid key");
+			throw new PwDbOutputException(Reason.CRYPTO, "Invalid key", e);
 		} catch (InvalidAlgorithmParameterException e) {
-			throw new PwDbOutputException("Invalid algorithm parameter.");
+			throw new PwDbOutputException(Reason.CRYPTO, "Invalid algorithm parameter.", e);
 		} catch (IOException e) {
-			throw new PwDbOutputException("Failed to output final encrypted part.");
+			throw new PwDbOutputException(Reason.IO, "Failed to output final encrypted part.", e);
 		}
 	}
 	
@@ -135,7 +136,7 @@ public class PwDbV3Output extends PwDbOutput {
 		} else if ( mPM.getEncAlgorithm() == PwEncryptionAlgorithm.Twofish ) {
 			header.flags |= PwDbHeaderV3.FLAG_TWOFISH;
 		} else {
-			throw new PwDbOutputException("Unsupported algorithm.");
+			throw new PwDbOutputException(Reason.CRYPTO, "Unsupported algorithm.");
 		}
 		
 		header.version = PwDbHeaderV3.DBVER_DW;
@@ -150,7 +151,7 @@ public class PwDbV3Output extends PwDbOutput {
 		try {
 			md = MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
-			throw new PwDbOutputException("SHA-256 not implemented here.");
+			throw new PwDbOutputException(Reason.CRYPTO, "SHA-256 not implemented here.", e);
 		}
 		
 		// Header checksum
@@ -158,7 +159,7 @@ public class PwDbV3Output extends PwDbOutput {
 		try {
 			headerDigest = MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
-			throw new PwDbOutputException("SHA-256 not implemented here.");
+			throw new PwDbOutputException(Reason.CRYPTO, "SHA-256 not implemented here.", e);
 		}
 		NullOutputStream nos;
 		nos = new NullOutputStream();
@@ -171,7 +172,7 @@ public class PwDbV3Output extends PwDbOutput {
 			pho.outputEnd();
 			headerDos.flush();
 		} catch (IOException e) {
-			throw new PwDbOutputException(e);
+			throw new PwDbOutputException(Reason.IO, "Failed to output KDB header.", e);
 		}
 		byte[] headerHash = headerDigest.digest();
 		headerHashBlock = getHeaderHashBuffer(headerHash);
@@ -185,7 +186,7 @@ public class PwDbV3Output extends PwDbOutput {
 			bos.flush();
 			bos.close();
 		} catch (IOException e) {
-			throw new PwDbOutputException("Failed to generate checksum.");
+			throw new PwDbOutputException(Reason.IO, "Failed to generate checksum.", e);
 		}
 
 		header.contentsHash = md.digest();
@@ -200,7 +201,7 @@ public class PwDbV3Output extends PwDbOutput {
 			pho.outputEnd();
 			dos.flush();
 		} catch (IOException e) {
-			throw new PwDbOutputException(e);
+			throw new PwDbOutputException(Reason.IO, "Failed to output KDB header.", e);
 		}
 		
 		return header;
@@ -215,7 +216,7 @@ public class PwDbV3Output extends PwDbOutput {
 			    los.writeInt(headerHashBlock.length);
 			    los.write(headerHashBlock);
 		    } catch (IOException e) {
-			    throw new PwDbOutputException("Failed to output header hash: " + e.getMessage());
+			    throw new PwDbOutputException(Reason.IO, "Failed to output header hash.", e);
 		    }
 		}
 		
@@ -227,7 +228,7 @@ public class PwDbV3Output extends PwDbOutput {
 			try {
 				pgo.output();
 			} catch (IOException e) {
-				throw new PwDbOutputException("Failed to output a group: " + e.getMessage());
+				throw new PwDbOutputException(Reason.IO, "Failed to output a group.", e);
 			}
 		}
 		
@@ -238,7 +239,7 @@ public class PwDbV3Output extends PwDbOutput {
 			try {
 				peo.output();
 			} catch (IOException e) {
-				throw new PwDbOutputException("Failed to output an entry.");
+				throw new PwDbOutputException(Reason.IO, "Failed to output an entry.", e);
 			}
 		}
 	}

@@ -20,15 +20,49 @@
 package com.keepassdroid.database.exception;
 
 public class PwDbOutputException extends Exception {
-	public PwDbOutputException(String string) {
-		super(string);
-	}
+    public enum Reason {
+        IO,
+        SERIALIZATION,
+        CRYPTO,
+        KEY_DERIVATION,
+        RANDOM,
+        UNKNOWN
+    }
 
-	public PwDbOutputException(String string, Exception e) { super(string, e); }
+    private final Reason reason;
 
-	public PwDbOutputException(Exception e) {
-		super(e);
-	}
+    public PwDbOutputException(String message) {
+        this(Reason.UNKNOWN, message, null);
+    }
+
+    public PwDbOutputException(String message, Exception cause) {
+        this(Reason.UNKNOWN, message, cause);
+    }
+
+    public PwDbOutputException(Exception cause) {
+        super(cause);
+        this.reason = Reason.UNKNOWN;
+    }
+
+    public PwDbOutputException(Reason reason, String message) {
+        this(reason, message, null);
+    }
+
+    public PwDbOutputException(Reason reason, String message, Exception cause) {
+        super(message, cause);
+        this.reason = reason;
+    }
+
+    public Reason getReason() {
+        return reason;
+    }
+
+    // Keep the summary free of database contents and provider exception messages.
+    public String getDiagnosticSummary() {
+        Throwable cause = getCause();
+        return "Database save failed [" + reason + "]"
+                + (cause == null ? "" : " (" + cause.getClass().getName() + ")");
+    }
 
 	/**
 	 * 
