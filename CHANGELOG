@@ -1,3 +1,7 @@
+KeePassDroid (2.7.1)
+ * Update dependency versions
+ * Enable R8 optimizations
+
 KeePassDroid (2.7)
  * Update to target SDK 36 (Android 16)
  * Keep controls clear of system bars, display cutouts, and the keyboard
