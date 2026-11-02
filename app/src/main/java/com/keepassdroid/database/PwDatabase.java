@@ -21,6 +21,7 @@ package com.keepassdroid.database;
 
 import com.keepassdroid.crypto.finalkey.FinalKey;
 import com.keepassdroid.crypto.finalkey.FinalKeyFactory;
+import com.keepassdroid.database.exception.EmptyKeyException;
 import com.keepassdroid.database.exception.InvalidKeyFileException;
 import com.keepassdroid.database.exception.KeyFileEmptyException;
 import com.keepassdroid.stream.NullOutputStream;
@@ -215,7 +216,7 @@ public abstract class PwDatabase {
         assert(key!=null);
 
         if ( key.length() == 0 )
-            throw new IllegalArgumentException( "Key cannot be empty." );
+            throw new EmptyKeyException();
 
         MessageDigest md;
         try {

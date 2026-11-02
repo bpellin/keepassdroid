@@ -31,6 +31,7 @@ import com.keepassdroid.crypto.keyDerivation.AesKdf;
 import com.keepassdroid.crypto.keyDerivation.KdfEngine;
 import com.keepassdroid.crypto.keyDerivation.KdfFactory;
 import com.keepassdroid.crypto.keyDerivation.KdfParameters;
+import com.keepassdroid.database.exception.EmptyKeyException;
 import com.keepassdroid.database.exception.InvalidKeyFileException;
 import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.Types;
@@ -138,7 +139,7 @@ public class PwDatabaseV4 extends PwDatabase {
 		} else if ( keyInputStream != null) {
 			fKey = getFileKey(keyInputStream);
 		} else {
-			throw new IllegalArgumentException( "Key cannot be empty." );
+			throw new EmptyKeyException();
 		}
 		
 		MessageDigest md;

@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package com.keepassdroid.database;
 
 // Java
+import com.keepassdroid.database.exception.EmptyKeyException;
 import com.keepassdroid.database.exception.InvalidKeyFileException;
 import com.keepassdroid.utils.EmptyUtils;
 
@@ -231,7 +232,7 @@ public class PwDatabaseV3 extends PwDatabase {
 		} else if (keyInputStream != null) {
 			return getFileKey(keyInputStream);
 		} else {
-			throw new IllegalArgumentException("Key cannot be empty.");
+			throw new EmptyKeyException();
 		}
 
 	}
