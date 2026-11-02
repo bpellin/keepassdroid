@@ -92,7 +92,7 @@ import java.util.List;
 public class FileSelectActivity extends AppCompatActivity {
 
     private ListView mList;
-    private ArrayAdapter mAdapter;
+    private ArrayAdapter<String> mAdapter;
 
     private static final int CMENU_CLEAR = Menu.FIRST;
 
@@ -328,11 +328,15 @@ public class FileSelectActivity extends AppCompatActivity {
                 new RecentFileViewModelFactory(getApplication(), fileHistory)).get(RecentFileViewModel.class);
 
         LiveData<List<String>> files = fileViewModel.getRecentFiles();
-        mAdapter = new ArrayAdapter<String>(this, R.layout.file_row, R.id.file_filename, files.getValue());
+        mAdapter = new ArrayAdapter<String>(this, R.layout.file_row, R.id.file_filename);
         mList.setAdapter(mAdapter);
         files.observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
+                // Update the adapter's own list and notify ListView together on the UI thread.
+                mAdapter.setNotifyOnChange(false);
+                mAdapter.clear();
+                mAdapter.addAll(strings);
                 mAdapter.notifyDataSetChanged();
             }
         });
