@@ -21,7 +21,6 @@ package com.keepassdroid.fileselect;
 
 import android.app.Application;
 import android.net.Uri;
-import android.os.Looper;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -33,14 +32,17 @@ import com.keepassdroid.utils.UriUtil;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class RecentFileViewModel extends AndroidViewModel
 {
     private final MediatorLiveData<List<String>> files =
-            new MediatorLiveData<List<String>>(new CopyOnWriteArrayList<String>());
+            new MediatorLiveData<List<String>>(Collections.emptyList());
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private RecentFileHistory fileHistory;
 
     public RecentFileViewModel(@NotNull Application application) {
@@ -60,7 +62,7 @@ public class RecentFileViewModel extends AndroidViewModel
             }
         });
 
-        updateFiles();;
+        updateFiles();
     }
 
     public LiveData<List<String>> getRecentFiles() {
@@ -68,13 +70,13 @@ public class RecentFileViewModel extends AndroidViewModel
     }
 
     private void updateFiles() {
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
+        // Capture the input before resolving names in the background.
+        final List<String> databases = new ArrayList<>(fileHistory.getDbList().getValue());
+        executor.execute(new Runnable() {
             @Override
-            public synchronized void run() {
-                List<String> displayNames = files.getValue();
-                displayNames.clear();
+            public void run() {
+                List<String> displayNames = new ArrayList<>();
 
-                List<String> databases = fileHistory.getDbList().getValue();
                 for (String fileName : databases) {
                     String name = UriUtil.getFileName(Uri.parse(fileName), getApplication().getApplicationContext());
                     if (EmptyUtils.isNullOrEmpty(name)) {
@@ -86,17 +88,15 @@ public class RecentFileViewModel extends AndroidViewModel
                     displayNames.add(name);
                 }
 
-                postFilesUpdate(displayNames);
+                // Published lists must never be mutated by a subsequent refresh.
+                files.postValue(Collections.unmodifiableList(displayNames));
             }
         });
     }
 
-    private void postFilesUpdate(List<String> liveData) {
-        // On the main thread
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            files.setValue(liveData);
-        } else {
-            files.postValue(liveData);
-        }
+    @Override
+    protected void onCleared() {
+        executor.shutdownNow();
+        super.onCleared();
     }
 }
