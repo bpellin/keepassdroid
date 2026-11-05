@@ -67,7 +67,6 @@ dependencies {
     }
     implementation 'joda-time:joda-time:2.15.1'
     implementation 'androidx.core:core:1.19.1'
-    implementation "androidx.multidex:multidex:2.0.1"
     implementation "androidx.biometric:biometric:1.1.0"
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.activity:activity:1.13.0"
