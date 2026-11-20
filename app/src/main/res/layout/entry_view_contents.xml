@@ -33,6 +33,7 @@
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
 	  android:textIsSelectable="true"
+	  android:fontFamily="@font/dejavu_sans_mono"
 	  style="@style/EntryItem"
 	/>
 	<View style="@style/Divider" />
@@ -48,22 +49,24 @@
 	  android:layout_height="wrap_content"
 	  android:autoLink="all"
 	  android:textIsSelectable="true"
+	  android:fontFamily="@font/dejavu_sans_mono"
 	  style="@style/EntryItem"
 	/>
 	<View style="@style/Divider" />
 	<!-- Password -->
+	<!-- Edit password here is invalid, so set inputType=none -->
 	<TextView android:id="@+id/entry_password_label"
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content" 
 	  android:text="@string/entry_password"
 	  style="@style/WhiteOnDarkSmall"
 	/>
-	<com.keepassdroid.view.PasswordTextViewSelect android:id="@+id/entry_password" 
+	<TextView android:id="@+id/entry_password"
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
-	  android:inputType="textPassword"
+	  android:inputType="none"
 	  android:textIsSelectable="true"
-	  android:typeface="monospace"
+	  android:fontFamily="@font/dejavu_sans_mono"
 	  style="@style/EntryItem"
 	/>
 	<View style="@style/Divider" />
@@ -78,6 +81,7 @@
       android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
 	  android:textIsSelectable="true"
+	  android:fontFamily="@font/dejavu_sans_mono"
 	  style="@style/EntryItem"
 	/>
 	<View style="@style/Divider" />
@@ -96,6 +100,7 @@
 	<TextView android:id="@+id/entry_created" 
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
+	  android:fontFamily="@font/dejavu_sans_mono"
 	  style="@style/EntryItem"
 	/>
 	<View style="@style/Divider" />
@@ -109,6 +114,7 @@
 	<TextView android:id="@+id/entry_modified" 
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
+	  android:fontFamily="@font/dejavu_sans_mono"
 	  style="@style/EntryItem"
 	/>
 	<View style="@style/Divider" />
@@ -122,6 +128,7 @@
 	<TextView android:id="@+id/entry_accessed" 
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
+	  android:fontFamily="@font/dejavu_sans_mono"
 	  style="@style/EntryItem"
 	/>
 	<View style="@style/Divider" />
@@ -135,6 +142,7 @@
 	<TextView android:id="@+id/entry_expires" 
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
+	  android:fontFamily="@font/dejavu_sans_mono"
 	  style="@style/EntryItem"
 	/>
 </LinearLayout>
