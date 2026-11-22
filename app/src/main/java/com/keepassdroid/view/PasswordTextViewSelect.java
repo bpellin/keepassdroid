@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Brian Pellin.
+ * Copyright 2011-2020 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,45 +19,63 @@
  */
 package com.keepassdroid.view;
 
-import com.keepassdroid.assets.TypefaceFactory;
-
 import android.content.Context;
-import android.graphics.Typeface;
+import android.text.method.ArrowKeyMovementMethod;
+import android.text.method.MovementMethod;
 import android.util.AttributeSet;
+import android.graphics.Typeface;
+import android.text.InputType;
 
-public class PasswordTextViewSelect extends TextViewSelect {
+import androidx.appcompat.widget.AppCompatEditText;
 
-	public PasswordTextViewSelect(Context context, AttributeSet attrs,
-			int defStyle) {
-		super(context, attrs, defStyle);
+public class PasswordTextViewSelect extends AppCompatEditText {
+
+	private Typeface mTypeface;
+
+	public PasswordTextViewSelect(Context context) {
+		this(context, null);
 	}
 
 	public PasswordTextViewSelect(Context context, AttributeSet attrs) {
-		super(context, attrs);
+		// this class extends from EditText,
+		// so use default EditText style as defStyle
+		this(context, attrs, android.R.attr.editTextStyle);
 	}
+	
+	public PasswordTextViewSelect(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
 
-	public PasswordTextViewSelect(Context context) {
-		super(context);
-	}
-
-	private Typeface getTypeface(Typeface tf) {
-		Typeface tfOverride = TypefaceFactory.getTypeface(getContext(), "fonts/DejaVuSansMono.ttf");
+		mTypeface = getTypeface();
 		
-		if (tfOverride != null) {
-			return tfOverride;
+		setFocusable(true);
+		setFocusableInTouchMode(true);
+	}
+
+
+	@Override
+	protected MovementMethod getDefaultMovementMethod() {
+		return ArrowKeyMovementMethod.getInstance();
+	}
+
+	@Override
+	protected boolean getDefaultEditable() {
+		return false;
+	}
+
+	@Override
+	public void setInputType(int type) {
+		super.setInputType(type);
+
+		// some system will set font to default after invoking setInputType
+		// so we have to fix it here
+		if ((type & InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) != 0) {
+			setTypeface(mTypeface);
 		}
-		
-		return tf;
 	}
 
 	@Override
-	public void setTypeface(Typeface tf, int style) {
-		super.setTypeface(getTypeface(tf), style);
-	}
-
-	@Override
-	public void setTypeface(Typeface tf) {
-		super.setTypeface(getTypeface(tf));
+	public void setText(CharSequence text, BufferType type) {
+		super.setText(text, BufferType.EDITABLE);
 	}
 
 }
