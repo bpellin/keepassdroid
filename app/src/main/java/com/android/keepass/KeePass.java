@@ -45,20 +45,12 @@ public class KeePass extends Activity {
 
 	private void startFileSelect() {
 		Intent intent = new Intent(this, FileSelectActivity.class);
-		startActivityForResult(intent, 0);
+		startActivity(intent);
+		finish();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		if (resultCode == EXIT_NORMAL) {
-			finish();
-		}
 	}
 }
