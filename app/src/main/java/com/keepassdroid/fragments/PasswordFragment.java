@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Brian Pellin
+ * Copyright 2020-2026 Brian Pellin
  *
  * This file is part of KeePassDroid.
  *
@@ -64,6 +64,7 @@ import com.keepassdroid.LoadDB;
 import com.keepassdroid.ProgressTask;
 import com.keepassdroid.app.App;
 import com.keepassdroid.compat.ClipDataCompat;
+import com.keepassdroid.compat.ContentResolverCompat;
 import com.keepassdroid.compat.StorageAF;
 import com.keepassdroid.database.edit.OnFinish;
 import com.keepassdroid.dialog.PasswordEncodingDialogHelper;
@@ -418,6 +419,13 @@ public class PasswordFragment extends Fragment implements BiometricHelper.Biomet
                         if (uri != null) {
                             if (requestCode == GET_CONTENT) {
                                 uri = UriUtil.translate(activity, uri);
+                            }
+                            if (requestCode == OPEN_DOC
+                                    && (data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION) != 0) {
+                                // Retain access to the key file across device restarts.
+                                ContentResolverCompat.takePersistableUriPermission(
+                                        activity.getContentResolver(), uri,
+                                        Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             }
                             String path = uri.toString();
                             if (path != null) {
