@@ -1,7 +1,7 @@
  * Support KDBX 4.2 database format
  * Get persistable permissions for key file
  * use Dejavu Sans Mono font when showing entry data
- * Update simplified Chinese translation
+ * Update Simplified Chinese and French translations
 
 KeePassDroid (2.7.2)
  * Crash fixes
