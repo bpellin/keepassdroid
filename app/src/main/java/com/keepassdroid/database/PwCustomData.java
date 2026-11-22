@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PwCustomData extends HashMap<String, String> {
+    // A null value represents a deleted database-level item in KDBX 4.2.
+    // An empty string is a live item. Group/entry items must have a value.
     public Map<String, Date> lastMod = new HashMap<String, Date>();
 
     public String put(String key, String value, Date last) {

@@ -606,6 +606,11 @@ public class PwDatabaseV4 extends PwDatabase {
 
 	public long getMinKdbxVersion() {
 		long minVer = version;
+		// Preserve the loaded format even when no remaining items require 4.2.
+		// Do not select 4.2 based on custom data in an older database.
+		if (minVer >= PwDbHeaderV4.FILE_VERSION_32_4_2) {
+			return minVer;
+		}
 
 		EntryGetMinVer entryHandler = new EntryGetMinVer();
 		GroupGetMinVer groupHandler = new GroupGetMinVer();

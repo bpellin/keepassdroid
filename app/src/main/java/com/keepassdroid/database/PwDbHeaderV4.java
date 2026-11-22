@@ -50,6 +50,8 @@ public class PwDbHeaderV4 extends PwDbHeader {
     public static final int FILE_VERSION_32_3  =          0x00030001;
 	public static final int FILE_VERSION_32_4  =          0x00040000;
 	public static final int FILE_VERSION_32_4_1 =         0x00040001;
+	public static final int FILE_VERSION_32_4_2 =         0x00040002;
+	// Keep new databases on 4.1; use 4.2 only for databases loaded as 4.2.
 	public static final int FILE_VERSION_32 =             FILE_VERSION_32_4_1;
 
     public class PwDbHeaderV4Fields {

@@ -42,6 +42,7 @@ import org.junit.runners.Suite;
         Kdb3.class,
         Kdb3Twofish.class,
         Kdb4.class,
+        Kdb42.class,
         Kdb4Header.class,
         ProtectedBinaryTest.class,
         SprEngineTest.class,

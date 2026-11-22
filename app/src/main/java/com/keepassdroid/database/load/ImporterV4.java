@@ -848,7 +848,8 @@ public class ImporterV4 extends Importer {
 		} else if ( ctx == KdbContext.CustomData && name.equalsIgnoreCase(ElemCustomData) ) {
 			return KdbContext.Meta;
 		} else if ( ctx == KdbContext.CustomDataItem && name.equalsIgnoreCase(ElemStringDictExItem) ) {
-			if ( customDataKey != null && customDataValue != null) {
+			if (customDataKey != null && (customDataValue != null ||
+					version >= PwDbHeaderV4.FILE_VERSION_32_4_2)) {
 				db.customData.put(customDataKey, customDataValue, customDataLastMod);
 			} else assert(false);
 			

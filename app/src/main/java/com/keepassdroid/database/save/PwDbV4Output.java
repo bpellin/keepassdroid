@@ -629,9 +629,11 @@ public class PwDbV4Output extends PwDbOutput {
 		xml.text(safeXmlString(keyValue));
 		xml.endTag(null, keyName);
 		
-		xml.startTag(null, valueName);
-		xml.text(safeXmlString(valueValue));
-		xml.endTag(null, valueName);
+		if (valueValue != null) {
+			xml.startTag(null, valueName);
+			xml.text(safeXmlString(valueValue));
+			xml.endTag(null, valueName);
+		}
 
 		if (lastMod != null) {
 			writeObject(ElemLastModTime, lastMod);
@@ -775,6 +777,10 @@ public class PwDbV4Output extends PwDbOutput {
 		
 		for (Entry<String, String> pair : customData.entrySet()) {
 			String key = pair.getKey();
+			if (pair.getValue() == null && (customData != mPM.customData ||
+					header.version < PwDbHeaderV4.FILE_VERSION_32_4_2)) {
+				throw new IllegalStateException("Deleted custom data requires a KDBX 4.2 database.");
+			}
 
 			Date lastMod = null;
 			if (header.version >= PwDbHeaderV4.FILE_VERSION_32_4_1) {
